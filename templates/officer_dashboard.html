@@ -1,0 +1,7348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>InfraGuard AI | Officer Dashboard</title>
+
+    <!-- =====================================================
+         BOOTSTRAP
+    ====================================================== -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- =====================================================
+         LEAFLET
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <!-- =====================================================
+         GOOGLE FONT
+    ====================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        /* =====================================================
+           ROOT
+        ====================================================== */
+
+        :root {
+
+            --navy: #12345b;
+            --navy-dark: #0d2745;
+            --blue: #1769aa;
+            --blue-light: #eaf4fb;
+
+            --green: #198754;
+            --green-light: #eaf7f0;
+
+            --orange: #f28c28;
+            --orange-light: #fff4e7;
+
+            --red: #c93636;
+            --red-light: #fceeee;
+
+            --purple: #6857a8;
+            --purple-light: #f2effb;
+
+            --ink: #172b3a;
+            --text: #233746;
+            --muted: #6b7c8c;
+
+            --bg: #f4f7f9;
+            --surface: #ffffff;
+            --surface-soft: #f8fafc;
+
+            --border: #dbe3e9;
+            --border-dark: #c9d4dc;
+
+            --shadow-sm:
+                0 2px 8px rgba(18, 52, 91, 0.06);
+
+            --shadow:
+                0 8px 24px rgba(18, 52, 91, 0.08);
+
+            --shadow-lg:
+                0 18px 45px rgba(18, 52, 91, 0.12);
+
+            --radius: 12px;
+            --radius-lg: 16px;
+        }
+
+
+        /* =====================================================
+           RESET
+        ====================================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            background: var(--bg);
+
+            color: var(--text);
+
+            font-family:
+                "Noto Sans",
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            font-size: 14px;
+        }
+
+
+        button,
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+
+        /* =====================================================
+           TOP UTILITY BAR
+        ====================================================== */
+
+        .utility-bar {
+
+            background: var(--navy-dark);
+
+            color: #dce8f2;
+
+            min-height: 34px;
+
+            font-size: 12px;
+        }
+
+
+        .utility-inner {
+
+            min-height: 34px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+
+        .utility-left,
+        .utility-right {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 16px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .utility-item {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            opacity: .92;
+        }
+
+
+        .status-dot {
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #48b77a;
+
+            box-shadow:
+                0 0 0 4px rgba(72,183,122,.12);
+
+            animation: pulseDot 2s infinite;
+        }
+
+
+        @keyframes pulseDot {
+
+            0%,
+            100% {
+                box-shadow:
+                    0 0 0 3px rgba(72,183,122,.10);
+            }
+
+            50% {
+                box-shadow:
+                    0 0 0 6px rgba(72,183,122,.04);
+            }
+        }
+
+
+        /* =====================================================
+           HEADER
+        ====================================================== */
+
+        .main-header {
+
+            background: var(--surface);
+
+            border-bottom: 1px solid var(--border);
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+            box-shadow: 0 2px 10px rgba(18,52,91,.04);
+        }
+
+
+        .header-inner {
+
+            min-height: 76px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            min-width: 0;
+        }
+
+
+        .brand-mark {
+
+            width: 43px;
+            height: 43px;
+
+            border-radius: 10px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    var(--navy),
+                    var(--blue)
+                );
+
+            box-shadow:
+                0 5px 14px rgba(23,105,170,.20);
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .brand-mark::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 20px;
+            height: 20px;
+
+            border-radius: 50%;
+
+            background: rgba(255,255,255,.08);
+
+            right: -7px;
+            bottom: -7px;
+        }
+
+
+        .brand-shield {
+
+            font-size: 19px;
+
+            font-weight: 800;
+
+            position: relative;
+
+            z-index: 1;
+        }
+
+
+        .brand-name {
+
+            color: var(--navy);
+
+            font-size: 20px;
+
+            font-weight: 800;
+
+            line-height: 1.1;
+
+            letter-spacing: -.3px;
+        }
+
+
+        .brand-name span {
+            color: var(--blue);
+        }
+
+
+        .brand-subtitle {
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+            margin-top: 3px;
+
+            text-transform: uppercase;
+
+            letter-spacing: .65px;
+
+            font-weight: 700;
+        }
+
+
+        .header-actions {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+
+        .officer-profile {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            padding-right: 7px;
+        }
+
+
+        .officer-avatar {
+
+            width: 36px;
+            height: 36px;
+
+            border-radius: 50%;
+
+            background: var(--blue-light);
+
+            color: var(--blue);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-weight: 800;
+
+            font-size: 13px;
+
+            border: 1px solid #cfe3f2;
+        }
+
+
+        .officer-info {
+
+            line-height: 1.2;
+        }
+
+
+        .officer-name {
+
+            color: var(--ink);
+
+            font-size: 13px;
+
+            font-weight: 800;
+        }
+
+
+        .officer-role {
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+            margin-top: 2px;
+        }
+
+
+        .logout-btn {
+
+            border: 1px solid var(--border);
+
+            background: white;
+
+            color: var(--text);
+
+            border-radius: 8px;
+
+            padding: 8px 13px;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            transition:
+                .2s ease;
+        }
+
+
+        .logout-btn:hover {
+
+            border-color: #b8c8d4;
+
+            background: #f8fafc;
+
+            color: var(--navy);
+        }
+
+
+        /* =====================================================
+           TRICOLOR ACCENT
+        ====================================================== */
+
+        .tricolor-line {
+
+            height: 3px;
+
+            display: flex;
+        }
+
+
+        .tricolor-line span:nth-child(1) {
+
+            flex: 1;
+
+            background: #e87922;
+        }
+
+
+        .tricolor-line span:nth-child(2) {
+
+            flex: 1;
+
+            background: #ffffff;
+
+            border-top: 1px solid #eef1f3;
+
+            border-bottom: 1px solid #eef1f3;
+        }
+
+
+        .tricolor-line span:nth-child(3) {
+
+            flex: 1;
+
+            background: #138a4b;
+        }
+
+
+        /* =====================================================
+           PAGE
+        ====================================================== */
+
+        .page {
+
+            padding: 28px 0 60px;
+        }
+
+
+        /* =====================================================
+           BREADCRUMB
+        ====================================================== */
+
+        .breadcrumb-wrap {
+
+            margin-bottom: 14px;
+        }
+
+
+        .breadcrumb {
+
+            margin: 0;
+
+            font-size: 12px;
+        }
+
+
+        .breadcrumb-item {
+
+            color: var(--muted);
+        }
+
+
+        .breadcrumb-item.active {
+
+            color: var(--navy);
+
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           HERO
+        ====================================================== */
+
+        .dashboard-hero {
+
+            background:
+                linear-gradient(
+                    120deg,
+                    #ffffff 0%,
+                    #f4f9fd 58%,
+                    #edf5fa 100%
+                );
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius-lg);
+
+            padding: 27px 29px;
+
+            position: relative;
+
+            overflow: hidden;
+
+            box-shadow: var(--shadow-sm);
+
+            margin-bottom: 22px;
+
+            animation: fadeUp .55s ease both;
+        }
+
+
+        .dashboard-hero::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 240px;
+            height: 240px;
+
+            right: -90px;
+            top: -120px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(23,105,170,.07);
+        }
+
+
+        .dashboard-hero::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 100px;
+            height: 100px;
+
+            right: 150px;
+            bottom: -70px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(242,140,40,.07);
+        }
+
+
+        .hero-content {
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        .eyebrow {
+
+            color: var(--blue);
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            letter-spacing: 1.1px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 8px;
+        }
+
+
+        .hero-title {
+
+            margin: 0;
+
+            color: var(--navy);
+
+            font-size: 28px;
+
+            line-height: 1.2;
+
+            font-weight: 800;
+
+            letter-spacing: -.5px;
+        }
+
+
+        .hero-description {
+
+            margin: 9px 0 0;
+
+            color: var(--muted);
+
+            max-width: 720px;
+
+            line-height: 1.7;
+
+            font-size: 13px;
+        }
+
+
+        .hero-actions {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+
+            position: relative;
+
+            z-index: 3;
+        }
+
+
+        .btn-primary-custom {
+
+            background: var(--blue);
+
+            border: 1px solid var(--blue);
+
+            color: white;
+
+            border-radius: 8px;
+
+            padding: 9px 15px;
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease,
+                background .2s ease;
+        }
+
+
+        .btn-primary-custom:hover {
+
+            background: #135d95;
+
+            border-color: #135d95;
+
+            color: white;
+
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 6px 14px rgba(23,105,170,.18);
+        }
+
+
+        .btn-secondary-custom {
+
+            background: white;
+
+            border: 1px solid var(--border-dark);
+
+            color: var(--navy);
+
+            border-radius: 8px;
+
+            padding: 9px 15px;
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            transition: .2s ease;
+        }
+
+
+        .btn-secondary-custom:hover {
+
+            background: var(--surface-soft);
+
+            border-color: #aebfcb;
+
+            color: var(--navy);
+        }
+
+
+        /* =====================================================
+           SYSTEM STATUS
+        ====================================================== */
+
+        .system-status {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-top: 15px;
+
+            padding: 6px 10px;
+
+            background: rgba(25,135,84,.07);
+
+            border: 1px solid rgba(25,135,84,.16);
+
+            border-radius: 999px;
+
+            color: #167346;
+
+            font-size: 10px;
+
+            font-weight: 800;
+        }
+
+
+        /* =====================================================
+           KPI CARDS
+        ====================================================== */
+
+        .kpi-grid {
+
+            margin-bottom: 22px;
+        }
+
+
+        .kpi-card {
+
+            background: var(--surface);
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius);
+
+            padding: 18px;
+
+            height: 100%;
+
+            position: relative;
+
+            overflow: hidden;
+
+            box-shadow: var(--shadow-sm);
+
+            transition:
+                transform .25s ease,
+                box-shadow .25s ease,
+                border-color .25s ease;
+
+            animation: fadeUp .55s ease both;
+        }
+
+
+        .kpi-card:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow: var(--shadow);
+
+            border-color: #c8d6df;
+        }
+
+
+        .kpi-card::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 60px;
+            height: 60px;
+
+            right: -22px;
+            bottom: -22px;
+
+            border-radius: 50%;
+
+            background: rgba(23,105,170,.035);
+        }
+
+
+        .kpi-top {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            justify-content: space-between;
+
+            gap: 10px;
+        }
+
+
+        .kpi-label {
+
+            color: var(--muted);
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: .45px;
+        }
+
+
+        .kpi-value {
+
+            color: var(--navy);
+
+            font-size: 30px;
+
+            font-weight: 800;
+
+            line-height: 1;
+
+            margin-top: 9px;
+        }
+
+
+        .kpi-icon {
+
+            width: 36px;
+            height: 36px;
+
+            border-radius: 9px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 15px;
+
+            font-weight: 800;
+        }
+
+
+        .kpi-icon.blue {
+
+            background: var(--blue-light);
+
+            color: var(--blue);
+        }
+
+
+        .kpi-icon.orange {
+
+            background: var(--orange-light);
+
+            color: var(--orange);
+        }
+
+
+        .kpi-icon.red {
+
+            background: var(--red-light);
+
+            color: var(--red);
+        }
+
+
+        .kpi-icon.green {
+
+            background: var(--green-light);
+
+            color: var(--green);
+        }
+
+
+        .kpi-foot {
+
+            margin-top: 11px;
+
+            color: var(--muted);
+
+            font-size: 10px;
+        }
+
+
+        .kpi-line {
+
+            height: 3px;
+
+            width: 100%;
+
+            border-radius: 5px;
+
+            background: #edf1f4;
+
+            margin-top: 13px;
+
+            overflow: hidden;
+        }
+
+
+        .kpi-line span {
+
+            display: block;
+
+            height: 100%;
+
+            width: 0;
+
+            border-radius: inherit;
+
+            transition: width 1s ease;
+        }
+
+
+        .kpi-line.blue span {
+            background: var(--blue);
+        }
+
+
+        .kpi-line.orange span {
+            background: var(--orange);
+        }
+
+
+        .kpi-line.red span {
+            background: var(--red);
+        }
+
+
+        .kpi-line.green span {
+            background: var(--green);
+        }
+
+
+        /* =====================================================
+           SECTION CARD
+        ====================================================== */
+
+        .section-card {
+
+            background: var(--surface);
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius-lg);
+
+            overflow: hidden;
+
+            box-shadow: var(--shadow-sm);
+
+            margin-top: 22px;
+
+            animation: fadeUp .6s ease both;
+        }
+
+
+        .section-header {
+
+            padding: 17px 20px;
+
+            border-bottom: 1px solid var(--border);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .section-title-wrap h2 {
+
+            color: var(--navy);
+
+            margin: 0;
+
+            font-size: 16px;
+
+            font-weight: 800;
+        }
+
+
+        .section-title-wrap p {
+
+            margin: 4px 0 0;
+
+            color: var(--muted);
+
+            font-size: 11px;
+        }
+
+
+        .section-tools {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            flex-wrap: wrap;
+        }
+
+
+        /* =====================================================
+           FILTER
+        ====================================================== */
+
+        .filter-select {
+
+            min-width: 210px;
+
+            border: 1px solid var(--border);
+
+            background: white;
+
+            color: var(--text);
+
+            border-radius: 8px;
+
+            padding: 8px 32px 8px 10px;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            outline: none;
+        }
+
+
+        .filter-select:focus {
+
+            border-color: #9dc4df;
+
+            box-shadow:
+                0 0 0 3px rgba(23,105,170,.08);
+        }
+
+
+        /* =====================================================
+           TABLE
+        ====================================================== */
+
+        .table-wrap {
+
+            overflow-x: auto;
+        }
+
+
+        .table {
+
+            margin: 0;
+
+            --bs-table-bg: transparent;
+
+            --bs-table-color: var(--text);
+
+            --bs-table-border-color: var(--border);
+        }
+
+
+        .table thead th {
+
+            background: #f8fafb;
+
+            color: #6d7d89;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            text-transform: uppercase;
+
+            letter-spacing: .55px;
+
+            white-space: nowrap;
+
+            border-bottom: 1px solid var(--border);
+
+            padding: 12px 15px;
+        }
+
+
+        .table tbody td {
+
+            vertical-align: middle;
+
+            padding: 13px 15px;
+
+            font-size: 12px;
+
+            color: var(--text);
+        }
+
+
+        .table tbody tr {
+
+            transition:
+                background .2s ease;
+        }
+
+
+        .table tbody tr:hover {
+
+            background: #f8fbfd;
+        }
+
+
+        .complaint-code {
+
+            color: var(--navy);
+
+            font-weight: 800;
+
+            font-size: 12px;
+        }
+
+
+        .complaint-date {
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+            margin-top: 3px;
+        }
+
+
+        .asset-mini {
+
+            color: var(--navy);
+
+            font-weight: 700;
+
+            font-size: 11px;
+        }
+
+
+        .asset-unlinked {
+
+            color: #9aa8b2;
+
+            font-size: 10px;
+        }
+
+
+        /* =====================================================
+           STATUS BADGES
+        ====================================================== */
+
+        .status {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            padding: 5px 8px;
+
+            border-radius: 999px;
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            white-space: nowrap;
+
+            border: 1px solid transparent;
+        }
+
+
+        .status::before {
+
+            content: "";
+
+            width: 5px;
+            height: 5px;
+
+            border-radius: 50%;
+
+            background: currentColor;
+
+            opacity: .75;
+        }
+
+
+        .status-submitted {
+
+            color: #a86600;
+
+            background: #fff7e9;
+
+            border-color: #f5dfb5;
+        }
+
+
+        .status-review {
+
+            color: #1769aa;
+
+            background: #edf6fc;
+
+            border-color: #d2e6f4;
+        }
+
+
+        .status-verified,
+        .status-prioritized {
+
+            color: #6857a8;
+
+            background: #f3f0fb;
+
+            border-color: #ded7f3;
+        }
+
+
+        .status-assigned,
+        .status-progress {
+
+            color: #0b7285;
+
+            background: #eaf8fa;
+
+            border-color: #cdebee;
+        }
+
+
+        .status-inspection {
+
+            color: #9b3f9f;
+
+            background: #fbedfb;
+
+            border-color: #ead0eb;
+        }
+
+
+        .status-resolved,
+        .status-closed {
+
+            color: #198754;
+
+            background: #eaf7f0;
+
+            border-color: #cdebdc;
+        }
+
+
+        .status-rejected {
+
+            color: #b02a37;
+
+            background: #fceeee;
+
+            border-color: #f1d1d5;
+        }
+
+
+        /* =====================================================
+           PRIORITY
+        ====================================================== */
+
+        .priority {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            font-weight: 800;
+
+            font-size: 10px;
+        }
+
+
+        .priority::before {
+
+            content: "";
+
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+        }
+
+
+        .p1 {
+            color: var(--red);
+        }
+
+
+        .p1::before {
+            background: var(--red);
+        }
+
+
+        .p2 {
+            color: #b36a00;
+        }
+
+
+        .p2::before {
+            background: var(--orange);
+        }
+
+
+        .p3 {
+            color: var(--blue);
+        }
+
+
+        .p3::before {
+            background: var(--blue);
+        }
+
+
+        .p4 {
+            color: var(--muted);
+        }
+
+
+        .p4::before {
+            background: #aab7c1;
+        }
+
+
+        /* =====================================================
+           REVIEW BUTTON
+        ====================================================== */
+
+        .review-btn {
+
+            border: 1px solid #bfd0dc;
+
+            background: white;
+
+            color: var(--navy);
+
+            border-radius: 7px;
+
+            padding: 6px 10px;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            transition: .2s ease;
+        }
+
+
+        .review-btn:hover {
+
+            background: var(--blue-light);
+
+            border-color: #9fc5dd;
+
+            color: var(--blue);
+        }
+
+
+        /* =====================================================
+           ASSET GRID
+        ====================================================== */
+
+        .asset-section-body {
+
+            padding: 17px;
+        }
+
+
+        .asset-card {
+
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 12px;
+
+            padding: 15px;
+
+            height: 100%;
+
+            transition:
+                transform .22s ease,
+                box-shadow .22s ease,
+                border-color .22s ease;
+
+            animation: fadeUp .5s ease both;
+        }
+
+
+        .asset-card:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow: var(--shadow);
+
+            border-color: #c4d4de;
+        }
+
+
+        .asset-top {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 10px;
+
+            align-items: flex-start;
+        }
+
+
+        .asset-code {
+
+            color: var(--navy);
+
+            font-weight: 800;
+
+            font-size: 13px;
+        }
+
+
+        .asset-type {
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+            margin-top: 3px;
+
+            text-transform: capitalize;
+        }
+
+
+        .asset-status {
+
+            font-size: 8px;
+
+            font-weight: 800;
+
+            border-radius: 999px;
+
+            padding: 4px 7px;
+        }
+
+
+        .asset-status.active {
+
+            color: #198754;
+
+            background: var(--green-light);
+
+            border: 1px solid #cce8d8;
+        }
+
+
+        .asset-status.other {
+
+            color: #a86600;
+
+            background: var(--orange-light);
+
+            border: 1px solid #f2dfbf;
+        }
+
+
+        .asset-metrics {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 8px;
+
+            margin-top: 13px;
+        }
+
+
+        .asset-metric {
+
+            background: #f8fafb;
+
+            border: 1px solid #e8eef2;
+
+            border-radius: 8px;
+
+            padding: 9px;
+        }
+
+
+        .asset-metric-label {
+
+            color: var(--muted);
+
+            font-size: 9px;
+
+            font-weight: 600;
+        }
+
+
+        .asset-metric-value {
+
+            color: var(--navy);
+
+            font-size: 15px;
+
+            font-weight: 800;
+
+            margin-top: 2px;
+        }
+
+
+        .condition-wrap {
+
+            margin-top: 12px;
+        }
+
+
+        .condition-head {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 5px;
+        }
+
+
+        .condition-label {
+
+            color: var(--muted);
+
+            font-size: 9px;
+
+            font-weight: 700;
+        }
+
+
+        .condition-value {
+
+            font-size: 9px;
+
+            font-weight: 800;
+        }
+
+
+        .condition-bar {
+
+            height: 5px;
+
+            border-radius: 10px;
+
+            background: #e8eef2;
+
+            overflow: hidden;
+        }
+
+
+        .condition-bar span {
+
+            display: block;
+
+            height: 100%;
+
+            border-radius: inherit;
+
+            transition: width 1s ease;
+        }
+
+
+        .condition-good {
+            background: var(--green);
+        }
+
+
+        .condition-medium {
+            background: var(--orange);
+        }
+
+
+        .condition-poor {
+            background: var(--red);
+        }
+
+
+        .asset-ai-btn {
+
+            width: 100%;
+
+            margin-top: 13px;
+
+            border: 1px solid #bfd0dc;
+
+            background: white;
+
+            color: var(--navy);
+
+            border-radius: 7px;
+
+            padding: 7px;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            transition: .2s ease;
+        }
+
+
+        .asset-ai-btn:hover {
+
+            background: var(--blue-light);
+
+            border-color: #9fc5dd;
+
+            color: var(--blue);
+        }
+
+
+        /* =====================================================
+           EMPTY / LOADING
+        ====================================================== */
+
+        .loading {
+
+            padding: 45px 20px;
+
+            text-align: center;
+
+            color: var(--muted);
+
+            font-size: 12px;
+        }
+
+
+        .loading-spinner {
+
+            width: 25px;
+            height: 25px;
+
+            border: 2px solid #dce6ec;
+
+            border-top-color: var(--blue);
+
+            border-radius: 50%;
+
+            margin: 0 auto 10px;
+
+            animation: spin .8s linear infinite;
+        }
+
+
+        @keyframes spin {
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+
+        .empty {
+
+            padding: 45px 20px;
+
+            text-align: center;
+
+            color: var(--muted);
+
+            font-size: 12px;
+        }
+
+
+        .error-box {
+
+            background: var(--red-light);
+
+            border: 1px solid #efcfd3;
+
+            color: #9f2935;
+
+            border-radius: 10px;
+
+            padding: 12px 14px;
+
+            margin-bottom: 16px;
+
+            font-size: 12px;
+
+            animation: fadeUp .3s ease both;
+        }
+
+
+        /* =====================================================
+           MODALS
+        ====================================================== */
+
+        .modal-content {
+
+            background: white;
+
+            color: var(--text);
+
+            border: 1px solid var(--border);
+
+            border-radius: 16px;
+
+            box-shadow: var(--shadow-lg);
+
+            overflow: hidden;
+        }
+
+
+        .modal-header {
+
+            border-bottom: 1px solid var(--border);
+
+            padding: 17px 20px;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #ffffff,
+                    #fafcfd
+                );
+        }
+
+
+        .modal-footer {
+
+            border-top: 1px solid var(--border);
+
+            padding: 13px 20px;
+
+            background: #fafcfd;
+        }
+
+
+        .modal-title {
+
+            color: var(--navy);
+
+            font-size: 17px;
+
+            font-weight: 800;
+        }
+
+
+        .modal-subtitle {
+
+            color: var(--muted);
+
+            font-size: 10px;
+        }
+
+
+        .btn-close {
+
+            opacity: .55;
+        }
+
+
+        .btn-close:hover {
+            opacity: .9;
+        }
+
+
+        /* =====================================================
+           WORKFLOW
+        ====================================================== */
+
+        .workflow-wrap {
+
+            background: #f8fafb;
+
+            border: 1px solid var(--border);
+
+            border-radius: 11px;
+
+            padding: 14px;
+
+            overflow-x: auto;
+        }
+
+
+        .workflow {
+
+            display: flex;
+
+            min-width: 720px;
+
+            gap: 0;
+        }
+
+
+        .workflow-step {
+
+            flex: 1;
+
+            text-align: center;
+
+            position: relative;
+
+            min-width: 90px;
+        }
+
+
+        .workflow-step:not(:last-child)::after {
+
+            content: "";
+
+            position: absolute;
+
+            top: 13px;
+
+            left: 50%;
+
+            width: 100%;
+
+            height: 2px;
+
+            background: #dce4e9;
+
+            z-index: 0;
+        }
+
+
+        .workflow-step.done:not(:last-child)::after {
+
+            background: #9bd2b5;
+        }
+
+
+        .workflow-dot {
+
+            width: 28px;
+            height: 28px;
+
+            margin: 0 auto;
+
+            border-radius: 50%;
+
+            background: white;
+
+            border: 2px solid #cbd7df;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            color: #8a9aa5;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        .workflow-step.active .workflow-dot {
+
+            border-color: var(--blue);
+
+            background: var(--blue-light);
+
+            color: var(--blue);
+
+            box-shadow:
+                0 0 0 4px rgba(23,105,170,.08);
+        }
+
+
+        .workflow-step.done .workflow-dot {
+
+            border-color: var(--green);
+
+            background: var(--green-light);
+
+            color: var(--green);
+        }
+
+
+        .workflow-label {
+
+            margin-top: 7px;
+
+            color: #83929d;
+
+            font-size: 8px;
+
+            font-weight: 700;
+
+            line-height: 1.3;
+        }
+
+
+        .workflow-step.active .workflow-label {
+
+            color: var(--blue);
+        }
+
+
+        .workflow-step.done .workflow-label {
+
+            color: var(--green);
+        }
+
+
+        /* =====================================================
+           DETAIL METRICS
+        ====================================================== */
+
+        .detail-metric {
+
+            background: #f8fafb;
+
+            border: 1px solid var(--border);
+
+            border-radius: 9px;
+
+            padding: 11px;
+
+            height: 100%;
+        }
+
+
+        .detail-label {
+
+            color: var(--muted);
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: .35px;
+        }
+
+
+        .detail-value {
+
+            color: var(--navy);
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            margin-top: 4px;
+        }
+
+
+        .description-box {
+
+            background: #f8fafb;
+
+            border: 1px solid var(--border);
+
+            border-radius: 9px;
+
+            padding: 13px;
+
+            color: var(--text);
+
+            font-size: 12px;
+
+            line-height: 1.65;
+        }
+
+
+        /* =====================================================
+           MATCHED ASSET
+        ====================================================== */
+
+        .matched-asset {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f5f9fc,
+                    #ffffff
+                );
+
+            border: 1px solid #d7e3eb;
+
+            border-radius: 10px;
+
+            padding: 13px;
+        }
+
+
+        /* =====================================================
+           MAP
+        ====================================================== */
+
+        #map {
+
+            height: 270px;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+
+            border: 1px solid var(--border);
+        }
+
+
+        /* =====================================================
+           PHOTO
+        ====================================================== */
+
+        .photo-preview {
+
+            width: 100%;
+
+            max-height: 300px;
+
+            object-fit: contain;
+
+            border-radius: 10px;
+
+            background: #f5f7f8;
+
+            border: 1px solid var(--border);
+        }
+
+
+        /* =====================================================
+           AI RISK BOX
+        ====================================================== */
+
+        .ai-panel {
+
+            border: 1px solid #d9e5ec;
+
+            border-radius: 13px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #f5faff,
+                    #ffffff
+                );
+
+            padding: 17px;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .ai-panel::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 130px;
+            height: 130px;
+
+            border-radius: 50%;
+
+            right: -60px;
+            top: -65px;
+
+            background:
+                rgba(23,105,170,.06);
+        }
+
+
+        .ai-label {
+
+            color: var(--blue);
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            text-transform: uppercase;
+
+            letter-spacing: .7px;
+        }
+
+
+        .risk-score-row {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-top: 8px;
+        }
+
+
+        .risk-number {
+
+            color: var(--navy);
+
+            font-size: 46px;
+
+            line-height: 1;
+
+            font-weight: 900;
+
+            letter-spacing: -1.5px;
+        }
+
+
+        .risk-denominator {
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+            margin-top: 5px;
+        }
+
+
+        .risk-category {
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        .risk-meter {
+
+            margin-top: 13px;
+
+            height: 8px;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #42a66d 0%,
+                    #e6b84b 45%,
+                    #e26d52 72%,
+                    #c93636 100%
+                );
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .risk-meter-marker {
+
+            position: absolute;
+
+            top: -4px;
+
+            width: 3px;
+
+            height: 16px;
+
+            border-radius: 3px;
+
+            background: var(--navy);
+
+            left: 0;
+
+            transition:
+                left 1s cubic-bezier(.2,.8,.2,1);
+        }
+
+
+        .risk-meter-labels {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            color: var(--muted);
+
+            font-size: 8px;
+
+            margin-top: 5px;
+        }
+
+
+        .ai-metrics {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 8px;
+
+            margin-top: 14px;
+        }
+
+
+        .ai-metric {
+
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 8px;
+
+            padding: 9px;
+        }
+
+
+        .ai-metric-label {
+
+            color: var(--muted);
+
+            font-size: 8px;
+
+            font-weight: 700;
+        }
+
+
+        .ai-metric-value {
+
+            color: var(--navy);
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            margin-top: 3px;
+        }
+
+
+        /* =====================================================
+           RECOMMENDATION
+        ====================================================== */
+
+        .recommendation-card {
+
+            margin-top: 12px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 11px;
+
+            overflow: hidden;
+        }
+
+
+        .recommendation-header {
+
+            padding: 12px 14px;
+
+            background: #f8fafb;
+
+            border-bottom: 1px solid var(--border);
+
+            color: var(--navy);
+
+            font-size: 11px;
+
+            font-weight: 800;
+        }
+
+
+        .recommendation-body {
+
+            padding: 13px;
+
+            color: var(--text);
+
+            font-size: 11px;
+
+            line-height: 1.6;
+        }
+
+
+        .factor {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 12px;
+
+            border-bottom: 1px solid #e8edf0;
+
+            padding: 9px 0;
+
+            font-size: 10px;
+        }
+
+
+        .factor:last-child {
+
+            border-bottom: 0;
+        }
+
+
+        .factor-name {
+
+            color: var(--muted);
+        }
+
+
+        .factor strong {
+
+            color: var(--navy);
+        }
+
+
+        /* =====================================================
+           ACTION BUTTONS
+        ====================================================== */
+
+        .action-btn {
+
+            border-radius: 7px;
+
+            padding: 7px 11px;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            border: 1px solid transparent;
+
+            transition: .2s ease;
+        }
+
+
+        .action-primary {
+
+            color: white;
+
+            background: var(--blue);
+
+            border-color: var(--blue);
+        }
+
+
+        .action-primary:hover {
+
+            background: #135d95;
+
+            color: white;
+        }
+
+
+        .action-success {
+
+            color: white;
+
+            background: var(--green);
+
+            border-color: var(--green);
+        }
+
+
+        .action-warning {
+
+            color: #604000;
+
+            background: #ffd67a;
+
+            border-color: #f2c35b;
+        }
+
+
+        .action-danger {
+
+            color: var(--red);
+
+            background: white;
+
+            border-color: #e2b8bd;
+        }
+
+
+        .action-danger:hover {
+
+            background: var(--red-light);
+        }
+
+
+        /* =====================================================
+           TOAST
+        ====================================================== */
+
+        .toast-container {
+
+            z-index: 9999;
+        }
+
+
+        .toast {
+
+            background: var(--navy);
+
+            color: white;
+
+            border: 0;
+
+            border-radius: 9px;
+
+            box-shadow: var(--shadow-lg);
+        }
+
+
+        .toast-body {
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            padding: 12px 14px;
+        }
+
+
+        /* =====================================================
+           ANIMATION
+        ====================================================== */
+
+        @keyframes fadeUp {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(12px);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        .reveal {
+
+            opacity: 0;
+
+            transform:
+                translateY(12px);
+
+            transition:
+                opacity .55s ease,
+                transform .55s ease;
+        }
+
+
+        .reveal.visible {
+
+            opacity: 1;
+
+            transform:
+                translateY(0);
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ====================================================== */
+
+        @media (max-width: 991px) {
+
+            .officer-info {
+                display: none;
+            }
+
+            .dashboard-hero {
+                padding: 23px;
+            }
+
+            .hero-title {
+                font-size: 24px;
+            }
+
+        }
+
+
+        @media (max-width: 767px) {
+
+            .utility-right {
+                display: none;
+            }
+
+            .utility-inner {
+                justify-content: center;
+            }
+
+            .main-header {
+                position: relative;
+            }
+
+            .header-inner {
+                min-height: 68px;
+            }
+
+            .brand-subtitle {
+                display: none;
+            }
+
+            .brand-name {
+                font-size: 18px;
+            }
+
+            .brand-mark {
+                width: 38px;
+                height: 38px;
+            }
+
+            .logout-btn {
+                padding: 7px 9px;
+            }
+
+            .page {
+                padding-top: 18px;
+            }
+
+            .dashboard-hero {
+                padding: 20px;
+            }
+
+            .hero-title {
+                font-size: 21px;
+            }
+
+            .hero-description {
+                font-size: 12px;
+            }
+
+            .hero-actions {
+                width: 100%;
+            }
+
+            .hero-actions button {
+                flex: 1;
+            }
+
+            .section-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .section-tools {
+                width: 100%;
+            }
+
+            .filter-select {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .workflow {
+                min-width: 680px;
+            }
+
+            .ai-metrics {
+                grid-template-columns: 1fr 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 480px) {
+
+            .utility-left {
+                gap: 9px;
+            }
+
+            .utility-item:nth-child(2) {
+                display: none;
+            }
+
+            .brand-name {
+                font-size: 16px;
+            }
+
+            .kpi-value {
+                font-size: 26px;
+            }
+
+            .kpi-card {
+                padding: 15px;
+            }
+
+            .risk-number {
+                font-size: 40px;
+            }
+
+        }
+
+
+        /* =====================================================
+           REDUCED MOTION
+        ====================================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+
+                animation-duration: .01ms !important;
+
+                animation-iteration-count: 1 !important;
+
+                transition-duration: .01ms !important;
+
+                scroll-behavior: auto !important;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="main-header">
+
+    <div class="container">
+
+        <div class="header-inner">
+
+            <a
+                href="/"
+                class="brand"
+                aria-label="InfraGuard AI Home"
+            >
+
+                <div class="brand-mark">
+
+                    <div class="brand-shield">
+                        IA
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="brand-name">
+                        InfraGuard <span>AI</span>
+                    </div>
+
+                    <div class="brand-subtitle">
+                        Digital Civic Infrastructure Platform
+                    </div>
+
+                </div>
+
+            </a>
+
+
+            <div class="header-actions">
+
+                <div class="officer-profile">
+
+                    <div
+                        class="officer-avatar"
+                        id="officerAvatar"
+                    >
+                        MO
+                    </div>
+
+
+                    <div class="officer-info">
+
+                        <div
+                            class="officer-name"
+                            id="officerName"
+                        >
+                            Maintenance Officer
+                        </div>
+
+                        <div class="officer-role">
+                            Maintenance Operations
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="logout-btn"
+                    onclick="logout()"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- =========================================================
+     TRICOLOR
+========================================================= -->
+
+<div class="tricolor-line">
+
+    <span></span>
+    <span></span>
+    <span></span>
+
+</div>
+
+
+<!-- =========================================================
+     PAGE
+========================================================= -->
+
+<main class="page">
+
+    <div class="container">
+
+
+        <!-- =================================================
+             BREADCRUMB
+        ================================================== -->
+
+        <div class="breadcrumb-wrap">
+
+            <nav aria-label="breadcrumb">
+
+                <ol class="breadcrumb">
+
+                    <li class="breadcrumb-item">
+                        InfraGuard AI
+                    </li>
+
+                    <li
+                        class="breadcrumb-item active"
+                        aria-current="page"
+                    >
+                        Officer Dashboard
+                    </li>
+
+                </ol>
+
+            </nav>
+
+        </div>
+
+
+        <!-- =================================================
+             ERROR
+        ================================================== -->
+
+        <div id="globalError"></div>
+
+
+        <!-- =================================================
+             HERO
+        ================================================== -->
+
+        <section class="dashboard-hero">
+
+            <div class="row align-items-center">
+
+                <div class="col-lg-8">
+
+                    <div class="hero-content">
+
+                        <div class="eyebrow">
+                            Officer Operations
+                        </div>
+
+                        <h1 class="hero-title">
+                            Infrastructure Operations Dashboard
+                        </h1>
+
+                        <p class="hero-description">
+
+                            Review citizen complaints, assess
+                            infrastructure risk, prioritize maintenance
+                            actions and move verified issues through
+                            the service workflow.
+
+                        </p>
+
+
+                        <div class="system-status">
+
+                            <span class="status-dot"></span>
+
+                            AI monitoring and complaint services available
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-lg-4 mt-4 mt-lg-0">
+
+                    <div class="hero-actions justify-content-lg-end">
+
+                        <button
+                            class="btn-primary-custom"
+                            onclick="refreshDashboard()"
+                            id="refreshButton"
+                        >
+                            ↻ &nbsp; Refresh Dashboard
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             KPI
+        ================================================== -->
+
+        <div class="row g-3 kpi-grid">
+
+
+            <!-- TOTAL -->
+
+            <div class="col-6 col-xl-3">
+
+                <div class="kpi-card">
+
+                    <div class="kpi-top">
+
+                        <div>
+
+                            <div class="kpi-label">
+                                Total Complaints
+                            </div>
+
+                            <div
+                                class="kpi-value"
+                                id="totalComplaints"
+                            >
+                                0
+                            </div>
+
+                        </div>
+
+
+                        <div class="kpi-icon blue">
+                            C
+                        </div>
+
+                    </div>
+
+
+                    <div class="kpi-foot">
+                        All reported infrastructure issues
+                    </div>
+
+
+                    <div class="kpi-line blue">
+                        <span
+                            id="totalKpiLine"
+                            style="width:70%"
+                        ></span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- REVIEW -->
+
+            <div class="col-6 col-xl-3">
+
+                <div class="kpi-card">
+
+                    <div class="kpi-top">
+
+                        <div>
+
+                            <div class="kpi-label">
+                                Needs Review
+                            </div>
+
+                            <div
+                                class="kpi-value"
+                                id="reviewComplaints"
+                            >
+                                0
+                            </div>
+
+                        </div>
+
+
+                        <div class="kpi-icon orange">
+                            !
+                        </div>
+
+                    </div>
+
+
+                    <div class="kpi-foot">
+                        Submitted or awaiting verification
+                    </div>
+
+
+                    <div class="kpi-line orange">
+                        <span
+                            id="reviewKpiLine"
+                            style="width:45%"
+                        ></span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- HIGH RISK -->
+
+            <div class="col-6 col-xl-3">
+
+                <div class="kpi-card">
+
+                    <div class="kpi-top">
+
+                        <div>
+
+                            <div class="kpi-label">
+                                Critical / High
+                            </div>
+
+                            <div
+                                class="kpi-value"
+                                id="highRiskComplaints"
+                            >
+                                0
+                            </div>
+
+                        </div>
+
+
+                        <div class="kpi-icon red">
+                            !
+                        </div>
+
+                    </div>
+
+
+                    <div class="kpi-foot">
+                        Priority attention required
+                    </div>
+
+
+                    <div class="kpi-line red">
+                        <span
+                            id="riskKpiLine"
+                            style="width:35%"
+                        ></span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RESOLVED -->
+
+            <div class="col-6 col-xl-3">
+
+                <div class="kpi-card">
+
+                    <div class="kpi-top">
+
+                        <div>
+
+                            <div class="kpi-label">
+                                Resolved
+                            </div>
+
+                            <div
+                                class="kpi-value"
+                                id="resolvedComplaints"
+                            >
+                                0
+                            </div>
+
+                        </div>
+
+
+                        <div class="kpi-icon green">
+                            ✓
+                        </div>
+
+                    </div>
+
+
+                    <div class="kpi-foot">
+                        Completed or citizen-confirmed
+                    </div>
+
+
+                    <div class="kpi-line green">
+                        <span
+                            id="resolvedKpiLine"
+                            style="width:65%"
+                        ></span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             COMPLAINT QUEUE
+        ================================================== -->
+
+        <section class="section-card reveal">
+
+            <div class="section-header">
+
+                <div class="section-title-wrap">
+
+                    <h2>
+                        Complaint Priority Queue
+                    </h2>
+
+                    <p>
+                        Review reported issues and progress verified
+                        complaints through maintenance.
+                    </p>
+
+                </div>
+
+
+                <div class="section-tools">
+
+                    <select
+                        id="statusFilter"
+                        class="filter-select"
+                        onchange="renderComplaints()"
+                    >
+
+                        <option value="ALL">
+                            All statuses
+                        </option>
+
+                        <option value="SUBMITTED">
+                            Submitted
+                        </option>
+
+                        <option value="UNDER REVIEW">
+                            Under Review
+                        </option>
+
+                        <option value="VERIFIED">
+                            Verified
+                        </option>
+
+                        <option value="PRIORITIZED">
+                            Prioritized
+                        </option>
+
+                        <option value="ASSIGNED">
+                            Assigned
+                        </option>
+
+                        <option value="IN PROGRESS">
+                            In Progress
+                        </option>
+
+                        <option value="INSPECTION">
+                            Inspection
+                        </option>
+
+                        <option value="RESOLVED">
+                            Resolved
+                        </option>
+
+                        <option value="CLOSED">
+                            Closed
+                        </option>
+
+                        <option value="REJECTED">
+                            Rejected
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div id="complaintsContainer">
+
+                <div class="loading">
+
+                    <div class="loading-spinner"></div>
+
+                    Loading complaints...
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ASSETS
+        ================================================== -->
+
+        <section class="section-card reveal">
+
+            <div class="section-header">
+
+                <div class="section-title-wrap">
+
+                    <h2>
+                        Infrastructure Assets
+                    </h2>
+
+                    <p>
+                        Assets available for AI-assisted risk analysis.
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <span
+                        class="status status-review"
+                        id="assetCount"
+                    >
+                        0 assets
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="asset-section-body">
+
+                <div
+                    class="row g-3"
+                    id="assetsContainer"
+                >
+
+                    <div class="loading">
+
+                        <div class="loading-spinner"></div>
+
+                        Loading infrastructure assets...
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+</main>
+
+
+<!-- =========================================================
+     COMPLAINT MODAL
+========================================================= -->
+
+<div
+    class="modal fade"
+    id="complaintModal"
+    tabindex="-1"
+>
+
+    <div
+        class="modal-dialog modal-xl modal-dialog-scrollable"
+    >
+
+        <div class="modal-content">
+
+
+            <!-- HEADER -->
+
+            <div class="modal-header">
+
+                <div>
+
+                    <div
+                        class="eyebrow mb-1"
+                        style="font-size:9px;"
+                    >
+                        Complaint Review
+                    </div>
+
+                    <h5
+                        class="modal-title mb-1"
+                        id="modalComplaintTitle"
+                    >
+                        Complaint Review
+                    </h5>
+
+                    <div
+                        class="modal-subtitle"
+                        id="modalComplaintCode"
+                    >
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+
+
+            <!-- BODY -->
+
+            <div class="modal-body p-3 p-lg-4">
+
+
+                <!-- WORKFLOW -->
+
+                <div class="mb-4">
+
+                    <div
+                        class="detail-label mb-2"
+                    >
+                        Workflow Progress
+                    </div>
+
+
+                    <div class="workflow-wrap">
+
+                        <div
+                            class="workflow"
+                            id="workflow"
+                        >
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row g-4">
+
+
+                    <!-- =====================================
+                         LEFT
+                    ====================================== -->
+
+                    <div class="col-lg-7">
+
+
+                        <!-- DETAILS -->
+
+                        <div class="row g-2">
+
+
+                            <div class="col-md-6">
+
+                                <div class="detail-metric">
+
+                                    <div class="detail-label">
+                                        Category
+                                    </div>
+
+                                    <div
+                                        class="detail-value"
+                                        id="detailCategory"
+                                    >
+                                        —
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <div class="detail-metric">
+
+                                    <div class="detail-label">
+                                        Problem Type
+                                    </div>
+
+                                    <div
+                                        class="detail-value"
+                                        id="detailProblem"
+                                    >
+                                        —
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <div class="detail-metric">
+
+                                    <div class="detail-label">
+                                        Severity
+                                    </div>
+
+                                    <div
+                                        class="detail-value"
+                                        id="detailSeverity"
+                                    >
+                                        —
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <div class="detail-metric">
+
+                                    <div class="detail-label">
+                                        Current Status
+                                    </div>
+
+                                    <div
+                                        class="detail-value"
+                                        id="detailStatus"
+                                    >
+                                        —
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DESCRIPTION -->
+
+                        <div class="mt-3">
+
+                            <div class="detail-label mb-2">
+                                Citizen Description
+                            </div>
+
+                            <div
+                                class="description-box"
+                                id="detailDescription"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <!-- ASSET -->
+
+                        <div class="mt-3">
+
+                            <div class="detail-label mb-2">
+                                Matched Infrastructure Asset
+                            </div>
+
+                            <div
+                                class="matched-asset"
+                                id="matchedAsset"
+                            >
+                                No asset linked.
+                            </div>
+
+                        </div>
+
+
+                        <!-- MAP -->
+
+                        <div class="mt-3">
+
+                            <div class="detail-label mb-2">
+                                Reported Location
+                            </div>
+
+                            <div id="map"></div>
+
+                        </div>
+
+
+                        <!-- PHOTO -->
+
+                        <div
+                            class="mt-3"
+                            id="photoContainer"
+                            style="display:none;"
+                        >
+
+                            <div class="detail-label mb-2">
+                                Citizen Evidence
+                            </div>
+
+                            <img
+                                id="complaintPhoto"
+                                class="photo-preview"
+                                alt="Citizen complaint evidence"
+                            >
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- =====================================
+                         RIGHT
+                    ====================================== -->
+
+                    <div class="col-lg-5">
+
+
+                        <!-- AI -->
+
+                        <div class="ai-panel">
+
+                            <div class="ai-label">
+                                AI-Assisted Maintenance Risk
+                            </div>
+
+
+                            <div class="risk-score-row">
+
+                                <div>
+
+                                    <div
+                                        class="risk-number"
+                                        id="aiRiskScore"
+                                    >
+                                        —
+                                    </div>
+
+                                    <div class="risk-denominator">
+                                        Risk score / 100
+                                    </div>
+
+                                </div>
+
+
+                                <div
+                                    class="risk-category"
+                                    id="aiRiskCategory"
+                                >
+                                    <span class="status">
+                                        Not predicted
+                                    </span>
+                                </div>
+
+                            </div>
+
+
+                            <div class="risk-meter">
+
+                                <div
+                                    class="risk-meter-marker"
+                                    id="riskMeterMarker"
+                                ></div>
+
+                            </div>
+
+
+                            <div class="risk-meter-labels">
+
+                                <span>
+                                    Low
+                                </span>
+
+                                <span>
+                                    Medium
+                                </span>
+
+                                <span>
+                                    High
+                                </span>
+
+                                <span>
+                                    Critical
+                                </span>
+
+                            </div>
+
+
+                            <div class="ai-metrics">
+
+
+                                <div class="ai-metric">
+
+                                    <div class="ai-metric-label">
+                                        Maintenance Probability
+                                    </div>
+
+                                    <div
+                                        class="ai-metric-value"
+                                        id="aiProbability"
+                                    >
+                                        —
+                                    </div>
+
+                                </div>
+
+
+                                <div class="ai-metric">
+
+                                    <div class="ai-metric-label">
+                                        Priority
+                                    </div>
+
+                                    <div
+                                        class="ai-metric-value"
+                                        id="aiPriority"
+                                    >
+                                        —
+                                    </div>
+
+                                </div>
+
+
+                                <div class="ai-metric">
+
+                                    <div class="ai-metric-label">
+                                        Priority Score
+                                    </div>
+
+                                    <div
+                                        class="ai-metric-value"
+                                        id="aiPriorityScore"
+                                    >
+                                        —
+                                    </div>
+
+                                </div>
+
+
+                                <div class="ai-metric">
+
+                                    <div class="ai-metric-label">
+                                        SLA
+                                    </div>
+
+                                    <div
+                                        class="ai-metric-value"
+                                        id="aiSla"
+                                    >
+                                        —
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+
+                            <button
+                                id="runComplaintAI"
+                                class="btn-primary-custom w-100 mt-3"
+                                onclick="runComplaintPrediction()"
+                            >
+                                Run AI Risk Analysis
+                            </button>
+
+                        </div>
+
+
+                        <!-- RECOMMENDATION -->
+
+                        <div class="recommendation-card">
+
+                            <div class="recommendation-header">
+                                Recommended Action
+                            </div>
+
+
+                            <div class="recommendation-body">
+
+                                <div
+                                    id="aiRecommendation"
+                                >
+                                    Run the AI risk engine to generate
+                                    a maintenance recommendation.
+                                </div>
+
+
+                                <div
+                                    id="contributingFactors"
+                                    class="mt-2"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="modal-footer">
+
+                <div
+                    class="me-auto"
+                    id="workflowActions"
+                ></div>
+
+
+                <button
+                    type="button"
+                    class="btn-secondary-custom"
+                    data-bs-dismiss="modal"
+                >
+                    Close
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     ASSET AI MODAL
+========================================================= -->
+
+<div
+    class="modal fade"
+    id="assetPredictionModal"
+    tabindex="-1"
+>
+
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+
+            <div class="modal-header">
+
+                <div>
+
+                    <div
+                        class="eyebrow mb-1"
+                        style="font-size:9px;"
+                    >
+                        Predictive Maintenance
+                    </div>
+
+                    <h5 class="modal-title">
+                        AI Asset Risk Analysis
+                    </h5>
+
+                    <div
+                        class="modal-subtitle"
+                        id="assetPredictionTitle"
+                    ></div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+
+
+            <div
+                class="modal-body"
+                id="assetPredictionBody"
+            >
+
+                <div class="loading">
+
+                    <div class="loading-spinner"></div>
+
+                    Running AI prediction...
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
+<div
+    class="toast-container position-fixed bottom-0 end-0 p-3"
+>
+
+    <div
+        id="appToast"
+        class="toast"
+        role="alert"
+    >
+
+        <div
+            class="toast-body"
+            id="toastMessage"
+        >
+            Done.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     BOOTSTRAP
+========================================================= -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+
+<!-- =========================================================
+     LEAFLET
+========================================================= -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+
+<script>
+
+/* =========================================================
+   GLOBAL STATE
+========================================================= */
+
+let complaints = [];
+
+let assets = [];
+
+let selectedComplaint = null;
+
+let complaintMap = null;
+
+let complaintMarker = null;
+
+
+/* =========================================================
+   WORKFLOW
+========================================================= */
+
+const workflow = [
+
+    "SUBMITTED",
+
+    "UNDER REVIEW",
+
+    "VERIFIED",
+
+    "PRIORITIZED",
+
+    "ASSIGNED",
+
+    "IN PROGRESS",
+
+    "INSPECTION",
+
+    "RESOLVED"
+
+];
+
+
+const workflowLabels = {
+
+    "SUBMITTED":
+        "Submitted",
+
+    "UNDER REVIEW":
+        "Under Review",
+
+    "VERIFIED":
+        "Verified",
+
+    "PRIORITIZED":
+        "Prioritized",
+
+    "ASSIGNED":
+        "Assigned",
+
+    "IN PROGRESS":
+        "In Progress",
+
+    "INSPECTION":
+        "Inspection",
+
+    "RESOLVED":
+        "Resolved"
+
+};
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+function getAccessToken() {
+
+    const directKeys = [
+
+        "access_token",
+
+        "accessToken",
+
+        "supabase_access_token"
+
+    ];
+
+
+    for (const key of directKeys) {
+
+        const value =
+            localStorage.getItem(key);
+
+        if (value) {
+
+            return value;
+
+        }
+
+    }
+
+
+    for (
+        let i = 0;
+        i < localStorage.length;
+        i++
+    ) {
+
+        const key =
+            localStorage.key(i);
+
+        if (!key) {
+
+            continue;
+
+        }
+
+
+        if (key.includes("-auth-token")) {
+
+            try {
+
+                const raw =
+                    JSON.parse(
+                        localStorage.getItem(key)
+                    );
+
+
+                if (raw?.access_token) {
+
+                    return raw.access_token;
+
+                }
+
+
+                if (raw?.accessToken) {
+
+                    return raw.accessToken;
+
+                }
+
+            }
+            catch (e) {
+
+                // Ignore malformed entries.
+
+            }
+
+        }
+
+    }
+
+
+    return null;
+}
+
+
+function authHeaders() {
+
+    const token =
+        getAccessToken();
+
+
+    const headers = {
+
+        "Content-Type":
+            "application/json"
+
+    };
+
+
+    if (token) {
+
+        headers["Authorization"] =
+            `Bearer ${token}`;
+
+    }
+
+
+    return headers;
+}
+
+
+function logout() {
+
+    localStorage.removeItem(
+        "access_token"
+    );
+
+    localStorage.removeItem(
+        "accessToken"
+    );
+
+    localStorage.removeItem(
+        "supabase_access_token"
+    );
+
+    localStorage.removeItem(
+        "user"
+    );
+
+    localStorage.removeItem(
+        "profile"
+    );
+
+
+    window.location.href =
+        "/login";
+}
+
+
+/* =========================================================
+   API
+========================================================= */
+
+async function apiRequest(
+    url,
+    options = {}
+) {
+
+    const config = {
+
+        ...options,
+
+        headers: {
+
+            ...authHeaders(),
+
+            ...(options.headers || {})
+
+        }
+
+    };
+
+
+    const response =
+        await fetch(
+            url,
+            config
+        );
+
+
+    const contentType =
+        response.headers.get(
+            "content-type"
+        ) || "";
+
+
+    let data;
+
+
+    if (
+        contentType.includes(
+            "application/json"
+        )
+    ) {
+
+        data =
+            await response.json();
+
+    }
+    else {
+
+        const text =
+            await response.text();
+
+
+        data = {
+
+            error:
+                text ||
+                `Request failed with status ${response.status}`
+
+        };
+
+    }
+
+
+    if (!response.ok) {
+
+        throw new Error(
+
+            data.error ||
+
+            data.message ||
+
+            `Request failed with status ${response.status}`
+
+        );
+
+    }
+
+
+    return data;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message) {
+
+    document.getElementById(
+        "toastMessage"
+    ).textContent =
+        message;
+
+
+    const toastElement =
+        document.getElementById(
+            "appToast"
+        );
+
+
+    const toast =
+        bootstrap.Toast.getOrCreateInstance(
+            toastElement,
+            {
+                delay: 2800
+            }
+        );
+
+
+    toast.show();
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+function showError(message) {
+
+    document.getElementById(
+        "globalError"
+    ).innerHTML = `
+
+        <div class="error-box">
+
+            ${escapeHtml(message)}
+
+        </div>
+
+    `;
+}
+
+
+function clearError() {
+
+    document.getElementById(
+        "globalError"
+    ).innerHTML = "";
+
+}
+
+
+/* =========================================================
+   REFRESH
+========================================================= */
+
+async function refreshDashboard() {
+
+    clearError();
+
+
+    const button =
+        document.getElementById(
+            "refreshButton"
+        );
+
+
+    if (button) {
+
+        button.disabled = true;
+
+        button.textContent =
+            "Refreshing...";
+
+    }
+
+
+    try {
+
+        await Promise.all([
+
+            loadComplaints(),
+
+            loadAssets()
+
+        ]);
+
+
+        updateStats();
+
+
+        animateKpiBars();
+
+
+        showToast(
+            "Dashboard refreshed."
+        );
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+        showError(
+            error.message
+        );
+
+    }
+    finally {
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                "↻  Refresh Dashboard";
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   COMPLAINTS
+========================================================= */
+
+async function loadComplaints() {
+
+    const container =
+        document.getElementById(
+            "complaintsContainer"
+        );
+
+
+    container.innerHTML = `
+
+        <div class="loading">
+
+            <div class="loading-spinner"></div>
+
+            Loading complaints...
+
+        </div>
+
+    `;
+
+
+    try {
+
+        const data =
+            await apiRequest(
+                "/api/officer/complaints"
+            );
+
+
+        complaints =
+            Array.isArray(data)
+                ? data
+                : (
+                    data.complaints ||
+                    data.data ||
+                    []
+                );
+
+
+        renderComplaints();
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                Failed to load complaints.
+
+                <br>
+
+                <small>
+                    ${escapeHtml(error.message)}
+                </small>
+
+            </div>
+
+        `;
+
+
+        throw error;
+    }
+
+}
+
+
+function renderComplaints() {
+
+    const container =
+        document.getElementById(
+            "complaintsContainer"
+        );
+
+
+    const filter =
+        document.getElementById(
+            "statusFilter"
+        ).value;
+
+
+    let rows =
+        [...complaints];
+
+
+    if (filter !== "ALL") {
+
+        rows =
+            rows.filter(
+                complaint =>
+                    complaint.status === filter
+            );
+
+    }
+
+
+    const priorityOrder = {
+
+        "P1": 1,
+
+        "P2": 2,
+
+        "P3": 3,
+
+        "P4": 4
+
+    };
+
+
+    rows.sort(
+        (a, b) => {
+
+            const pa =
+                priorityOrder[
+                    a.priority
+                ] || 5;
+
+
+            const pb =
+                priorityOrder[
+                    b.priority
+                ] || 5;
+
+
+            if (pa !== pb) {
+
+                return pa - pb;
+
+            }
+
+
+            return (
+                new Date(
+                    b.created_at || 0
+                ) -
+
+                new Date(
+                    a.created_at || 0
+                )
+            );
+
+        }
+    );
+
+
+    if (!rows.length) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                No complaints found for
+                this filter.
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    let html = `
+
+        <div class="table-wrap">
+
+            <table class="table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Complaint
+                        </th>
+
+                        <th>
+                            Category
+                        </th>
+
+                        <th>
+                            Severity
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Priority
+                        </th>
+
+                        <th>
+                            Asset
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+    `;
+
+
+    for (const complaint of rows) {
+
+        const priority =
+            complaint.priority ||
+            "—";
+
+
+        const priorityClass =
+            priority === "P1"
+                ? "p1"
+                : priority === "P2"
+                    ? "p2"
+                    : priority === "P3"
+                        ? "p3"
+                        : "p4";
+
+
+        const asset =
+            findAsset(
+                complaint.asset_id
+            );
+
+
+        html += `
+
+            <tr>
+
+                <td>
+
+                    <div class="complaint-code">
+
+                        ${escapeHtml(
+                            complaint.complaint_code ||
+                            "Complaint"
+                        )}
+
+                    </div>
+
+
+                    <div class="complaint-date">
+
+                        ${formatDate(
+                            complaint.created_at
+                        )}
+
+                    </div>
+
+                </td>
+
+
+                <td>
+
+                    ${escapeHtml(
+                        complaint.category ||
+                        "—"
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    ${escapeHtml(
+                        complaint.severity ||
+                        "—"
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    ${statusBadge(
+                        complaint.status
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    <span
+                        class="priority ${priorityClass}"
+                    >
+
+                        ${escapeHtml(
+                            priority
+                        )}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    ${
+                        asset
+
+                            ? `
+
+                                <span class="asset-mini">
+
+                                    ${escapeHtml(
+                                        asset.asset_code
+                                    )}
+
+                                </span>
+
+                              `
+
+                            : `
+
+                                <span class="asset-unlinked">
+
+                                    Not linked
+
+                                </span>
+
+                              `
+                    }
+
+                </td>
+
+
+                <td>
+
+                    <button
+                        class="review-btn"
+                        onclick="openComplaint('${complaint.id}')"
+                    >
+
+                        Review
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+
+    html += `
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    `;
+
+
+    container.innerHTML =
+        html;
+
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats() {
+
+    const total =
+        complaints.length;
+
+
+    const review =
+        complaints.filter(
+            c =>
+                [
+                    "SUBMITTED",
+                    "UNDER REVIEW"
+                ].includes(c.status)
+        ).length;
+
+
+    const high =
+        complaints.filter(
+            c =>
+                ["P1", "P2"]
+                    .includes(c.priority) ||
+
+                ["Critical", "High"]
+                    .includes(c.severity)
+        ).length;
+
+
+    const resolved =
+        complaints.filter(
+            c =>
+                [
+                    "RESOLVED",
+                    "CITIZEN CONFIRMED",
+                    "CLOSED"
+                ].includes(c.status)
+        ).length;
+
+
+    document.getElementById(
+        "totalComplaints"
+    ).textContent =
+        total;
+
+
+    document.getElementById(
+        "reviewComplaints"
+    ).textContent =
+        review;
+
+
+    document.getElementById(
+        "highRiskComplaints"
+    ).textContent =
+        high;
+
+
+    document.getElementById(
+        "resolvedComplaints"
+    ).textContent =
+        resolved;
+
+
+    const avatar =
+        document.getElementById(
+            "officerAvatar"
+        );
+
+
+    if (avatar) {
+
+        const name =
+            document.getElementById(
+                "officerName"
+            ).textContent.trim();
+
+
+        if (name) {
+
+            const parts =
+                name.split(/\s+/);
+
+
+            avatar.textContent =
+                (
+                    (parts[0]?.[0] || "M") +
+                    (parts[1]?.[0] || "O")
+                ).toUpperCase();
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   KPI ANIMATION
+========================================================= */
+
+function animateKpiBars() {
+
+    const total =
+        Math.max(
+            complaints.length,
+            1
+        );
+
+
+    const review =
+        complaints.filter(
+            c =>
+                [
+                    "SUBMITTED",
+                    "UNDER REVIEW"
+                ].includes(c.status)
+        ).length;
+
+
+    const high =
+        complaints.filter(
+            c =>
+                ["P1", "P2"]
+                    .includes(c.priority) ||
+
+                ["Critical", "High"]
+                    .includes(c.severity)
+        ).length;
+
+
+    const resolved =
+        complaints.filter(
+            c =>
+                [
+                    "RESOLVED",
+                    "CITIZEN CONFIRMED",
+                    "CLOSED"
+                ].includes(c.status)
+        ).length;
+
+
+    document.getElementById(
+        "totalKpiLine"
+    ).style.width =
+        "100%";
+
+
+    document.getElementById(
+        "reviewKpiLine"
+    ).style.width =
+        `${Math.min(
+            (review / total) * 100,
+            100
+        )}%`;
+
+
+    document.getElementById(
+        "riskKpiLine"
+    ).style.width =
+        `${Math.min(
+            (high / total) * 100,
+            100
+        )}%`;
+
+
+    document.getElementById(
+        "resolvedKpiLine"
+    ).style.width =
+        `${Math.min(
+            (resolved / total) * 100,
+            100
+        )}%`;
+
+}
+
+
+/* =========================================================
+   ASSETS
+========================================================= */
+
+async function loadAssets() {
+
+    const container =
+        document.getElementById(
+            "assetsContainer"
+        );
+
+
+    container.innerHTML = `
+
+        <div class="loading">
+
+            <div class="loading-spinner"></div>
+
+            Loading infrastructure assets...
+
+        </div>
+
+    `;
+
+
+    try {
+
+        const data =
+            await apiRequest(
+                "/api/officer/assets"
+            );
+
+
+        assets =
+            Array.isArray(data)
+                ? data
+                : (
+                    data.assets ||
+                    data.data ||
+                    []
+                );
+
+
+        renderAssets();
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                Failed to load assets.
+
+                <br>
+
+                <small>
+                    ${escapeHtml(error.message)}
+                </small>
+
+            </div>
+
+        `;
+
+
+        throw error;
+    }
+
+}
+
+
+function renderAssets() {
+
+    const container =
+        document.getElementById(
+            "assetsContainer"
+        );
+
+
+    document.getElementById(
+        "assetCount"
+    ).textContent =
+        `${assets.length} asset${assets.length === 1 ? "" : "s"}`;
+
+
+    if (!assets.length) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                No infrastructure assets available.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        assets.map(
+            asset => {
+
+                const condition =
+                    Number(
+                        asset.condition_score ??
+                        0
+                    );
+
+
+                let conditionClass =
+                    "condition-good";
+
+
+                if (condition <= 30) {
+
+                    conditionClass =
+                        "condition-poor";
+
+                }
+                else if (condition <= 60) {
+
+                    conditionClass =
+                        "condition-medium";
+
+                }
+
+
+                const statusClass =
+                    asset.status === "ACTIVE"
+                        ? "active"
+                        : "other";
+
+
+                return `
+
+                    <div
+                        class="col-md-6 col-xl-4"
+                    >
+
+                        <div class="asset-card">
+
+                            <div class="asset-top">
+
+                                <div>
+
+                                    <div class="asset-code">
+
+                                        ${escapeHtml(
+                                            asset.asset_code
+                                        )}
+
+                                    </div>
+
+                                    <div class="asset-type">
+
+                                        ${escapeHtml(
+                                            prettyAssetType(
+                                                asset.asset_type
+                                            )
+                                        )}
+
+                                    </div>
+
+                                </div>
+
+
+                                <span
+                                    class="asset-status ${statusClass}"
+                                >
+
+                                    ${escapeHtml(
+                                        asset.status ||
+                                        "ACTIVE"
+                                    )}
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="asset-metrics">
+
+
+                                <div class="asset-metric">
+
+                                    <div class="asset-metric-label">
+                                        Condition
+                                    </div>
+
+                                    <div
+                                        class="asset-metric-value"
+                                    >
+
+                                        ${condition}/100
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="asset-metric">
+
+                                    <div class="asset-metric-label">
+                                        Complaints
+                                    </div>
+
+                                    <div
+                                        class="asset-metric-value"
+                                    >
+
+                                        ${asset.complaint_count ?? 0}
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="condition-wrap">
+
+                                <div class="condition-head">
+
+                                    <span class="condition-label">
+                                        Condition health
+                                    </span>
+
+                                    <span
+                                        class="condition-value"
+                                    >
+
+                                        ${condition}%
+
+                                    </span>
+
+                                </div>
+
+
+                                <div class="condition-bar">
+
+                                    <span
+                                        class="${conditionClass}"
+                                        style="width:${Math.max(
+                                            0,
+                                            Math.min(
+                                                100,
+                                                condition
+                                            )
+                                        )}%"
+                                    ></span>
+
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                class="asset-ai-btn"
+                                onclick="runAssetPrediction('${asset.id}')"
+                            >
+
+                                Run AI Prediction
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+        ).join("");
+
+}
+
+
+/* =========================================================
+   COMPLAINT MODAL
+========================================================= */
+
+function openComplaint(id) {
+
+    const complaint =
+        complaints.find(
+            c => c.id === id
+        );
+
+
+    if (!complaint) {
+
+        showToast(
+            "Complaint not found."
+        );
+
+        return;
+
+    }
+
+
+    selectedComplaint =
+        complaint;
+
+
+    resetAIResult();
+
+
+    document.getElementById(
+        "modalComplaintTitle"
+    ).textContent =
+        complaint.problem_type ||
+        "Complaint Review";
+
+
+    document.getElementById(
+        "modalComplaintCode"
+    ).textContent =
+        complaint.complaint_code ||
+        complaint.id;
+
+
+    document.getElementById(
+        "detailCategory"
+    ).textContent =
+        complaint.category ||
+        "—";
+
+
+    document.getElementById(
+        "detailProblem"
+    ).textContent =
+        complaint.problem_type ||
+        "—";
+
+
+    document.getElementById(
+        "detailSeverity"
+    ).textContent =
+        complaint.severity ||
+        "—";
+
+
+    document.getElementById(
+        "detailStatus"
+    ).innerHTML =
+        statusBadge(
+            complaint.status
+        );
+
+
+    document.getElementById(
+        "detailDescription"
+    ).textContent =
+        complaint.description ||
+        "No description provided.";
+
+
+    renderWorkflow(
+        complaint.status
+    );
+
+
+    renderWorkflowActions(
+        complaint
+    );
+
+
+    renderMatchedAsset(
+        complaint
+    );
+
+
+    renderComplaintLocation(
+        complaint
+    );
+
+
+    renderComplaintPhoto(
+        complaint
+    );
+
+
+    const modal =
+        bootstrap.Modal.getOrCreateInstance(
+            document.getElementById(
+                "complaintModal"
+            )
+        );
+
+
+    modal.show();
+
+
+    setTimeout(
+        () => {
+
+            if (complaintMap) {
+
+                complaintMap.invalidateSize();
+
+            }
+
+        },
+        300
+    );
+
+}
+
+
+/* =========================================================
+   WORKFLOW
+========================================================= */
+
+function renderWorkflow(
+    currentStatus
+) {
+
+    const container =
+        document.getElementById(
+            "workflow"
+        );
+
+
+    const currentIndex =
+        workflow.indexOf(
+            currentStatus
+        );
+
+
+    container.innerHTML =
+        workflow.map(
+            (status, index) => {
+
+                let state = "";
+
+
+                if (index < currentIndex) {
+
+                    state = "done";
+
+                }
+
+
+                if (index === currentIndex) {
+
+                    state = "active";
+
+                }
+
+
+                return `
+
+                    <div
+                        class="workflow-step ${state}"
+                    >
+
+                        <div class="workflow-dot">
+
+                            ${index + 1}
+
+                        </div>
+
+
+                        <div class="workflow-label">
+
+                            ${workflowLabels[status]}
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+        ).join("");
+
+}
+
+
+function renderWorkflowActions(
+    complaint
+) {
+
+    const container =
+        document.getElementById(
+            "workflowActions"
+        );
+
+
+    const status =
+        complaint.status;
+
+
+    let buttons = [];
+
+
+    if (status === "SUBMITTED") {
+
+        buttons.push(`
+
+            <button
+                class="action-btn action-primary"
+                onclick="changeStatus('UNDER REVIEW')"
+            >
+                Start Review
+            </button>
+
+        `);
+
+
+        buttons.push(`
+
+            <button
+                class="action-btn action-danger ms-1"
+                onclick="changeStatus('REJECTED')"
+            >
+                Reject
+            </button>
+
+        `);
+
+    }
+
+
+    else if (
+        status === "UNDER REVIEW"
+    ) {
+
+        buttons.push(`
+
+            <button
+                class="action-btn action-primary"
+                onclick="changeStatus('VERIFIED')"
+            >
+                Verify Complaint
+            </button>
+
+        `);
+
+
+        buttons.push(`
+
+            <button
+                class="action-btn action-danger ms-1"
+                onclick="changeStatus('REJECTED')"
+            >
+                Reject
+            </button>
+
+        `);
+
+    }
+
+
+    else if (
+        status === "VERIFIED"
+    ) {
+
+        buttons.push(`
+
+            <button
+                class="action-btn action-primary"
+                onclick="prioritizeComplaint()"
+            >
+                AI Analyze & Prioritize
+            </button>
+
+        `);
+
+    }
+
+
+    else if (
+        status === "PRIORITIZED"
+    ) {
+
+        buttons.push(`
+
+            <button
+                class="action-btn action-primary"
+                onclick="changeStatus('ASSIGNED')"
+            >
+                Mark Assigned
+            </button>
+
+        `);
+
+    }
+
+
+    else if (
+        status === "ASSIGNED"
+    ) {
+
+        buttons.push(`
+
+            <button
+                class="action-btn action-primary"
+                onclick="changeStatus('IN PROGRESS')"
+            >
+                Start Work
+            </button>
+
+        `);
+
+    }
+
+
+    else if (
+        status === "IN PROGRESS"
+    ) {
+
+        buttons.push(`
+
+            <button
+                class="action-btn action-warning"
+                onclick="changeStatus('INSPECTION')"
+            >
+                Send to Inspection
+            </button>
+
+        `);
+
+    }
+
+
+    else if (
+        status === "INSPECTION"
+    ) {
+
+        buttons.push(`
+
+            <button
+                class="action-btn action-success"
+                onclick="changeStatus('RESOLVED')"
+            >
+                Mark Resolved
+            </button>
+
+        `);
+
+    }
+
+
+    else if (
+        status === "REOPENED"
+    ) {
+
+        buttons.push(`
+
+            <button
+                class="action-btn action-primary"
+                onclick="changeStatus('UNDER REVIEW')"
+            >
+                Reopen Review
+            </button>
+
+        `);
+
+    }
+
+
+    else if (
+        status === "RESOLVED"
+    ) {
+
+        buttons.push(`
+
+            <span
+                class="small text-secondary"
+            >
+                Waiting for citizen confirmation.
+            </span>
+
+        `);
+
+    }
+
+
+    else if (
+        status === "CLOSED"
+    ) {
+
+        buttons.push(`
+
+            <span
+                class="small text-success"
+            >
+                Complaint closed.
+            </span>
+
+        `);
+
+    }
+
+
+    else if (
+        status === "REJECTED"
+    ) {
+
+        buttons.push(`
+
+            <span
+                class="small text-danger"
+            >
+                Complaint rejected.
+            </span>
+
+        `);
+
+    }
+
+
+    else {
+
+        buttons.push(`
+
+            <span
+                class="small text-secondary"
+            >
+                No workflow action available.
+            </span>
+
+        `);
+
+    }
+
+
+    container.innerHTML =
+        buttons.join("");
+
+}
+
+
+/* =========================================================
+   CHANGE STATUS
+========================================================= */
+
+async function changeStatus(
+    newStatus
+) {
+
+    if (!selectedComplaint) {
+
+        return;
+
+    }
+
+
+    const complaintId =
+        selectedComplaint.id;
+
+
+    const oldStatus =
+        selectedComplaint.status;
+
+
+    if (
+        !confirm(
+            `Change complaint status from "${oldStatus}" to "${newStatus}"?`
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        await apiRequest(
+
+            `/api/officer/complaints/${complaintId}/status`,
+
+            {
+
+                method: "PATCH",
+
+                body:
+                    JSON.stringify({
+                        status:
+                            newStatus
+                    })
+
+            }
+
+        );
+
+
+        selectedComplaint.status =
+            newStatus;
+
+
+        const index =
+            complaints.findIndex(
+                c =>
+                    c.id === complaintId
+            );
+
+
+        if (index !== -1) {
+
+            complaints[index].status =
+                newStatus;
+
+        }
+
+
+        renderWorkflow(
+            newStatus
+        );
+
+
+        renderWorkflowActions(
+            selectedComplaint
+        );
+
+
+        document.getElementById(
+            "detailStatus"
+        ).innerHTML =
+            statusBadge(
+                newStatus
+            );
+
+
+        renderComplaints();
+
+
+        updateStats();
+
+
+        animateKpiBars();
+
+
+        showToast(
+            `Complaint moved to ${newStatus}.`
+        );
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+
+        showToast(
+            `Status update failed: ${error.message}`
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   AI PRIORITIZATION
+========================================================= */
+
+async function prioritizeComplaint() {
+
+    if (!selectedComplaint) {
+
+        return;
+
+    }
+
+
+    if (!selectedComplaint.asset_id) {
+
+        showToast(
+            "This complaint has no linked infrastructure asset."
+        );
+
+        return;
+
+    }
+
+
+    await runComplaintPrediction();
+
+
+    if (
+        selectedComplaint.aiPredictionSuccess
+    ) {
+
+        await changeStatus(
+            "PRIORITIZED"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   COMPLAINT AI
+========================================================= */
+
+async function runComplaintPrediction() {
+
+    if (!selectedComplaint) {
+
+        return;
+
+    }
+
+
+    if (!selectedComplaint.asset_id) {
+
+        showToast(
+            "No infrastructure asset is linked to this complaint."
+        );
+
+        return;
+
+    }
+
+
+    const button =
+        document.getElementById(
+            "runComplaintAI"
+        );
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Running AI analysis...";
+
+
+    resetAIResult();
+
+
+    try {
+
+        const data =
+            await apiRequest(
+
+                `/api/officer/predict/${selectedComplaint.asset_id}`,
+
+                {
+
+                    method: "POST"
+
+                }
+
+            );
+
+
+        selectedComplaint.aiPredictionSuccess =
+            true;
+
+
+        renderAIResult(
+            data
+        );
+
+
+        showToast(
+            "AI risk analysis completed."
+        );
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+
+        selectedComplaint.aiPredictionSuccess =
+            false;
+
+
+        showToast(
+            `AI prediction failed: ${error.message}`
+        );
+
+    }
+    finally {
+
+        button.disabled =
+            false;
+
+
+        button.textContent =
+            "Run AI Risk Analysis";
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER AI
+========================================================= */
+
+function renderAIResult(
+    data
+) {
+
+    const prediction =
+        data.prediction ||
+        {};
+
+
+    const risk =
+        prediction.risk ||
+        {};
+
+
+    const score =
+        Number(
+
+            risk.score ??
+
+            prediction.risk_score ??
+
+            0
+
+        );
+
+
+    const category =
+        risk.category ||
+
+        prediction.risk_category ||
+
+        "Unknown";
+
+
+    const probability =
+        prediction.maintenance_probability;
+
+
+    const priorityTier =
+        prediction.priority_tier ||
+
+        prediction.priority ||
+
+        "—";
+
+
+    const priorityScore =
+        prediction.priority_score;
+
+
+    const sla =
+        prediction.sla_resolution_days;
+
+
+    const recommendation =
+        prediction.recommended_action ||
+
+        "Review the asset and determine the appropriate maintenance action.";
+
+
+    document.getElementById(
+        "aiRiskScore"
+    ).textContent =
+        Math.round(score);
+
+
+    document.getElementById(
+        "aiRiskCategory"
+    ).innerHTML = `
+
+        <span class="status ${riskClass(category)}">
+
+            ${escapeHtml(category)}
+
+        </span>
+
+    `;
+
+
+    document.getElementById(
+        "aiProbability"
+    ).textContent =
+
+        probability === undefined ||
+        probability === null
+
+            ? "—"
+
+            : `${formatProbability(probability)}%`;
+
+
+    document.getElementById(
+        "aiPriority"
+    ).textContent =
+        priorityTier;
+
+
+    document.getElementById(
+        "aiPriorityScore"
+    ).textContent =
+
+        priorityScore === undefined ||
+        priorityScore === null
+
+            ? "—"
+
+            : Number(
+                priorityScore
+            ).toFixed(1);
+
+
+    document.getElementById(
+        "aiSla"
+    ).textContent =
+
+        sla === undefined ||
+        sla === null
+
+            ? "—"
+
+            : `${sla} days`;
+
+
+    document.getElementById(
+        "aiRecommendation"
+    ).textContent =
+        recommendation;
+
+
+    renderContributingFactors(
+        prediction.contributing_factors
+    );
+
+
+    const marker =
+        document.getElementById(
+            "riskMeterMarker"
+        );
+
+
+    marker.style.left =
+        `${Math.max(
+            0,
+            Math.min(
+                100,
+                score
+            )
+        )}%`;
+
+}
+
+
+/* =========================================================
+   CONTRIBUTING FACTORS
+========================================================= */
+
+function renderContributingFactors(
+    factors
+) {
+
+    const container =
+        document.getElementById(
+            "contributingFactors"
+        );
+
+
+    if (!factors) {
+
+        container.innerHTML =
+            "";
+
+        return;
+
+    }
+
+
+    if (Array.isArray(factors)) {
+
+        container.innerHTML = `
+
+            <div
+                class="detail-label mb-1"
+            >
+                Contributing Factors
+            </div>
+
+
+            ${factors.map(
+                factor => `
+
+                    <div class="factor">
+
+                        <span class="factor-name">
+
+                            ${escapeHtml(
+
+                                typeof factor === "string"
+
+                                    ? factor
+
+                                    : (
+                                        factor.name ||
+                                        "Factor"
+                                    )
+
+                            )}
+
+                        </span>
+
+
+                        ${
+                            typeof factor === "object" &&
+                            factor.value !== undefined
+
+                                ? `
+
+                                    <strong>
+
+                                        ${escapeHtml(
+                                            String(
+                                                factor.value
+                                            )
+                                        )}
+
+                                    </strong>
+
+                                  `
+
+                                : ""
+                        }
+
+                    </div>
+
+                `
+            ).join("")}
+
+        `;
+
+
+        return;
+
+    }
+
+
+    if (
+        typeof factors === "object"
+    ) {
+
+        container.innerHTML = `
+
+            <div
+                class="detail-label mb-1"
+            >
+                Contributing Factors
+            </div>
+
+
+            ${Object.entries(
+                factors
+            ).map(
+                ([name, value]) => `
+
+                    <div class="factor">
+
+                        <span class="factor-name">
+
+                            ${escapeHtml(
+                                name
+                            )}
+
+                        </span>
+
+
+                        <strong>
+
+                            ${escapeHtml(
+                                String(
+                                    value
+                                )
+                            )}
+
+                        </strong>
+
+                    </div>
+
+                `
+            ).join("")}
+
+        `;
+
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        "";
+
+}
+
+
+/* =========================================================
+   RESET AI
+========================================================= */
+
+function resetAIResult() {
+
+    document.getElementById(
+        "aiRiskScore"
+    ).textContent =
+        "—";
+
+
+    document.getElementById(
+        "aiRiskCategory"
+    ).innerHTML = `
+
+        <span class="status">
+
+            Not predicted
+
+        </span>
+
+    `;
+
+
+    document.getElementById(
+        "aiProbability"
+    ).textContent =
+        "—";
+
+
+    document.getElementById(
+        "aiPriority"
+    ).textContent =
+        "—";
+
+
+    document.getElementById(
+        "aiPriorityScore"
+    ).textContent =
+        "—";
+
+
+    document.getElementById(
+        "aiSla"
+    ).textContent =
+        "—";
+
+
+    document.getElementById(
+        "aiRecommendation"
+    ).textContent =
+        "Run the AI risk engine to generate a maintenance recommendation.";
+
+
+    document.getElementById(
+        "contributingFactors"
+    ).innerHTML =
+        "";
+
+
+    document.getElementById(
+        "riskMeterMarker"
+    ).style.left =
+        "0%";
+
+}
+
+
+/* =========================================================
+   ASSET PREDICTION
+========================================================= */
+
+async function runAssetPrediction(
+    assetId
+) {
+
+    const asset =
+        findAsset(
+            assetId
+        );
+
+
+    if (!asset) {
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "assetPredictionTitle"
+    ).textContent =
+
+        `${asset.asset_code} • ${prettyAssetType(asset.asset_type)}`;
+
+
+    document.getElementById(
+        "assetPredictionBody"
+    ).innerHTML = `
+
+        <div class="loading">
+
+            <div class="loading-spinner"></div>
+
+            Running AI prediction...
+
+        </div>
+
+    `;
+
+
+    const modal =
+        bootstrap.Modal.getOrCreateInstance(
+
+            document.getElementById(
+                "assetPredictionModal"
+            )
+
+        );
+
+
+    modal.show();
+
+
+    try {
+
+        const data =
+            await apiRequest(
+
+                `/api/officer/predict/${assetId}`,
+
+                {
+
+                    method: "POST"
+
+                }
+
+            );
+
+
+        const prediction =
+            data.prediction ||
+            {};
+
+
+        const risk =
+            prediction.risk ||
+            {};
+
+
+        const score =
+            Number(
+
+                risk.score ??
+
+                prediction.risk_score ??
+
+                0
+
+            );
+
+
+        const category =
+            risk.category ||
+
+            prediction.risk_category ||
+
+            "Unknown";
+
+
+        const probability =
+            prediction.maintenance_probability;
+
+
+        const priority =
+            prediction.priority_tier ||
+
+            prediction.priority ||
+
+            "—";
+
+
+        const recommendation =
+            prediction.recommended_action ||
+
+            "Review asset";
+
+
+        document.getElementById(
+            "assetPredictionBody"
+        ).innerHTML = `
+
+            <div class="ai-panel">
+
+                <div class="ai-label">
+                    AI Asset Risk Assessment
+                </div>
+
+
+                <div class="risk-score-row">
+
+                    <div>
+
+                        <div class="risk-number">
+
+                            ${Math.round(score)}
+
+                        </div>
+
+                        <div class="risk-denominator">
+                            Risk score / 100
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <span
+                            class="status ${riskClass(category)}"
+                        >
+
+                            ${escapeHtml(
+                                category
+                            )}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="risk-meter">
+
+                    <div
+                        class="risk-meter-marker"
+                        style="left:${Math.max(
+                            0,
+                            Math.min(
+                                100,
+                                score
+                            )
+                        )}%"
+                    ></div>
+
+                </div>
+
+
+                <div class="risk-meter-labels">
+
+                    <span>Low</span>
+
+                    <span>Medium</span>
+
+                    <span>High</span>
+
+                    <span>Critical</span>
+
+                </div>
+
+
+                <div class="ai-metrics">
+
+                    <div class="ai-metric">
+
+                        <div class="ai-metric-label">
+                            Maintenance Probability
+                        </div>
+
+                        <div class="ai-metric-value">
+
+                            ${
+                                probability === undefined ||
+                                probability === null
+
+                                    ? "—"
+
+                                    : formatProbability(
+                                        probability
+                                    ) + "%"
+
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="ai-metric">
+
+                        <div class="ai-metric-label">
+                            Priority
+                        </div>
+
+                        <div class="ai-metric-value">
+
+                            ${escapeHtml(
+                                priority
+                            )}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="recommendation-card mt-3">
+
+                    <div class="recommendation-header">
+
+                        Recommended Action
+
+                    </div>
+
+                    <div class="recommendation-body">
+
+                        ${escapeHtml(
+                            recommendation
+                        )}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        showToast(
+            "AI prediction completed."
+        );
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+
+        document.getElementById(
+            "assetPredictionBody"
+        ).innerHTML = `
+
+            <div class="error-box">
+
+                AI prediction failed:
+
+                ${escapeHtml(
+                    error.message
+                )}
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   MATCHED ASSET
+========================================================= */
+
+function renderMatchedAsset(
+    complaint
+) {
+
+    const container =
+        document.getElementById(
+            "matchedAsset"
+        );
+
+
+    const asset =
+        findAsset(
+            complaint.asset_id
+        );
+
+
+    if (!asset) {
+
+        container.innerHTML = `
+
+            <span
+                class="text-secondary"
+            >
+                No linked infrastructure asset.
+            </span>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML = `
+
+        <div
+            class="d-flex justify-content-between align-items-start"
+        >
+
+            <div>
+
+                <div class="asset-code">
+
+                    ${escapeHtml(
+                        asset.asset_code
+                    )}
+
+                </div>
+
+
+                <div class="asset-type">
+
+                    ${escapeHtml(
+                        prettyAssetType(
+                            asset.asset_type
+                        )
+                    )}
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="asset-ai-btn"
+                style="width:auto;margin-top:0;padding:5px 10px;"
+                onclick="runAssetPrediction('${asset.id}')"
+            >
+                AI
+            </button>
+
+        </div>
+
+
+        <div class="asset-metrics mt-2">
+
+
+            <div class="asset-metric">
+
+                <div class="asset-metric-label">
+                    Condition
+                </div>
+
+                <div class="asset-metric-value">
+                    ${asset.condition_score ?? "—"}
+                </div>
+
+            </div>
+
+
+            <div class="asset-metric">
+
+                <div class="asset-metric-label">
+                    Complaints
+                </div>
+
+                <div class="asset-metric-value">
+                    ${asset.complaint_count ?? 0}
+                </div>
+
+            </div>
+
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   LOCATION
+========================================================= */
+
+function renderComplaintLocation(
+    complaint
+) {
+
+    const lat =
+        Number(
+            complaint.latitude
+        );
+
+
+    const lng =
+        Number(
+            complaint.longitude
+        );
+
+
+    if (
+        !Number.isFinite(lat) ||
+        !Number.isFinite(lng)
+    ) {
+
+        document.getElementById(
+            "map"
+        ).innerHTML = `
+
+            <div
+                class="h-100 d-flex align-items-center justify-content-center text-secondary"
+            >
+
+                No GPS location provided.
+
+            </div>
+
+        `;
+
+
+        if (complaintMap) {
+
+            complaintMap.remove();
+
+            complaintMap =
+                null;
+
+        }
+
+
+        return;
+
+    }
+
+
+    if (complaintMap) {
+
+        complaintMap.remove();
+
+        complaintMap =
+            null;
+
+        complaintMarker =
+            null;
+
+    }
+
+
+    complaintMap =
+        L.map(
+            "map"
+        ).setView(
+            [lat, lng],
+            16
+        );
+
+
+    L.tileLayer(
+
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
+        {
+
+            maxZoom: 19,
+
+            attribution:
+                "&copy; OpenStreetMap contributors"
+
+        }
+
+    ).addTo(
+        complaintMap
+    );
+
+
+    complaintMarker =
+        L.marker(
+            [lat, lng]
+        )
+        .addTo(
+            complaintMap
+        )
+        .bindPopup(
+
+            `<b>Complaint Location</b><br>${lat.toFixed(6)}, ${lng.toFixed(6)}`
+
+        )
+        .openPopup();
+
+}
+
+
+/* =========================================================
+   PHOTO
+========================================================= */
+
+function renderComplaintPhoto(
+    complaint
+) {
+
+    const container =
+        document.getElementById(
+            "photoContainer"
+        );
+
+
+    const image =
+        document.getElementById(
+            "complaintPhoto"
+        );
+
+
+    if (!complaint.photo_url) {
+
+        container.style.display =
+            "none";
+
+
+        image.removeAttribute(
+            "src"
+        );
+
+
+        return;
+
+    }
+
+
+    image.src =
+        complaint.photo_url;
+
+
+    container.style.display =
+        "block";
+
+}
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function findAsset(
+    id
+) {
+
+    if (!id) {
+
+        return null;
+
+    }
+
+
+    return assets.find(
+        asset =>
+            asset.id === id
+    ) || null;
+
+}
+
+
+function statusBadge(
+    status
+) {
+
+    if (!status) {
+
+        return `
+
+            <span class="status">
+
+                Unknown
+
+            </span>
+
+        `;
+
+    }
+
+
+    let cls =
+        "status-submitted";
+
+
+    if (
+        status === "UNDER REVIEW"
+    ) {
+
+        cls =
+            "status-review";
+
+    }
+
+
+    else if (
+
+        status === "VERIFIED" ||
+
+        status === "PRIORITIZED"
+
+    ) {
+
+        cls =
+            "status-verified";
+
+    }
+
+
+    else if (
+        status === "ASSIGNED"
+    ) {
+
+        cls =
+            "status-assigned";
+
+    }
+
+
+    else if (
+        status === "IN PROGRESS"
+    ) {
+
+        cls =
+            "status-progress";
+
+    }
+
+
+    else if (
+        status === "INSPECTION"
+    ) {
+
+        cls =
+            "status-inspection";
+
+    }
+
+
+    else if (
+
+        status === "RESOLVED" ||
+
+        status === "CITIZEN CONFIRMED" ||
+
+        status === "CLOSED"
+
+    ) {
+
+        cls =
+            "status-resolved";
+
+    }
+
+
+    else if (
+
+        status === "REJECTED" ||
+
+        status === "DUPLICATE"
+
+    ) {
+
+        cls =
+            "status-rejected";
+
+    }
+
+
+    return `
+
+        <span
+            class="status ${cls}"
+        >
+
+            ${escapeHtml(
+                status
+            )}
+
+        </span>
+
+    `;
+
+}
+
+
+function riskClass(
+    category
+) {
+
+    const value =
+        String(
+            category
+        ).toLowerCase();
+
+
+    if (
+        value.includes(
+            "critical"
+        )
+    ) {
+
+        return "status-rejected";
+
+    }
+
+
+    if (
+        value.includes(
+            "high"
+        )
+    ) {
+
+        return "status-submitted";
+
+    }
+
+
+    if (
+        value.includes(
+            "medium"
+        )
+    ) {
+
+        return "status-review";
+
+    }
+
+
+    if (
+        value.includes(
+            "low"
+        )
+    ) {
+
+        return "status-resolved";
+
+    }
+
+
+    return "";
+
+}
+
+
+function prettyAssetType(
+    type
+) {
+
+    if (!type) {
+
+        return "Unknown";
+
+    }
+
+
+    return String(
+        type
+    )
+    .replaceAll(
+        "_",
+        " "
+    );
+
+}
+
+
+function formatProbability(
+    value
+) {
+
+    let number =
+        Number(
+            value
+        );
+
+
+    if (!Number.isFinite(number)) {
+
+        return "—";
+
+    }
+
+
+    if (number <= 1) {
+
+        number *= 100;
+
+    }
+
+
+    return number.toFixed(1);
+
+}
+
+
+function formatDate(
+    value
+) {
+
+    if (!value) {
+
+        return "Unknown date";
+
+    }
+
+
+    const date =
+        new Date(
+            value
+        );
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return String(
+            value
+        );
+
+    }
+
+
+    return date.toLocaleString(
+
+        "en-IN",
+
+        {
+
+            dateStyle:
+                "medium",
+
+            timeStyle:
+                "short"
+
+        }
+
+    );
+
+}
+
+
+function escapeHtml(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+
+    .replaceAll(
+        "&",
+        "&amp;"
+    )
+
+    .replaceAll(
+        "<",
+        "&lt;"
+    )
+
+    .replaceAll(
+        ">",
+        "&gt;"
+    )
+
+    .replaceAll(
+        '"',
+        "&quot;"
+    )
+
+    .replaceAll(
+        "'",
+        "&#039;"
+    );
+
+}
+
+
+/* =========================================================
+   OFFICER NAME
+========================================================= */
+
+function loadOfficerName() {
+
+    const possibleKeys = [
+
+        "profile",
+
+        "user"
+
+    ];
+
+
+    for (
+        const key of possibleKeys
+    ) {
+
+        try {
+
+            const raw =
+                localStorage.getItem(
+                    key
+                );
+
+
+            if (!raw) {
+
+                continue;
+
+            }
+
+
+            const data =
+                JSON.parse(
+                    raw
+                );
+
+
+            const name =
+
+                data.full_name ||
+
+                data.name ||
+
+                data.user_metadata?.full_name;
+
+
+            if (name) {
+
+                document.getElementById(
+                    "officerName"
+                ).textContent =
+                    name;
+
+
+                const parts =
+                    name.trim()
+                        .split(/\s+/);
+
+
+                document.getElementById(
+                    "officerAvatar"
+                ).textContent =
+
+                    (
+
+                        (parts[0]?.[0] || "M") +
+
+                        (parts[1]?.[0] || "O")
+
+                    ).toUpperCase();
+
+
+                return;
+
+            }
+
+        }
+        catch (e) {
+
+            // Ignore malformed localStorage.
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   SCROLL REVEAL
+========================================================= */
+
+function initRevealAnimations() {
+
+    const elements =
+        document.querySelectorAll(
+            ".reveal"
+        );
+
+
+    if (
+        !("IntersectionObserver" in window)
+    ) {
+
+        elements.forEach(
+            element =>
+                element.classList.add(
+                    "visible"
+                )
+        );
+
+        return;
+
+    }
+
+
+    const observer =
+        new IntersectionObserver(
+
+            entries => {
+
+                entries.forEach(
+                    entry => {
+
+                        if (
+                            entry.isIntersecting
+                        ) {
+
+                            entry.target.classList.add(
+                                "visible"
+                            );
+
+                            observer.unobserve(
+                                entry.target
+                            );
+
+                        }
+
+                    }
+                );
+
+            },
+
+            {
+                threshold: .08
+            }
+
+        );
+
+
+    elements.forEach(
+        element =>
+            observer.observe(
+                element
+            )
+    );
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    async () => {
+
+        loadOfficerName();
+
+        initRevealAnimations();
+
+        const token =
+            getAccessToken();
+
+
+        if (!token) {
+
+            console.warn(
+                "No direct access token found in localStorage."
+            );
+
+        }
+
+
+        await refreshDashboard();
+
+    }
+
+);
+
+</script>
+
+</body>
+</html>

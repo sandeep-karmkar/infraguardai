@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Login | InfraGuard AI</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <!-- Google Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Project CSS -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+
+            font-family: "Inter", sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(37, 99, 235, 0.10),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 90% 90%,
+                    rgba(6, 182, 212, 0.10),
+                    transparent 30%
+                ),
+                #f8fafc;
+        }
+
+        .auth-page {
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 35px 20px;
+        }
+
+        .auth-container {
+            width: 100%;
+
+            max-width: 1180px;
+
+            display: grid;
+
+            grid-template-columns: 0.9fr 1.1fr;
+
+            background: #ffffff;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 26px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 25px 70px rgba(15, 23, 42, 0.12);
+        }
+
+        /* =====================================================
+           LEFT PANEL
+        ===================================================== */
+
+        .auth-info {
+            padding: 55px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #eff6ff,
+                    #dbeafe
+                );
+        }
+
+        .auth-brand {
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            margin-bottom: 42px;
+
+            font-size: 1.25rem;
+
+            font-weight: 800;
+
+            color: #0f172a;
+        }
+
+        .auth-brand span {
+            color: #2563eb;
+        }
+
+        .auth-brand-icon {
+            width: 43px;
+
+            height: 43px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 12px;
+
+            background: #2563eb;
+
+            color: #ffffff;
+
+            box-shadow:
+                0 8px 20px rgba(37, 99, 235, 0.25);
+        }
+
+        .auth-info h1 {
+            margin: 0 0 18px;
+
+            font-size: 2.65rem;
+
+            line-height: 1.12;
+
+            font-weight: 800;
+
+            color: #0f172a;
+        }
+
+        .auth-info > p {
+            margin: 0;
+
+            color: #64748b;
+
+            line-height: 1.75;
+
+            font-size: 0.98rem;
+        }
+
+        .auth-features {
+            margin-top: 32px;
+        }
+
+        .auth-feature {
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            margin-bottom: 17px;
+
+            color: #334155;
+
+            font-size: 0.92rem;
+
+            font-weight: 600;
+        }
+
+        .auth-feature-icon {
+            width: 38px;
+
+            height: 38px;
+
+            flex-shrink: 0;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 10px;
+
+            background: #ffffff;
+
+            color: #2563eb;
+
+            box-shadow:
+                0 5px 15px rgba(15, 23, 42, 0.08);
+        }
+
+        .security-note {
+            margin-top: 25px;
+
+            padding: 14px 16px;
+
+            border-radius: 12px;
+
+            background: rgba(255, 255, 255, 0.65);
+
+            border: 1px solid rgba(37, 99, 235, 0.12);
+
+            color: #475569;
+
+            font-size: 0.78rem;
+
+            line-height: 1.5;
+        }
+
+        /* =====================================================
+           RIGHT PANEL
+        ===================================================== */
+
+        .auth-form-section {
+            padding: 48px 55px;
+        }
+
+        .back-home {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            margin-bottom: 24px;
+
+            color: #64748b;
+
+            font-size: 0.86rem;
+
+            font-weight: 600;
+
+            text-decoration: none;
+        }
+
+        .back-home:hover {
+            color: #2563eb;
+        }
+
+        .auth-form-section h2 {
+            margin: 0 0 7px;
+
+            font-size: 1.85rem;
+
+            font-weight: 800;
+
+            color: #0f172a;
+        }
+
+        .auth-subtitle {
+            margin: 0 0 25px;
+
+            color: #64748b;
+
+            font-size: 0.92rem;
+        }
+
+        /* =====================================================
+           ROLE SELECTION
+        ===================================================== */
+
+        .role-heading {
+            margin-bottom: 12px;
+
+            color: #0f172a;
+
+            font-size: 0.9rem;
+
+            font-weight: 700;
+        }
+
+        .role-grid {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 10px;
+
+            margin-bottom: 23px;
+        }
+
+        .role-option {
+            position: relative;
+
+            cursor: pointer;
+        }
+
+        .role-option input {
+            position: absolute;
+
+            opacity: 0;
+
+            pointer-events: none;
+        }
+
+        .role-card {
+            min-height: 78px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 13px;
+
+            border: 1.5px solid #e2e8f0;
+
+            border-radius: 13px;
+
+            background: #ffffff;
+
+            transition:
+                border-color 0.2s ease,
+                background 0.2s ease,
+                box-shadow 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .role-card:hover {
+            border-color: #93c5fd;
+
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 7px 18px rgba(15, 23, 42, 0.07);
+        }
+
+        .role-option input:checked + .role-card {
+            border-color: #2563eb;
+
+            background: #eff6ff;
+
+            box-shadow:
+                0 8px 20px rgba(37, 99, 235, 0.10);
+        }
+
+        .role-icon {
+            width: 40px;
+
+            height: 40px;
+
+            flex-shrink: 0;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 10px;
+
+            background: #f1f5f9;
+
+            color: #64748b;
+
+            font-size: 16px;
+        }
+
+        .role-option input:checked + .role-card .role-icon {
+            background: #2563eb;
+
+            color: #ffffff;
+        }
+
+        .role-info {
+            min-width: 0;
+        }
+
+        .role-title {
+            display: block;
+
+            margin-bottom: 3px;
+
+            color: #0f172a;
+
+            font-size: 0.83rem;
+
+            font-weight: 800;
+        }
+
+        .role-description {
+            display: block;
+
+            color: #64748b;
+
+            font-size: 0.68rem;
+
+            line-height: 1.3;
+        }
+
+        /* =====================================================
+           FORM
+        ===================================================== */
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-label-custom {
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #334155;
+
+            font-size: 0.82rem;
+
+            font-weight: 700;
+        }
+
+        .form-control-custom {
+            width: 100%;
+
+            height: 47px;
+
+            padding: 0 14px;
+
+            border: 1px solid #dbe3ed;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            background: #ffffff;
+
+            color: #0f172a;
+
+            font-size: 0.88rem;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .form-control-custom:focus {
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 3px rgba(37, 99, 235, 0.10);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper .form-control-custom {
+            padding-right: 45px;
+        }
+
+        .password-toggle {
+            position: absolute;
+
+            top: 50%;
+
+            right: 13px;
+
+            transform: translateY(-50%);
+
+            border: none;
+
+            background: transparent;
+
+            color: #64748b;
+
+            cursor: pointer;
+        }
+
+        .auth-options {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin: 5px 0 20px;
+
+            font-size: 0.8rem;
+        }
+
+        .remember {
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            color: #64748b;
+
+            cursor: pointer;
+        }
+
+        .remember input {
+            accent-color: #2563eb;
+        }
+
+        .forgot-link {
+            color: #2563eb;
+
+            font-weight: 600;
+
+            text-decoration: none;
+        }
+
+        .auth-submit {
+            width: 100%;
+
+            height: 48px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #2563eb;
+
+            color: #ffffff;
+
+            font-weight: 700;
+
+            transition:
+                background 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .auth-submit:hover {
+            background: #1d4ed8;
+
+            transform: translateY(-1px);
+        }
+
+        .auth-submit:disabled {
+            opacity: 0.65;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+        .error-message {
+            display: none;
+
+            margin-bottom: 16px;
+
+            padding: 11px 13px;
+
+            border-radius: 10px;
+
+            background: #fef2f2;
+
+            border: 1px solid #fecaca;
+
+            color: #b91c1c;
+
+            font-size: 0.8rem;
+
+            line-height: 1.5;
+        }
+
+        .success-message {
+            display: none;
+
+            margin-bottom: 16px;
+
+            padding: 11px 13px;
+
+            border-radius: 10px;
+
+            background: #f0fdf4;
+
+            border: 1px solid #bbf7d0;
+
+            color: #15803d;
+
+            font-size: 0.8rem;
+        }
+
+        .role-warning {
+            display: none;
+
+            margin-top: 8px;
+
+            margin-bottom: 12px;
+
+            padding: 9px 11px;
+
+            border-radius: 8px;
+
+            background: #fff7ed;
+
+            border: 1px solid #fed7aa;
+
+            color: #c2410c;
+
+            font-size: 0.75rem;
+
+            line-height: 1.45;
+        }
+
+        .divider {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin: 22px 0;
+
+            color: #94a3b8;
+
+            font-size: 0.78rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+
+            flex: 1;
+
+            height: 1px;
+
+            background: #e2e8f0;
+        }
+
+        .register-link {
+            text-align: center;
+
+            color: #64748b;
+
+            font-size: 0.84rem;
+        }
+
+        .register-link a {
+            color: #2563eb;
+
+            font-weight: 700;
+
+            text-decoration: none;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 900px) {
+
+            .auth-container {
+                grid-template-columns: 1fr;
+
+                max-width: 620px;
+            }
+
+            .auth-info {
+                display: none;
+            }
+        }
+
+        @media (max-width: 520px) {
+
+            .auth-page {
+                padding: 18px 12px;
+            }
+
+            .auth-container {
+                border-radius: 18px;
+            }
+
+            .auth-form-section {
+                padding: 35px 22px;
+            }
+
+            .role-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="auth-page">
+
+    <div class="auth-container">
+
+        <!-- =================================================
+             LEFT INFORMATION PANEL
+        ================================================== -->
+
+        <div class="auth-info">
+
+            <div class="auth-brand">
+
+                <div class="auth-brand-icon">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                </div>
+
+                Infra<span>Guard AI</span>
+
+            </div>
+
+            <h1>
+                Smarter infrastructure starts here.
+            </h1>
+
+            <p>
+                Access your role-based workspace to monitor,
+                report, inspect and manage public infrastructure.
+            </p>
+
+            <div class="auth-features">
+
+                <div class="auth-feature">
+
+                    <div class="auth-feature-icon">
+
+                        <i class="fa-solid fa-brain"></i>
+
+                    </div>
+
+                    AI-powered risk prediction
+
+                </div>
+
+                <div class="auth-feature">
+
+                    <div class="auth-feature-icon">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                    </div>
+
+                    GIS-based infrastructure monitoring
+
+                </div>
+
+                <div class="auth-feature">
+
+                    <div class="auth-feature-icon">
+
+                        <i class="fa-solid fa-list-check"></i>
+
+                    </div>
+
+                    Smart maintenance prioritization
+
+                </div>
+
+                <div class="auth-feature">
+
+                    <div class="auth-feature-icon">
+
+                        <i class="fa-solid fa-users-gear"></i>
+
+                    </div>
+
+                    Role-based operational access
+
+                </div>
+
+            </div>
+
+            <div class="security-note">
+
+                <i class="fa-solid fa-lock me-1"></i>
+
+                Your selected role is verified against your
+                InfraGuard AI account before access is granted.
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             LOGIN PANEL
+        ================================================== -->
+
+        <div class="auth-form-section">
+
+            <a
+                href="/"
+                class="back-home"
+            >
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Back to home
+
+            </a>
+
+            <h2>
+                Welcome back
+            </h2>
+
+            <p class="auth-subtitle">
+                Select your role and sign in to your workspace.
+            </p>
+
+
+            <!-- ROLE SELECTION -->
+
+            <div class="role-heading">
+                Select your role
+            </div>
+
+            <div class="role-grid">
+
+                <!-- CITIZEN -->
+
+                <label class="role-option">
+
+                    <input
+                        type="radio"
+                        name="role"
+                        value="citizen"
+                        checked
+                    >
+
+                    <div class="role-card">
+
+                        <div class="role-icon">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+
+                        <div class="role-info">
+
+                            <span class="role-title">
+                                Citizen
+                            </span>
+
+                            <span class="role-description">
+                                Report and track infrastructure issues
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </label>
+
+
+                <!-- OFFICER -->
+
+                <label class="role-option">
+
+                    <input
+                        type="radio"
+                        name="role"
+                        value="officer"
+                    >
+
+                    <div class="role-card">
+
+                        <div class="role-icon">
+                            <i class="fa-solid fa-building-columns"></i>
+                        </div>
+
+                        <div class="role-info">
+
+                            <span class="role-title">
+                                Maintenance Officer
+                            </span>
+
+                            <span class="role-description">
+                                Manage complaints and maintenance
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </label>
+
+
+                <!-- INSPECTOR -->
+
+                <label class="role-option">
+
+                    <input
+                        type="radio"
+                        name="role"
+                        value="inspector"
+                    >
+
+                    <div class="role-card">
+
+                        <div class="role-icon">
+                            <i class="fa-solid fa-helmet-safety"></i>
+                        </div>
+
+                        <div class="role-info">
+
+                            <span class="role-title">
+                                Field Inspector
+                            </span>
+
+                            <span class="role-description">
+                                Inspect and verify field work
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </label>
+
+
+                <!-- ADMIN -->
+
+                <label class="role-option">
+
+                    <input
+                        type="radio"
+                        name="role"
+                        value="admin"
+                    >
+
+                    <div class="role-card">
+
+                        <div class="role-icon">
+                            <i class="fa-solid fa-user-shield"></i>
+                        </div>
+
+                        <div class="role-info">
+
+                            <span class="role-title">
+                                Administrator
+                            </span>
+
+                            <span class="role-description">
+                                Manage users and system configuration
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </label>
+
+            </div>
+
+
+            <!-- FORM -->
+
+            <form id="loginForm">
+
+                <div class="form-group">
+
+                    <label
+                        class="form-label-custom"
+                        for="email"
+                    >
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        class="form-control-custom"
+                        id="email"
+                        placeholder="you@example.com"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label
+                        class="form-label-custom"
+                        for="password"
+                    >
+                        Password
+                    </label>
+
+                    <div class="password-wrapper">
+
+                        <input
+                            type="password"
+                            class="form-control-custom"
+                            id="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword()"
+                        >
+
+                            <i
+                                class="fa-solid fa-eye"
+                                id="passwordIcon"
+                            ></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="roleWarning"
+                    class="role-warning"
+                ></div>
+
+
+                <div
+                    id="errorMessage"
+                    class="error-message"
+                ></div>
+
+
+                <div
+                    id="successMessage"
+                    class="success-message"
+                ></div>
+
+
+                <div class="auth-options">
+
+                    <label class="remember">
+
+                        <input
+                            type="checkbox"
+                            id="rememberMe"
+                        >
+
+                        Remember me
+
+                    </label>
+
+
+                    <a
+                        href="#"
+                        class="forgot-link"
+                        onclick="showForgotMessage(event)"
+                    >
+                        Forgot password?
+                    </a>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="auth-submit"
+                    id="loginButton"
+                >
+
+                    <i class="fa-solid fa-right-to-bracket me-2"></i>
+
+                    Sign In
+
+                </button>
+
+            </form>
+
+
+            <div class="divider">
+                New to InfraGuard AI?
+            </div>
+
+
+            <div class="register-link">
+
+                Don't have an account?
+
+                <a href="/register">
+                    Create an account
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ============================================================
+   PASSWORD VISIBILITY
+============================================================ */
+
+function togglePassword() {
+
+    const password =
+        document.getElementById("password");
+
+    const icon =
+        document.getElementById("passwordIcon");
+
+    if (password.type === "password") {
+
+        password.type = "text";
+
+        icon.classList.remove("fa-eye");
+
+        icon.classList.add("fa-eye-slash");
+
+    } else {
+
+        password.type = "password";
+
+        icon.classList.remove("fa-eye-slash");
+
+        icon.classList.add("fa-eye");
+
+    }
+
+}
+
+
+/* ============================================================
+   ROLE HELPERS
+============================================================ */
+
+function getSelectedRole() {
+
+    const selected =
+        document.querySelector(
+            'input[name="role"]:checked'
+        );
+
+    return selected
+        ? selected.value
+        : null;
+}
+
+
+function roleLabel(role) {
+
+    const labels = {
+
+        citizen: "Citizen",
+
+        officer: "Maintenance Officer",
+
+        inspector: "Field Inspector",
+
+        admin: "Administrator"
+
+    };
+
+    return labels[role] || role || "Unknown role";
+
+}
+
+
+/* ============================================================
+   MESSAGE HELPERS
+============================================================ */
+
+function showError(message) {
+
+    const error =
+        document.getElementById("errorMessage");
+
+    const success =
+        document.getElementById("successMessage");
+
+    error.textContent = message;
+
+    error.style.display = "block";
+
+    success.style.display = "none";
+}
+
+
+function showSuccess(message) {
+
+    const error =
+        document.getElementById("errorMessage");
+
+    const success =
+        document.getElementById("successMessage");
+
+    success.textContent = message;
+
+    success.style.display = "block";
+
+    error.style.display = "none";
+}
+
+
+function clearMessages() {
+
+    document.getElementById("errorMessage")
+        .style.display = "none";
+
+    document.getElementById("successMessage")
+        .style.display = "none";
+
+    document.getElementById("roleWarning")
+        .style.display = "none";
+}
+
+
+/* ============================================================
+   LOCAL STORAGE CLEANUP
+============================================================ */
+
+function clearAuthStorage() {
+
+    localStorage.removeItem("access_token");
+
+    localStorage.removeItem("refresh_token");
+
+    localStorage.removeItem("user_id");
+
+    localStorage.removeItem("profile");
+}
+
+
+/* ============================================================
+   FORGOT PASSWORD
+============================================================ */
+
+function showForgotMessage(event) {
+
+    event.preventDefault();
+
+    showError(
+        "Password recovery will be available soon. Please contact the administrator."
+    );
+}
+
+
+/* ============================================================
+   LOGIN
+============================================================ */
+
+document
+    .getElementById("loginForm")
+    .addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+            clearMessages();
+
+            const email =
+                document
+                    .getElementById("email")
+                    .value
+                    .trim();
+
+            const password =
+                document
+                    .getElementById("password")
+                    .value;
+
+            const selectedRole =
+                getSelectedRole();
+
+            const button =
+                document.getElementById("loginButton");
+
+
+            /* -----------------------------------------------
+               Validate role
+            ------------------------------------------------ */
+
+            if (!selectedRole) {
+
+                showError(
+                    "Please select your role."
+                );
+
+                return;
+            }
+
+
+            /* -----------------------------------------------
+               Loading state
+            ------------------------------------------------ */
+
+            button.disabled = true;
+
+            button.innerHTML =
+                '<i class="fa-solid fa-spinner fa-spin me-2"></i>Signing in...';
+
+
+            try {
+
+                /* -------------------------------------------
+                   Call Flask login API
+                -------------------------------------------- */
+
+                const response =
+                    await fetch(
+                        "/login",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+                                "Accept":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                email: email,
+
+                                password: password
+
+                            })
+                        }
+                    );
+
+
+                /* -------------------------------------------
+                   Safely parse response
+                -------------------------------------------- */
+
+                const contentType =
+                    response.headers.get(
+                        "content-type"
+                    ) || "";
+
+
+                let data;
+
+
+                if (
+                    contentType.includes(
+                        "application/json"
+                    )
+                ) {
+
+                    data =
+                        await response.json();
+
+                } else {
+
+                    const text =
+                        await response.text();
+
+                    console.error(
+                        "NON-JSON LOGIN RESPONSE:",
+                        text
+                    );
+
+                    throw new Error(
+                        "Server returned an unexpected response. Please restart Flask and try again."
+                    );
+                }
+
+
+                /* -------------------------------------------
+                   Backend login failed
+                -------------------------------------------- */
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error ||
+                        "Login failed."
+                    );
+                }
+
+
+                /* -------------------------------------------
+                   Validate required login response
+                -------------------------------------------- */
+
+                if (!data.access_token) {
+
+                    throw new Error(
+                        "Login succeeded but no access token was returned."
+                    );
+                }
+
+
+                if (!data.user_id) {
+
+                    throw new Error(
+                        "Login succeeded but no user ID was returned."
+                    );
+                }
+
+
+                if (
+                    !data.profile ||
+                    !data.profile.role
+                ) {
+
+                    throw new Error(
+                        "Login succeeded, but your account profile or role could not be loaded."
+                    );
+                }
+
+
+                /* -------------------------------------------
+                   Determine actual database role
+                -------------------------------------------- */
+
+                const actualRole =
+                    String(
+                        data.profile.role
+                    )
+                    .trim()
+                    .toLowerCase();
+
+
+                console.log(
+                    "LOGIN SUCCESS:",
+                    {
+                        user_id: data.user_id,
+                        selected_role: selectedRole,
+                        actual_role: actualRole,
+                        profile: data.profile
+                    }
+                );
+
+
+                /* -------------------------------------------
+                   Selected role must match DB role
+                -------------------------------------------- */
+
+                if (
+                    actualRole !== selectedRole
+                ) {
+
+                    clearAuthStorage();
+
+                    const warning =
+                        document.getElementById(
+                            "roleWarning"
+                        );
+
+
+                    warning.textContent =
+                        "This account is registered as " +
+                        roleLabel(actualRole) +
+                        ". Please select the correct role.";
+
+
+                    warning.style.display =
+                        "block";
+
+
+                    throw new Error(
+                        "Selected role does not match your account."
+                    );
+                }
+
+
+                /* -------------------------------------------
+                   Store authentication data
+                -------------------------------------------- */
+
+                localStorage.setItem(
+                    "access_token",
+                    data.access_token
+                );
+
+
+                localStorage.setItem(
+                    "refresh_token",
+                    data.refresh_token || ""
+                );
+
+
+                localStorage.setItem(
+                    "user_id",
+                    data.user_id
+                );
+
+
+                localStorage.setItem(
+                    "profile",
+                    JSON.stringify(
+                        data.profile
+                    )
+                );
+
+
+                /* -------------------------------------------
+                   Remember me
+                -------------------------------------------- */
+
+                if (
+                    document.getElementById(
+                        "rememberMe"
+                    ).checked
+                ) {
+
+                    localStorage.setItem(
+                        "remember_me",
+                        "true"
+                    );
+
+                } else {
+
+                    localStorage.removeItem(
+                        "remember_me"
+                    );
+                }
+
+
+                /* -------------------------------------------
+                   Success message
+                -------------------------------------------- */
+
+                showSuccess(
+                    "Login successful. Opening your " +
+                    roleLabel(actualRole) +
+                    " portal..."
+                );
+
+
+                /* -------------------------------------------
+                   ROLE-BASED PORTAL ROUTING
+                -------------------------------------------- */
+
+                setTimeout(
+                    function() {
+
+                        /* Citizen */
+
+                        if (
+                            actualRole ===
+                            "citizen"
+                        ) {
+
+                            window.location.href =
+                                "/dashboard";
+
+                            return;
+                        }
+
+
+                        /* Maintenance Officer */
+
+                        if (
+                            actualRole ===
+                            "officer"
+                        ) {
+
+                            window.location.href =
+                                "/officer-dashboard";
+
+                            return;
+                        }
+
+
+                        /* Field Inspector */
+
+                        if (
+                            actualRole ===
+                            "inspector"
+                        ) {
+
+                            window.location.href =
+                                "/inspector-dashboard";
+
+                            return;
+                        }
+
+
+                        /* Administrator */
+
+                        if (
+                            actualRole ===
+                            "admin"
+                        ) {
+
+                            /*
+                             * Admin currently uses the
+                             * officer command portal until
+                             * a separate admin dashboard
+                             * is implemented.
+                             */
+
+                            window.location.href =
+                                "/officer-dashboard";
+
+                            return;
+                        }
+
+
+                        /* Unknown role */
+
+                        clearAuthStorage();
+
+                        showError(
+                            "Your account has an unsupported role: " +
+                            actualRole
+                        );
+
+
+                        button.disabled = false;
+
+                        button.innerHTML =
+                            '<i class="fa-solid fa-right-to-bracket me-2"></i>Sign In';
+
+                    },
+                    500
+                );
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "LOGIN ERROR:",
+                    error
+                );
+
+
+                if (
+                    error.message !==
+                    "Selected role does not match your account."
+                ) {
+
+                    showError(
+                        error.message ||
+                        "Unable to sign in. Please try again."
+                    );
+                }
+
+
+                button.disabled = false;
+
+                button.innerHTML =
+                    '<i class="fa-solid fa-right-to-bracket me-2"></i>Sign In';
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

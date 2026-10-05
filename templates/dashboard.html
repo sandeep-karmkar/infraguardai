@@ -1,0 +1,3612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | InfraGuard AI</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        /* =========================================================
+           ROOT
+        ========================================================= */
+
+        :root {
+            --ig-navy: #12355b;
+            --ig-navy-dark: #0d2743;
+            --ig-blue: #1769aa;
+            --ig-blue-light: #eaf4fb;
+            --ig-green: #16845b;
+            --ig-green-light: #eaf7f1;
+            --ig-saffron: #f59e0b;
+
+            --ig-text: #18324a;
+            --ig-muted: #64748b;
+            --ig-border: #dbe4ec;
+            --ig-bg: #f5f8fb;
+            --ig-white: #ffffff;
+
+            --ig-shadow:
+                0 8px 30px rgba(18, 53, 91, 0.08);
+
+            --ig-shadow-hover:
+                0 14px 38px rgba(18, 53, 91, 0.13);
+        }
+
+
+        /* =========================================================
+           GLOBAL
+        ========================================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #f7fafc 0%,
+                    #f4f7fa 100%
+                );
+
+            color: var(--ig-text);
+
+            font-family:
+                "Noto Sans",
+                Arial,
+                sans-serif;
+
+            font-size: 15px;
+        }
+
+
+        a {
+            text-decoration: none;
+        }
+
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+
+        /* =========================================================
+           ACCESSIBILITY
+        ========================================================= */
+
+        .skip-link {
+            position: fixed;
+            left: 15px;
+            top: -60px;
+
+            z-index: 9999;
+
+            background: var(--ig-navy);
+            color: white;
+
+            padding: 10px 16px;
+
+            border-radius: 0 0 8px 8px;
+
+            transition: top 0.2s ease;
+        }
+
+
+        .skip-link:focus {
+            top: 0;
+            color: white;
+        }
+
+
+        :focus-visible {
+            outline: 3px solid rgba(23, 105, 170, 0.35);
+            outline-offset: 3px;
+        }
+
+
+        /* =========================================================
+           TOP UTILITY BAR
+        ========================================================= */
+
+        .utility-bar {
+            background: var(--ig-navy-dark);
+            color: rgba(255, 255, 255, 0.88);
+
+            min-height: 34px;
+
+            font-size: 0.78rem;
+        }
+
+
+        .utility-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            min-height: 34px;
+        }
+
+
+        .utility-left,
+        .utility-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+
+        .utility-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+
+            color: rgba(255, 255, 255, 0.82);
+        }
+
+
+        .utility-dot {
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #42c98a;
+
+            box-shadow:
+                0 0 0 4px rgba(66, 201, 138, 0.1);
+
+            animation: pulseDot 2s infinite;
+        }
+
+
+        @keyframes pulseDot {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.45;
+            }
+        }
+
+
+        /* =========================================================
+           NAVBAR
+        ========================================================= */
+
+        .dashboard-nav {
+            position: sticky;
+            top: 0;
+
+            z-index: 1000;
+
+            background: rgba(255, 255, 255, 0.96);
+
+            backdrop-filter: blur(14px);
+
+            border-bottom: 1px solid var(--ig-border);
+
+            box-shadow:
+                0 3px 18px rgba(18, 53, 91, 0.05);
+        }
+
+
+        .dashboard-nav-inner {
+            min-height: 76px;
+        }
+
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+
+            color: var(--ig-navy);
+        }
+
+
+        .brand:hover {
+            color: var(--ig-navy);
+        }
+
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 11px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--ig-navy),
+                    var(--ig-blue)
+                );
+
+            box-shadow:
+                0 7px 18px rgba(23, 105, 170, 0.2);
+        }
+
+
+        .brand-title {
+            font-size: 1.1rem;
+            line-height: 1.1;
+
+            font-weight: 800;
+
+            letter-spacing: -0.02em;
+        }
+
+
+        .brand-subtitle {
+            display: block;
+
+            margin-top: 3px;
+
+            color: var(--ig-muted);
+
+            font-size: 0.67rem;
+
+            font-weight: 600;
+
+            letter-spacing: 0.05em;
+
+            text-transform: uppercase;
+        }
+
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: var(--ig-blue-light);
+
+            color: var(--ig-blue);
+
+            font-weight: 800;
+
+            border: 1px solid #d7e8f5;
+        }
+
+
+        .user-info {
+            line-height: 1.2;
+        }
+
+
+        .user-role {
+            color: var(--ig-muted);
+
+            font-size: 0.68rem;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.06em;
+
+            font-weight: 700;
+        }
+
+
+        .user-email {
+            color: var(--ig-text);
+
+            font-size: 0.82rem;
+
+            font-weight: 600;
+
+            max-width: 180px;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+
+        .logout-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+
+            padding: 8px 13px;
+
+            border: 1px solid #d9e2ea;
+
+            border-radius: 9px;
+
+            background: white;
+
+            color: #53677a;
+
+            font-size: 0.82rem;
+
+            font-weight: 700;
+
+            transition:
+                transform 0.2s ease,
+                border-color 0.2s ease,
+                color 0.2s ease,
+                background 0.2s ease;
+        }
+
+
+        .logout-btn:hover {
+            transform: translateY(-1px);
+
+            color: #b42318;
+
+            border-color: #f0b9b4;
+
+            background: #fff8f7;
+        }
+
+
+        /* =========================================================
+           TRICOLOR LINE
+        ========================================================= */
+
+        .tricolor-line {
+            height: 4px;
+
+            background:
+                linear-gradient(
+                    to right,
+                    #f59e0b 0%,
+                    #f59e0b 33.33%,
+                    #ffffff 33.33%,
+                    #ffffff 66.66%,
+                    #16845b 66.66%,
+                    #16845b 100%
+                );
+
+            border-bottom: 1px solid rgba(18, 53, 91, 0.06);
+        }
+
+
+        /* =========================================================
+           MAIN
+        ========================================================= */
+
+        .dashboard-main {
+            padding: 42px 0 70px;
+        }
+
+
+        .container-main {
+            max-width: 1240px;
+        }
+
+
+        /* =========================================================
+           PAGE HEADER
+        ========================================================= */
+
+        .page-header {
+            margin-bottom: 28px;
+        }
+
+
+        .breadcrumb-custom {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            color: var(--ig-muted);
+
+            font-size: 0.78rem;
+
+            margin-bottom: 14px;
+        }
+
+
+        .breadcrumb-custom a {
+            color: var(--ig-blue);
+            font-weight: 600;
+        }
+
+
+        .page-header-row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 25px;
+        }
+
+
+        .eyebrow {
+            color: var(--ig-blue);
+
+            font-size: 0.72rem;
+
+            font-weight: 800;
+
+            letter-spacing: 0.12em;
+
+            text-transform: uppercase;
+
+            margin-bottom: 7px;
+        }
+
+
+        .welcome-title {
+            margin: 0;
+
+            color: var(--ig-navy);
+
+            font-size: clamp(
+                1.8rem,
+                3.5vw,
+                2.55rem
+            );
+
+            line-height: 1.15;
+
+            font-weight: 800;
+
+            letter-spacing: -0.035em;
+        }
+
+
+        .welcome-description {
+            max-width: 720px;
+
+            margin:
+                10px 0 0;
+
+            color: var(--ig-muted);
+
+            line-height: 1.7;
+        }
+
+
+        .primary-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+
+            border: 0;
+
+            border-radius: 9px;
+
+            padding: 12px 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--ig-navy),
+                    var(--ig-blue)
+                );
+
+            color: white;
+
+            font-size: 0.85rem;
+
+            font-weight: 700;
+
+            box-shadow:
+                0 8px 20px rgba(18, 53, 91, 0.16);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+
+        .primary-btn:hover {
+            color: white;
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 12px 25px rgba(18, 53, 91, 0.22);
+        }
+
+
+        /* =========================================================
+           DASHBOARD CARD
+        ========================================================= */
+
+        .dashboard-card {
+            background: white;
+
+            border: 1px solid var(--ig-border);
+
+            border-radius: 15px;
+
+            box-shadow: var(--ig-shadow);
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+        }
+
+
+        .dashboard-card:hover {
+            border-color: #cfdae4;
+
+            box-shadow: var(--ig-shadow-hover);
+        }
+
+
+        /* =========================================================
+           STAT CARDS
+        ========================================================= */
+
+        .stats-grid {
+            margin-bottom: 26px;
+        }
+
+
+        .stat-card {
+            height: 100%;
+
+            padding: 20px;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .stat-card::after {
+            content: "";
+
+            position: absolute;
+
+            width: 110px;
+            height: 110px;
+
+            right: -55px;
+            top: -55px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(23, 105, 170, 0.045);
+
+            pointer-events: none;
+        }
+
+
+        .stat-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+
+            margin-bottom: 17px;
+        }
+
+
+        .stat-icon {
+            width: 43px;
+            height: 43px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 11px;
+
+            background: var(--ig-blue-light);
+
+            color: var(--ig-blue);
+
+            font-size: 1.08rem;
+        }
+
+
+        .stat-icon.green {
+            background: var(--ig-green-light);
+            color: var(--ig-green);
+        }
+
+
+        .stat-icon.orange {
+            background: #fff7e8;
+            color: #c47b00;
+        }
+
+
+        .stat-icon.navy {
+            background: #edf2f7;
+            color: var(--ig-navy);
+        }
+
+
+        .stat-label {
+            color: var(--ig-muted);
+
+            font-size: 0.76rem;
+
+            font-weight: 600;
+        }
+
+
+        .stat-value {
+            margin-top: 4px;
+
+            color: var(--ig-navy);
+
+            font-size: 1.9rem;
+
+            line-height: 1;
+
+            font-weight: 800;
+        }
+
+
+        .stat-footer {
+            margin-top: 12px;
+
+            color: #7a8a99;
+
+            font-size: 0.7rem;
+        }
+
+
+        /* =========================================================
+           SECTION HEADER
+        ========================================================= */
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .section-title {
+            margin: 0;
+
+            color: var(--ig-navy);
+
+            font-size: 1.12rem;
+
+            font-weight: 800;
+        }
+
+
+        .section-subtitle {
+            color: var(--ig-muted);
+
+            font-size: 0.76rem;
+
+            margin-top: 3px;
+        }
+
+
+        .refresh-btn {
+            width: 37px;
+            height: 37px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 9px;
+
+            border: 1px solid var(--ig-border);
+
+            background: white;
+
+            color: var(--ig-blue);
+
+            transition:
+                transform 0.25s ease,
+                background 0.2s ease;
+        }
+
+
+        .refresh-btn:hover {
+            background: var(--ig-blue-light);
+
+            transform: rotate(180deg);
+        }
+
+
+        /* =========================================================
+           COMPLAINTS
+        ========================================================= */
+
+        .complaints-panel {
+            padding: 24px;
+        }
+
+
+        .complaint-card {
+            padding: 19px;
+
+            margin-bottom: 13px;
+
+            background: #ffffff;
+
+            border: 1px solid #e0e7ee;
+
+            border-radius: 12px;
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                border-color 0.2s ease;
+
+            animation: complaintIn 0.45s ease both;
+        }
+
+
+        .complaint-card:hover {
+            transform: translateY(-2px);
+
+            border-color: #cbd9e5;
+
+            box-shadow:
+                0 9px 25px rgba(18, 53, 91, 0.08);
+        }
+
+
+        @keyframes complaintIn {
+
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+        .complaint-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+
+            gap: 15px;
+        }
+
+
+        .complaint-code {
+            color: var(--ig-blue);
+
+            font-size: 0.73rem;
+
+            font-weight: 800;
+
+            letter-spacing: 0.04em;
+        }
+
+
+        .complaint-title {
+            margin:
+                5px 0 3px;
+
+            color: var(--ig-navy);
+
+            font-size: 0.98rem;
+
+            font-weight: 800;
+        }
+
+
+        .complaint-category {
+            color: var(--ig-muted);
+
+            font-size: 0.75rem;
+        }
+
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+
+            border-radius: 999px;
+
+            padding: 6px 10px;
+
+            font-size: 0.66rem;
+
+            font-weight: 800;
+
+            white-space: nowrap;
+
+            letter-spacing: 0.02em;
+        }
+
+
+        .status-submitted {
+            background: #eaf3ff;
+            color: #2167b2;
+        }
+
+
+        .status-progress {
+            background: #fff7dc;
+            color: #9a6900;
+        }
+
+
+        .status-resolved {
+            background: #e9f8f0;
+            color: #11744e;
+        }
+
+
+        .status-closed {
+            background: #edf0ff;
+            color: #555ca8;
+        }
+
+
+        .status-danger {
+            background: #fff0ef;
+            color: #b42318;
+        }
+
+
+        .complaint-meta {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 12px;
+
+            margin-top: 17px;
+        }
+
+
+        .meta-box {
+            padding: 10px 12px;
+
+            border-radius: 9px;
+
+            background: #f7f9fb;
+
+            border: 1px solid #edf1f4;
+        }
+
+
+        .meta-label {
+            color: #8291a0;
+
+            font-size: 0.67rem;
+
+            margin-bottom: 2px;
+        }
+
+
+        .meta-value {
+            color: var(--ig-text);
+
+            font-size: 0.77rem;
+
+            font-weight: 700;
+        }
+
+
+        .severity {
+            font-size: 0.77rem;
+
+            font-weight: 800;
+        }
+
+
+        .severity-critical {
+            color: #b42318;
+        }
+
+
+        .severity-high {
+            color: #c2410c;
+        }
+
+
+        .severity-medium {
+            color: #9a6700;
+        }
+
+
+        .severity-low {
+            color: #16845b;
+        }
+
+
+        .complaint-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-top: 15px;
+            padding-top: 13px;
+
+            border-top: 1px solid #edf1f4;
+        }
+
+
+        .track-note {
+            color: var(--ig-muted);
+
+            font-size: 0.7rem;
+        }
+
+
+        .view-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+
+            border: 1px solid #cfdae4;
+
+            background: white;
+
+            color: var(--ig-blue);
+
+            border-radius: 8px;
+
+            padding: 7px 11px;
+
+            font-size: 0.72rem;
+
+            font-weight: 700;
+
+            transition:
+                background 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+
+        .view-btn:hover {
+            background: var(--ig-blue-light);
+
+            border-color: #b8d4e9;
+
+            color: var(--ig-blue);
+        }
+
+
+        /* =========================================================
+           EMPTY STATE
+        ========================================================= */
+
+        .empty-state {
+            text-align: center;
+
+            padding: 55px 25px;
+        }
+
+
+        .empty-icon {
+            width: 66px;
+            height: 66px;
+
+            margin: 0 auto 17px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 17px;
+
+            background: var(--ig-blue-light);
+
+            color: var(--ig-blue);
+
+            font-size: 1.65rem;
+        }
+
+
+        .empty-state h5 {
+            color: var(--ig-navy);
+
+            font-weight: 800;
+
+            margin-bottom: 7px;
+        }
+
+
+        .empty-state p {
+            max-width: 430px;
+
+            margin:
+                0 auto;
+
+            color: var(--ig-muted);
+
+            font-size: 0.82rem;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================================================
+           HEALTH CARD
+        ========================================================= */
+
+        .side-card {
+            padding: 22px;
+        }
+
+
+        .health-number {
+            display: flex;
+            align-items: baseline;
+            gap: 5px;
+
+            margin-top: 15px;
+
+            color: var(--ig-navy);
+
+            font-size: 2.7rem;
+
+            line-height: 1;
+
+            font-weight: 800;
+        }
+
+
+        .health-number span {
+            color: var(--ig-muted);
+
+            font-size: 0.85rem;
+
+            font-weight: 600;
+        }
+
+
+        .health-bar {
+            height: 9px;
+
+            margin:
+                15px 0 18px;
+
+            overflow: hidden;
+
+            border-radius: 999px;
+
+            background: #edf1f4;
+        }
+
+
+        .health-fill {
+            height: 100%;
+
+            width: 82%;
+
+            border-radius: inherit;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--ig-blue),
+                    var(--ig-green)
+                );
+
+            animation: healthGrow 1.1s ease;
+        }
+
+
+        @keyframes healthGrow {
+
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 82%;
+            }
+        }
+
+
+        .health-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 9px 0;
+
+            border-bottom: 1px solid #edf1f4;
+
+            color: var(--ig-muted);
+
+            font-size: 0.74rem;
+        }
+
+
+        .health-row:last-child {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+
+
+        .health-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+
+            color: var(--ig-green);
+
+            font-weight: 800;
+        }
+
+
+        .health-status-dot {
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: var(--ig-green);
+        }
+
+
+        /* =========================================================
+           QUICK ACTIONS
+        ========================================================= */
+
+        .quick-action {
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 13px;
+
+            margin-bottom: 9px;
+
+            border: 1px solid #e3e9ee;
+
+            border-radius: 10px;
+
+            background: #ffffff;
+
+            color: var(--ig-text);
+
+            transition:
+                transform 0.2s ease,
+                border-color 0.2s ease,
+                background 0.2s ease;
+        }
+
+
+        .quick-action:last-child {
+            margin-bottom: 0;
+        }
+
+
+        .quick-action:hover {
+            transform: translateX(3px);
+
+            border-color: #bfd5e6;
+
+            background: #f8fbfd;
+
+            color: var(--ig-text);
+        }
+
+
+        .quick-icon {
+            width: 38px;
+            height: 38px;
+
+            flex: 0 0 38px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            background: var(--ig-blue-light);
+
+            color: var(--ig-blue);
+        }
+
+
+        .quick-title {
+            color: var(--ig-navy);
+
+            font-size: 0.78rem;
+
+            font-weight: 800;
+        }
+
+
+        .quick-description {
+            margin-top: 2px;
+
+            color: var(--ig-muted);
+
+            font-size: 0.68rem;
+        }
+
+
+        .quick-arrow {
+            margin-left: auto;
+
+            color: #9aa8b5;
+
+            font-size: 0.78rem;
+        }
+
+
+        /* =========================================================
+           INFORMATION NOTICE
+        ========================================================= */
+
+        .notice-card {
+            padding: 16px 18px;
+
+            margin-top: 18px;
+
+            border-left:
+                4px solid var(--ig-blue);
+
+            background: #f1f7fb;
+
+            border-radius: 8px;
+
+            color: #526b80;
+
+            font-size: 0.73rem;
+
+            line-height: 1.6;
+        }
+
+
+        .notice-card i {
+            color: var(--ig-blue);
+
+            margin-right: 5px;
+        }
+
+
+        /* =========================================================
+           MODAL
+        ========================================================= */
+
+        .modal-content {
+            border: 1px solid var(--ig-border);
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 25px 70px rgba(18, 53, 91, 0.2);
+
+            overflow: hidden;
+        }
+
+
+        .modal-header {
+            padding: 20px 23px;
+
+            border-bottom: 1px solid var(--ig-border);
+
+            background: #f8fafc;
+        }
+
+
+        .modal-title {
+            color: var(--ig-navy);
+        }
+
+
+        .modal-body {
+            padding: 24px;
+        }
+
+
+        .modal-meta-label {
+            color: #8191a0;
+
+            font-size: 0.7rem;
+
+            margin-bottom: 3px;
+        }
+
+
+        .modal-meta-value {
+            color: var(--ig-text);
+
+            font-size: 0.8rem;
+
+            font-weight: 700;
+        }
+
+
+        .description-box {
+            padding: 14px;
+
+            border-radius: 9px;
+
+            background: #f7f9fb;
+
+            border: 1px solid #edf1f4;
+
+            color: #506579;
+
+            font-size: 0.8rem;
+
+            line-height: 1.7;
+        }
+
+
+        /* =========================================================
+           TIMELINE
+        ========================================================= */
+
+        .timeline {
+            margin-top: 21px;
+
+            position: relative;
+
+            padding-left: 28px;
+        }
+
+
+        .timeline::before {
+            content: "";
+
+            position: absolute;
+
+            left: 6px;
+
+            top: 7px;
+
+            bottom: 7px;
+
+            width: 2px;
+
+            background: #e2e8ee;
+        }
+
+
+        .timeline-item {
+            position: relative;
+
+            padding-bottom: 20px;
+        }
+
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+
+        .timeline-dot {
+            position: absolute;
+
+            left: -28px;
+
+            top: 3px;
+
+            width: 15px;
+            height: 15px;
+
+            border-radius: 50%;
+
+            background: #d8e0e7;
+
+            border: 3px solid white;
+
+            box-shadow:
+                0 0 0 1px #d8e0e7;
+        }
+
+
+        .timeline-item.active .timeline-dot {
+            background: var(--ig-blue);
+
+            box-shadow:
+                0 0 0 4px rgba(23, 105, 170, 0.12);
+        }
+
+
+        .timeline-item.completed .timeline-dot {
+            background: var(--ig-green);
+
+            box-shadow:
+                0 0 0 1px var(--ig-green);
+        }
+
+
+        .timeline-label {
+            color: var(--ig-text);
+
+            font-size: 0.77rem;
+
+            font-weight: 800;
+        }
+
+
+        .timeline-date {
+            color: var(--ig-muted);
+
+            font-size: 0.68rem;
+
+            margin-top: 2px;
+        }
+
+
+        /* =========================================================
+           LOADING
+        ========================================================= */
+
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+
+            border:
+                3px solid #dce8f1;
+
+            border-top-color:
+                var(--ig-blue);
+
+            border-radius: 50%;
+
+            animation:
+                spin 0.8s linear infinite;
+
+            margin: 0 auto 15px;
+        }
+
+
+        @keyframes spin {
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+
+        /* =========================================================
+           REVEAL ANIMATION
+        ========================================================= */
+
+        .reveal {
+            opacity: 0;
+
+            transform: translateY(18px);
+
+            transition:
+                opacity 0.65s ease,
+                transform 0.65s ease;
+        }
+
+
+        .reveal.visible {
+            opacity: 1;
+
+            transform: translateY(0);
+        }
+
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        .dashboard-footer {
+            border-top: 1px solid var(--ig-border);
+
+            background: white;
+
+            padding: 22px 0;
+
+            color: var(--ig-muted);
+
+            font-size: 0.7rem;
+        }
+
+
+        .footer-inner {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+        }
+
+
+        .footer-brand {
+            color: var(--ig-navy);
+
+            font-weight: 800;
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 991px) {
+
+            .page-header-row {
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            .primary-btn {
+                width: 100%;
+            }
+
+            .user-info {
+                display: none;
+            }
+
+        }
+
+
+        @media (max-width: 767px) {
+
+            .utility-left {
+                display: none;
+            }
+
+            .utility-inner {
+                justify-content: center;
+            }
+
+            .utility-right {
+                gap: 10px;
+            }
+
+            .dashboard-nav-inner {
+                min-height: 68px;
+            }
+
+            .brand-icon {
+                width: 38px;
+                height: 38px;
+            }
+
+            .brand-title {
+                font-size: 1rem;
+            }
+
+            .brand-subtitle {
+                font-size: 0.58rem;
+            }
+
+            .logout-btn span {
+                display: none;
+            }
+
+            .logout-btn {
+                width: 37px;
+                height: 37px;
+
+                padding: 0;
+
+                justify-content: center;
+            }
+
+            .dashboard-main {
+                padding-top: 28px;
+            }
+
+            .complaints-panel,
+            .side-card {
+                padding: 18px;
+            }
+
+            .complaint-meta {
+                grid-template-columns: 1fr;
+            }
+
+            .complaint-footer {
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            .view-btn {
+                width: 100%;
+
+                justify-content: center;
+            }
+
+            .footer-inner {
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+        }
+
+
+        /* =========================================================
+           REDUCED MOTION
+        ========================================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+<a
+    href="#main-content"
+    class="skip-link"
+>
+    Skip to main content
+</a>
+
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<nav class="dashboard-nav">
+
+    <div class="container container-main">
+
+        <div
+            class="dashboard-nav-inner d-flex
+                   align-items-center
+                   justify-content-between"
+        >
+
+            <a
+                href="/"
+                class="brand"
+                aria-label="InfraGuard AI home"
+            >
+
+                <div class="brand-icon">
+
+                    <i class="bi bi-shield-check"></i>
+
+                </div>
+
+
+                <div>
+
+                    <div class="brand-title">
+                        InfraGuard AI
+                    </div>
+
+                    <span class="brand-subtitle">
+                        Civic Infrastructure Platform
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <div class="nav-user">
+
+                <div class="user-profile">
+
+                    <div
+                        class="user-avatar"
+                        id="userAvatar"
+                    >
+                        C
+                    </div>
+
+
+                    <div class="user-info">
+
+                        <div class="user-role">
+                            Citizen Portal
+                        </div>
+
+                        <div
+                            class="user-email"
+                            id="userEmail"
+                        >
+                            Citizen
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="logout-btn"
+                    onclick="logout()"
+                    aria-label="Logout"
+                >
+
+                    <i class="bi bi-box-arrow-right"></i>
+
+                    <span>
+                        Logout
+                    </span>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<div class="tricolor-line"></div>
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main
+    id="main-content"
+    class="dashboard-main"
+>
+
+    <div class="container container-main">
+
+
+        <!-- =====================================================
+             PAGE HEADER
+        ====================================================== -->
+
+        <section class="page-header reveal">
+
+            <div class="breadcrumb-custom">
+
+                <a href="/">
+                    Home
+                </a>
+
+                <i class="bi bi-chevron-right"></i>
+
+                <span>
+                    Citizen Dashboard
+                </span>
+
+            </div>
+
+
+            <div class="page-header-row">
+
+                <div>
+
+                    <div class="eyebrow">
+                        Citizen Portal
+                    </div>
+
+                    <h1 class="welcome-title">
+                        Welcome back.
+                    </h1>
+
+                    <p class="welcome-description">
+                        Report infrastructure problems, track your complaints,
+                        and help improve public infrastructure through timely
+                        citizen participation.
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <a
+                        href="/report-issue"
+                        class="primary-btn"
+                    >
+
+                        <i class="bi bi-plus-circle"></i>
+
+                        Report an Issue
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             STATISTICS
+        ====================================================== -->
+
+        <section
+            class="row g-3 stats-grid reveal"
+        >
+
+            <div class="col-6 col-lg-3">
+
+                <div class="dashboard-card stat-card">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon">
+
+                            <i class="bi bi-file-earmark-text"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="stat-label">
+                        Total complaints
+                    </div>
+
+                    <div
+                        class="stat-value counter"
+                        id="totalComplaints"
+                        data-value="0"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-footer">
+                        Complaints submitted by you
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-6 col-lg-3">
+
+                <div class="dashboard-card stat-card">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon orange">
+
+                            <i class="bi bi-hourglass-split"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="stat-label">
+                        Active complaints
+                    </div>
+
+                    <div
+                        class="stat-value counter"
+                        id="activeComplaints"
+                        data-value="0"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-footer">
+                        Currently being processed
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-6 col-lg-3">
+
+                <div class="dashboard-card stat-card">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon green">
+
+                            <i class="bi bi-check2-circle"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="stat-label">
+                        Resolved
+                    </div>
+
+                    <div
+                        class="stat-value counter"
+                        id="resolvedComplaints"
+                        data-value="0"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-footer">
+                        Successfully resolved
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-6 col-lg-3">
+
+                <div class="dashboard-card stat-card">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon navy">
+
+                            <i class="bi bi-shield-check"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="stat-label">
+                        Infrastructure health
+                    </div>
+
+                    <div class="stat-value">
+
+                        82
+
+                        <span
+                            class="fs-6"
+                            style="color:var(--ig-muted);"
+                        >
+                            / 100
+                        </span>
+
+                    </div>
+
+                    <div class="stat-footer">
+                        Platform demo indicator
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             MAIN GRID
+        ====================================================== -->
+
+        <div class="row g-4">
+
+
+            <!-- =================================================
+                 LEFT COLUMN
+            ================================================== -->
+
+            <div class="col-lg-8">
+
+
+                <!-- COMPLAINTS -->
+
+                <section
+                    class="dashboard-card complaints-panel reveal"
+                >
+
+                    <div class="section-header">
+
+                        <div>
+
+                            <div class="eyebrow">
+                                My activity
+                            </div>
+
+                            <h2 class="section-title">
+                                My Complaints
+                            </h2>
+
+                            <div class="section-subtitle">
+                                Track the status and progress of issues you have reported.
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="refresh-btn"
+                            onclick="loadComplaints()"
+                            title="Refresh complaints"
+                            aria-label="Refresh complaints"
+                        >
+
+                            <i class="bi bi-arrow-clockwise"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <div id="complaintsContainer">
+
+                        <div class="empty-state">
+
+                            <div class="loading-spinner"></div>
+
+                            <h5>
+                                Loading complaints
+                            </h5>
+
+                            <p>
+                                Connecting to your citizen records.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="notice-card">
+
+                        <i class="bi bi-info-circle"></i>
+
+                        Complaint information shown here is associated with
+                        your citizen account. Status updates are provided
+                        through the InfraGuard AI workflow.
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            <!-- =================================================
+                 RIGHT COLUMN
+            ================================================== -->
+
+            <div class="col-lg-4">
+
+
+                <!-- INFRASTRUCTURE HEALTH -->
+
+                <section
+                    class="dashboard-card side-card reveal mb-4"
+                >
+
+                    <div class="eyebrow">
+                        Platform overview
+                    </div>
+
+                    <h2 class="section-title">
+                        Infrastructure Health
+                    </h2>
+
+                    <div class="health-number">
+
+                        82
+
+                        <span>
+                            / 100
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        class="health-bar"
+                        aria-label="Infrastructure health 82 percent"
+                    >
+
+                        <div class="health-fill"></div>
+
+                    </div>
+
+
+                    <div class="health-row">
+
+                        <span>
+                            Roads
+                        </span>
+
+                        <strong>
+                            94%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="health-row">
+
+                        <span>
+                            Streetlights
+                        </span>
+
+                        <strong>
+                            81%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="health-row">
+
+                        <span>
+                            Drainage
+                        </span>
+
+                        <strong>
+                            72%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="health-row">
+
+                        <span>
+                            Overall status
+                        </span>
+
+                        <span class="health-status">
+
+                            <span class="health-status-dot"></span>
+
+                            Good
+
+                        </span>
+
+                    </div>
+
+                </section>
+
+
+                <!-- QUICK ACTIONS -->
+
+                <section
+                    class="dashboard-card side-card reveal"
+                >
+
+                    <div class="eyebrow">
+                        Quick actions
+                    </div>
+
+                    <h2 class="section-title mb-3">
+                        Get things done
+                    </h2>
+
+
+                    <a
+                        href="/report-issue"
+                        class="quick-action"
+                    >
+
+                        <div class="quick-icon">
+
+                            <i class="bi bi-megaphone"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="quick-title">
+                                Report a problem
+                            </div>
+
+                            <div class="quick-description">
+                                Submit a new infrastructure complaint
+                            </div>
+
+                        </div>
+
+                        <i class="bi bi-chevron-right quick-arrow"></i>
+
+                    </a>
+
+
+                    <a
+                        href="#complaintsContainer"
+                        class="quick-action"
+                    >
+
+                        <div class="quick-icon">
+
+                            <i class="bi bi-search"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="quick-title">
+                                Track complaints
+                            </div>
+
+                            <div class="quick-description">
+                                View your complaint status
+                            </div>
+
+                        </div>
+
+                        <i class="bi bi-chevron-right quick-arrow"></i>
+
+                    </a>
+
+
+                    <a
+                        href="/"
+                        class="quick-action"
+                    >
+
+                        <div class="quick-icon">
+
+                            <i class="bi bi-map"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="quick-title">
+                                Infrastructure information
+                            </div>
+
+                            <div class="quick-description">
+                                Explore the public infrastructure platform
+                            </div>
+
+                        </div>
+
+                        <i class="bi bi-chevron-right quick-arrow"></i>
+
+                    </a>
+
+                </section>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- =========================================================
+     COMPLAINT DETAILS MODAL
+========================================================= -->
+
+<div
+    class="modal fade"
+    id="complaintModal"
+    tabindex="-1"
+    aria-labelledby="modalComplaintCode"
+    aria-hidden="true"
+>
+
+    <div
+        class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
+    >
+
+        <div class="modal-content">
+
+
+            <div class="modal-header">
+
+                <div>
+
+                    <div class="eyebrow">
+                        Complaint tracking
+                    </div>
+
+                    <h2
+                        class="modal-title fs-5 fw-bold"
+                        id="modalComplaintCode"
+                    >
+                        Complaint
+                    </h2>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+
+            </div>
+
+
+            <div
+                class="modal-body"
+                id="modalComplaintContent"
+            >
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="dashboard-footer">
+
+    <div class="container container-main">
+
+        <div class="footer-inner">
+
+            <div>
+
+                <span class="footer-brand">
+                    InfraGuard AI
+                </span>
+
+                <span class="ms-2">
+                    Citizen Infrastructure Portal
+                </span>
+
+            </div>
+
+
+            <div>
+                © <span id="currentYear"></span>
+                InfraGuard AI
+            </div>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+
+<script>
+
+/* =========================================================
+   AUTHENTICATION
+========================================================= */
+
+const citizenId =
+    localStorage.getItem("user_id");
+
+const accessToken =
+    localStorage.getItem("access_token");
+
+
+if (!citizenId || !accessToken) {
+
+    window.location.href = "/login";
+
+}
+
+
+/* =========================================================
+   USER DISPLAY
+========================================================= */
+
+function setupUserDisplay() {
+
+    const emailElement =
+        document.getElementById("userEmail");
+
+    const avatarElement =
+        document.getElementById("userAvatar");
+
+
+    const storedEmail =
+        localStorage.getItem("user_email") ||
+        localStorage.getItem("email");
+
+
+    if (storedEmail) {
+
+        emailElement.textContent =
+            storedEmail;
+
+        const firstCharacter =
+            storedEmail
+                .trim()
+                .charAt(0)
+                .toUpperCase();
+
+        if (firstCharacter) {
+
+            avatarElement.textContent =
+                firstCharacter;
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+function logout() {
+
+    localStorage.removeItem("user_id");
+
+    localStorage.removeItem("access_token");
+
+    localStorage.removeItem("user_email");
+
+    localStorage.removeItem("email");
+
+    window.location.href = "/login";
+
+}
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHtml(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(value)
+
+        .replaceAll("&", "&amp;")
+
+        .replaceAll("<", "&lt;")
+
+        .replaceAll(">", "&gt;")
+
+        .replaceAll('"', "&quot;")
+
+        .replaceAll("'", "&#039;");
+
+}
+
+
+/* =========================================================
+   DATE FORMAT
+========================================================= */
+
+function formatDate(value) {
+
+    if (!value) {
+
+        return "Date unavailable";
+
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if (Number.isNaN(date.getTime())) {
+
+        return "Date unavailable";
+
+    }
+
+
+    return date.toLocaleString(
+
+        "en-IN",
+
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+
+    );
+
+}
+
+
+/* =========================================================
+   STATUS CLASS
+========================================================= */
+
+function getStatusClass(status) {
+
+    const normalized =
+        String(status || "")
+            .trim()
+            .toUpperCase();
+
+
+    if (normalized === "SUBMITTED") {
+
+        return "status-submitted";
+
+    }
+
+
+    if (
+        normalized === "RESOLVED" ||
+        normalized === "CITIZEN CONFIRMED" ||
+        normalized === "CLOSED"
+    ) {
+
+        return "status-resolved";
+
+    }
+
+
+    if (
+        normalized === "REJECTED" ||
+        normalized === "DUPLICATE"
+    ) {
+
+        return "status-danger";
+
+    }
+
+
+    return "status-progress";
+
+}
+
+
+/* =========================================================
+   SEVERITY CLASS
+========================================================= */
+
+function getSeverityClass(severity) {
+
+    return (
+        "severity-" +
+        String(
+            severity || "Medium"
+        ).toLowerCase()
+    );
+
+}
+
+
+/* =========================================================
+   TIMELINE
+========================================================= */
+
+function getTimeline(
+    status,
+    createdAt
+) {
+
+    const stages = [
+
+        "SUBMITTED",
+
+        "UNDER REVIEW",
+
+        "VERIFIED",
+
+        "PRIORITIZED",
+
+        "ASSIGNED",
+
+        "IN PROGRESS",
+
+        "INSPECTION",
+
+        "RESOLVED",
+
+        "CITIZEN CONFIRMED",
+
+        "CLOSED"
+
+    ];
+
+
+    const normalizedStatus =
+        String(status || "")
+            .trim()
+            .toUpperCase();
+
+
+    let currentIndex =
+        stages.indexOf(
+            normalizedStatus
+        );
+
+
+    if (currentIndex === -1) {
+
+        if (
+            normalizedStatus === "REJECTED" ||
+            normalizedStatus === "DUPLICATE"
+        ) {
+
+            return `
+
+                <div class="timeline">
+
+                    <div class="timeline-item active">
+
+                        <div class="timeline-dot"></div>
+
+                        <div class="timeline-label">
+
+                            ${escapeHtml(
+                                normalizedStatus
+                            )}
+
+                        </div>
+
+                        <div class="timeline-date">
+
+                            Complaint was moved to
+                            ${escapeHtml(
+                                normalizedStatus.toLowerCase()
+                            )}.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+
+
+        currentIndex = 0;
+
+    }
+
+
+    return `
+
+        <div class="timeline">
+
+            ${stages.map(
+                (stage, index) => {
+
+                    let className = "";
+
+
+                    if (
+                        index < currentIndex
+                    ) {
+
+                        className =
+                            "completed";
+
+                    }
+
+
+                    if (
+                        index === currentIndex
+                    ) {
+
+                        className =
+                            "active";
+
+                    }
+
+
+                    return `
+
+                        <div
+                            class="timeline-item
+                                   ${className}"
+                        >
+
+                            <div
+                                class="timeline-dot"
+                            ></div>
+
+
+                            <div
+                                class="timeline-label"
+                            >
+                                ${escapeHtml(
+                                    stage
+                                )}
+                            </div>
+
+
+                            ${
+                                index === 0
+
+                                ?
+
+                                `
+                                <div
+                                    class="timeline-date"
+                                >
+                                    Submitted
+                                    ${formatDate(
+                                        createdAt
+                                    )}
+                                </div>
+                                `
+
+                                :
+
+                                ""
+                            }
+
+                        </div>
+
+                    `;
+
+                }
+            ).join("")}
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   SHOW COMPLAINT MODAL
+========================================================= */
+
+function showComplaint(
+    complaint
+) {
+
+    document.getElementById(
+        "modalComplaintCode"
+    ).textContent =
+        complaint.complaint_code ||
+        "Complaint";
+
+
+    document.getElementById(
+        "modalComplaintContent"
+    ).innerHTML = `
+
+        <div class="row g-3">
+
+
+            <div class="col-md-6">
+
+                <div class="modal-meta-label">
+                    Infrastructure
+                </div>
+
+                <div class="modal-meta-value">
+                    ${escapeHtml(
+                        complaint.category
+                    )}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <div class="modal-meta-label">
+                    Problem
+                </div>
+
+                <div class="modal-meta-value">
+                    ${escapeHtml(
+                        complaint.problem_type
+                    )}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <div class="modal-meta-label">
+                    Severity
+                </div>
+
+                <div
+                    class="modal-meta-value
+                           ${getSeverityClass(
+                               complaint.severity
+                           )}"
+                >
+                    ${escapeHtml(
+                        complaint.severity
+                    )}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <div class="modal-meta-label">
+                    Current status
+                </div>
+
+                <div>
+
+                    <span
+                        class="status-badge
+                               ${getStatusClass(
+                                   complaint.status
+                               )}"
+                    >
+                        ${escapeHtml(
+                            complaint.status
+                        )}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-12">
+
+                <div class="modal-meta-label">
+                    Description
+                </div>
+
+                <div class="description-box mt-1">
+
+                    ${escapeHtml(
+                        complaint.description ||
+                        "No description provided."
+                    )}
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <hr
+            class="my-4"
+            style="border-color:#e2e8ee;"
+        >
+
+
+        <div class="eyebrow">
+            Tracking timeline
+        </div>
+
+
+        ${getTimeline(
+            complaint.status,
+            complaint.created_at
+        )}
+
+    `;
+
+
+    const modalElement =
+        document.getElementById(
+            "complaintModal"
+        );
+
+
+    const modal =
+        bootstrap.Modal.getOrCreateInstance(
+            modalElement
+        );
+
+
+    modal.show();
+
+}
+
+
+/* =========================================================
+   RENDER COMPLAINTS
+========================================================= */
+
+function renderComplaints(
+    complaints
+) {
+
+    const container =
+        document.getElementById(
+            "complaintsContainer"
+        );
+
+
+    if (!complaints.length) {
+
+        container.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+
+                    <i
+                        class="bi bi-clipboard2-plus"
+                    ></i>
+
+                </div>
+
+
+                <h5>
+                    No complaints yet
+                </h5>
+
+
+                <p>
+                    If you notice a road,
+                    streetlight, drainage,
+                    water or other public
+                    infrastructure problem,
+                    report it through the
+                    citizen portal.
+                </p>
+
+
+                <a
+                    href="/report-issue"
+                    class="primary-btn mt-3"
+                >
+
+                    <i
+                        class="bi bi-plus-circle"
+                    ></i>
+
+                    Report an Issue
+
+                </a>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        complaints.map(
+
+            (complaint, index) => `
+
+                <article
+                    class="complaint-card"
+                    style="
+                        animation-delay:
+                        ${index * 0.05}s;
+                    "
+                >
+
+
+                    <div class="complaint-header">
+
+
+                        <div>
+
+                            <div class="complaint-code">
+
+                                ${escapeHtml(
+                                    complaint.complaint_code
+                                )}
+
+                            </div>
+
+
+                            <h3 class="complaint-title">
+
+                                ${escapeHtml(
+                                    complaint.problem_type
+                                )}
+
+                            </h3>
+
+
+                            <div class="complaint-category">
+
+                                <i
+                                    class="bi bi-geo-alt me-1"
+                                ></i>
+
+                                ${escapeHtml(
+                                    complaint.category
+                                )}
+
+                            </div>
+
+                        </div>
+
+
+                        <span
+                            class="status-badge
+                                   ${getStatusClass(
+                                       complaint.status
+                                   )}"
+                        >
+
+                            ${escapeHtml(
+                                complaint.status
+                            )}
+
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="complaint-meta">
+
+
+                        <div class="meta-box">
+
+                            <div class="meta-label">
+                                Severity
+                            </div>
+
+                            <div
+                                class="
+                                    meta-value
+                                    severity
+                                    ${getSeverityClass(
+                                        complaint.severity
+                                    )}
+                                "
+                            >
+
+                                ${escapeHtml(
+                                    complaint.severity
+                                )}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="meta-box">
+
+                            <div class="meta-label">
+                                Submitted
+                            </div>
+
+                            <div class="meta-value">
+
+                                ${formatDate(
+                                    complaint.created_at
+                                )}
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="complaint-footer">
+
+                        <span class="track-note">
+
+                            <i
+                                class="bi bi-clock-history me-1"
+                            ></i>
+
+                            Track your complaint progress
+
+                        </span>
+
+
+                        <button
+                            type="button"
+                            class="view-btn"
+                            onclick='showComplaint(${JSON.stringify(
+                                complaint
+                            )})'
+                        >
+
+                            View Tracking
+
+                            <i
+                                class="bi bi-arrow-right"
+                            ></i>
+
+                        </button>
+
+                    </div>
+
+
+                </article>
+
+            `
+
+        ).join("");
+
+}
+
+
+/* =========================================================
+   ANIMATED COUNTER
+========================================================= */
+
+function animateCounter(
+    element,
+    target
+) {
+
+    const duration = 650;
+
+    const startTime =
+        performance.now();
+
+
+    function update(
+        currentTime
+    ) {
+
+        const elapsed =
+            currentTime -
+            startTime;
+
+
+        const progress =
+            Math.min(
+                elapsed / duration,
+                1
+            );
+
+
+        const eased =
+            1 -
+            Math.pow(
+                1 - progress,
+                3
+            );
+
+
+        const value =
+            Math.floor(
+                target * eased
+            );
+
+
+        element.textContent =
+            value;
+
+
+        if (progress < 1) {
+
+            requestAnimationFrame(
+                update
+            );
+
+        }
+
+    }
+
+
+    requestAnimationFrame(
+        update
+    );
+
+}
+
+
+/* =========================================================
+   LOAD COMPLAINTS
+========================================================= */
+
+async function loadComplaints() {
+
+    const container =
+        document.getElementById(
+            "complaintsContainer"
+        );
+
+
+    container.innerHTML = `
+
+        <div class="empty-state">
+
+            <div class="loading-spinner"></div>
+
+            <h5>
+                Loading complaints
+            </h5>
+
+            <p>
+                Fetching your latest citizen records.
+            </p>
+
+        </div>
+
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+
+                `/api/complaints?citizen_id=${encodeURIComponent(
+                    citizenId
+                )}`,
+
+                {
+
+                    headers: {
+
+                        "Authorization":
+                            `Bearer ${accessToken}`
+
+                    }
+
+                }
+
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Unable to load complaints."
+            );
+
+        }
+
+
+        const complaints =
+            data.complaints || [];
+
+
+        const active =
+            complaints.filter(
+
+                complaint => {
+
+                    const status =
+                        String(
+                            complaint.status ||
+                            ""
+                        ).toUpperCase();
+
+
+                    return ![
+                        "RESOLVED",
+                        "CITIZEN CONFIRMED",
+                        "CLOSED",
+                        "REJECTED",
+                        "DUPLICATE"
+                    ].includes(
+                        status
+                    );
+
+                }
+
+            ).length;
+
+
+        const resolved =
+            complaints.filter(
+
+                complaint => {
+
+                    const status =
+                        String(
+                            complaint.status ||
+                            ""
+                        ).toUpperCase();
+
+
+                    return [
+                        "RESOLVED",
+                        "CITIZEN CONFIRMED",
+                        "CLOSED"
+                    ].includes(
+                        status
+                    );
+
+                }
+
+            ).length;
+
+
+        const totalElement =
+            document.getElementById(
+                "totalComplaints"
+            );
+
+
+        const activeElement =
+            document.getElementById(
+                "activeComplaints"
+            );
+
+
+        const resolvedElement =
+            document.getElementById(
+                "resolvedComplaints"
+            );
+
+
+        totalElement.textContent = "0";
+
+        activeElement.textContent = "0";
+
+        resolvedElement.textContent = "0";
+
+
+        animateCounter(
+            totalElement,
+            complaints.length
+        );
+
+
+        animateCounter(
+            activeElement,
+            active
+        );
+
+
+        animateCounter(
+            resolvedElement,
+            resolved
+        );
+
+
+        renderComplaints(
+            complaints
+        );
+
+
+    } catch (error) {
+
+        container.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+
+                    <i
+                        class="bi bi-exclamation-triangle"
+                    ></i>
+
+                </div>
+
+
+                <h5>
+                    Unable to load complaints
+                </h5>
+
+
+                <p>
+                    ${escapeHtml(
+                        error.message
+                    )}
+                </p>
+
+
+                <button
+                    type="button"
+                    class="primary-btn mt-3"
+                    onclick="loadComplaints()"
+                >
+
+                    <i
+                        class="bi bi-arrow-clockwise"
+                    ></i>
+
+                    Try Again
+
+                </button>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   REVEAL ANIMATIONS
+========================================================= */
+
+function setupRevealAnimations() {
+
+    const elements =
+        document.querySelectorAll(
+            ".reveal"
+        );
+
+
+    if (
+        !("IntersectionObserver" in window)
+    ) {
+
+        elements.forEach(
+            element =>
+                element.classList.add(
+                    "visible"
+                )
+        );
+
+        return;
+
+    }
+
+
+    const observer =
+        new IntersectionObserver(
+
+            entries => {
+
+                entries.forEach(
+                    entry => {
+
+                        if (
+                            entry.isIntersecting
+                        ) {
+
+                            entry.target
+                                .classList
+                                .add(
+                                    "visible"
+                                );
+
+                            observer.unobserve(
+                                entry.target
+                            );
+
+                        }
+
+                    }
+                );
+
+            },
+
+            {
+                threshold: 0.12
+            }
+
+        );
+
+
+    elements.forEach(
+        element =>
+            observer.observe(
+                element
+            )
+    );
+
+}
+
+
+/* =========================================================
+   CURRENT YEAR
+========================================================= */
+
+function setupYear() {
+
+    document.getElementById(
+        "currentYear"
+    ).textContent =
+        new Date().getFullYear();
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+setupUserDisplay();
+
+setupRevealAnimations();
+
+setupYear();
+
+loadComplaints();
+
+</script>
+
+</body>
+</html>

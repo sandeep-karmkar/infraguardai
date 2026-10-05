@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>InfraGuardAI — Smarter Infrastructure</title>
+
+    <meta
+        name="description"
+        content="AI-powered predictive maintenance and citizen infrastructure reporting platform."
+    >
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top civic-nav">
+
+    <div class="container">
+
+        <a class="navbar-brand fw-bold" href="/">
+            <span class="brand-mark">I</span>
+            InfraGuardAI
+        </a>
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#mainNav"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#how-it-works">
+                        How it works
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#infrastructure">
+                        Infrastructure
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#impact">
+                        Impact
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a
+                        class="btn btn-outline-light rounded-pill px-4 ms-lg-2"
+                        href="/login"
+                    >
+                        Login
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a
+                        class="btn btn-primary rounded-pill px-4"
+                        href="/register"
+                    >
+                        Register
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main>
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="hero-section">
+
+        <div class="hero-grid"></div>
+
+        <div class="container position-relative">
+
+            <div class="row align-items-center min-vh-100 py-5">
+
+                <!-- Hero content -->
+
+                <div class="col-lg-7 pt-5">
+
+                    <div class="eyebrow mb-3">
+                        AI-POWERED CIVIC INFRASTRUCTURE
+                    </div>
+
+                    <h1 class="display-2 fw-bold text-white lh-1 mb-4">
+
+                        Smarter infrastructure.<br>
+
+                        <span class="text-gradient">
+                            Faster maintenance.
+                        </span>
+
+                    </h1>
+
+                    <p class="lead text-light-emphasis mb-4 hero-copy">
+
+                        A citizen-centric platform that combines
+                        public complaints, infrastructure data and
+                        AI predictions to help communities identify,
+                        prioritize and resolve problems faster.
+
+                    </p>
+
+                    <div class="d-flex flex-wrap gap-3">
+
+                        <a
+                            href="/register"
+                            class="btn btn-primary btn-lg rounded-pill px-4"
+                        >
+                            Report an issue
+                            <span>→</span>
+                        </a>
+
+                        <a
+                            href="#how-it-works"
+                            class="btn btn-ghost btn-lg rounded-pill px-4"
+                        >
+                            Explore the platform
+                        </a>
+
+                    </div>
+
+                    <div class="hero-trust mt-5">
+
+                        <span>✓ Citizen reporting</span>
+                        <span>✓ AI risk prediction</span>
+                        <span>✓ GIS monitoring</span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Infrastructure overview -->
+
+                <div class="col-lg-5 pt-5 mt-5">
+
+                    <div class="command-card">
+
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+
+                            <div>
+
+                                <small class="text-secondary">
+                                    LIVE OVERVIEW
+                                </small>
+
+                                <h5 class="text-white mb-0">
+                                    Infrastructure health
+                                </h5>
+
+                            </div>
+
+                            <span class="live-dot">
+                                ● Live
+                            </span>
+
+                        </div>
+
+
+                        <div class="health-score">
+
+                            <div class="score-ring">
+
+                                <span>82</span>
+                                <small>/100</small>
+
+                            </div>
+
+                            <div>
+
+                                <div class="text-white fw-semibold">
+                                    System health
+                                </div>
+
+                                <small class="text-secondary">
+                                    Across monitored assets
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric-list mt-4">
+
+                            <div class="metric-row">
+
+                                <span>Roads</span>
+                                <strong>94%</strong>
+
+                                <div class="metric-bar">
+                                    <i style="width:94%"></i>
+                                </div>
+
+                            </div>
+
+
+                            <div class="metric-row">
+
+                                <span>Streetlights</span>
+                                <strong>81%</strong>
+
+                                <div class="metric-bar">
+                                    <i style="width:81%"></i>
+                                </div>
+
+                            </div>
+
+
+                            <div class="metric-row">
+
+                                <span>Drainage</span>
+                                <strong>72%</strong>
+
+                                <div class="metric-bar">
+                                    <i style="width:72%"></i>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="alert-card mt-4">
+
+                            <div class="risk-icon">
+                                !
+                            </div>
+
+                            <div>
+
+                                <small class="text-secondary">
+                                    AI PRIORITY ALERT
+                                </small>
+
+                                <div class="text-white fw-semibold">
+                                    12 assets need attention
+                                </div>
+
+                            </div>
+
+                            <span class="ms-auto text-warning">
+                                High
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         HOW IT WORKS
+    ====================================================== -->
+
+    <section id="how-it-works" class="section-light py-5">
+
+        <div class="container py-5">
+
+            <div class="section-heading text-center mx-auto">
+
+                <div class="eyebrow-dark">
+                    HOW IT WORKS
+                </div>
+
+                <h2 class="display-6 fw-bold mt-2">
+                    From citizen report to resolution
+                </h2>
+
+                <p class="text-secondary mt-3">
+
+                    One connected workflow for citizens,
+                    maintenance officers and field inspectors.
+
+                </p>
+
+            </div>
+
+
+            <div class="row g-4 mt-4">
+
+                <div class="col-md-4">
+
+                    <div class="step-card">
+
+                        <span>01</span>
+
+                        <h4>
+                            Report
+                        </h4>
+
+                        <p>
+
+                            Citizens report potholes,
+                            broken streetlights,
+                            drainage problems and other
+                            infrastructure issues with location
+                            and evidence.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="step-card">
+
+                        <span>02</span>
+
+                        <h4>
+                            Predict & prioritize
+                        </h4>
+
+                        <p>
+
+                            AI combines infrastructure condition,
+                            history, complaints and environmental
+                            signals to identify high-risk assets.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="step-card">
+
+                        <span>03</span>
+
+                        <h4>
+                            Resolve & verify
+                        </h4>
+
+                        <p>
+
+                            Officers assign work, inspectors verify
+                            repairs and citizens can track the
+                            complaint through closure.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         INFRASTRUCTURE
+    ====================================================== -->
+
+    <section id="infrastructure" class="section-dark py-5">
+
+        <div class="container py-5">
+
+            <div class="row align-items-end mb-4">
+
+                <div class="col-lg-8">
+
+                    <div class="eyebrow">
+                        INFRASTRUCTURE INTELLIGENCE
+                    </div>
+
+                    <h2 class="display-6 fw-bold text-white mt-2">
+                        Built around real civic problems
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+
+                    <div class="infra-card">
+
+                        <div class="infra-number">
+                            01
+                        </div>
+
+                        <h4>
+                            Roads
+                        </h4>
+
+                        <p>
+
+                            Detect recurring damage,
+                            monitor condition and
+                            prioritize repairs.
+
+                        </p>
+
+                        <span>
+                            Predictive maintenance →
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="infra-card">
+
+                        <div class="infra-number">
+                            02
+                        </div>
+
+                        <h4>
+                            Streetlights
+                        </h4>
+
+                        <p>
+
+                            Track failures and complaints
+                            while identifying assets at risk.
+
+                        </p>
+
+                        <span>
+                            Smart monitoring →
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="infra-card">
+
+                        <div class="infra-number">
+                            03
+                        </div>
+
+                        <h4>
+                            Drainage
+                        </h4>
+
+                        <p>
+
+                            Combine citizen reports and
+                            asset conditions to surface
+                            urgent issues.
+
+                        </p>
+
+                        <span>
+                            Risk intelligence →
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         IMPACT
+    ====================================================== -->
+
+    <section id="impact" class="section-light py-5">
+
+        <div class="container py-5">
+
+            <div class="row g-4 text-center">
+
+                <div class="col-6 col-lg-3">
+
+                    <div class="stat">
+
+                        <strong>
+                            1,248
+                        </strong>
+
+                        <span>
+                            Assets monitored
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-6 col-lg-3">
+
+                    <div class="stat">
+
+                        <strong>
+                            386
+                        </strong>
+
+                        <span>
+                            Issues reported
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-6 col-lg-3">
+
+                    <div class="stat">
+
+                        <strong>
+                            924
+                        </strong>
+
+                        <span>
+                            Issues resolved
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-6 col-lg-3">
+
+                    <div class="stat">
+
+                        <strong>
+                            87%
+                        </strong>
+
+                        <span>
+                            Resolution rate
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+    <section class="cta-section py-5">
+
+        <div class="container py-5 text-center">
+
+            <div class="eyebrow">
+                MAKE INFRASTRUCTURE RESPONSIVE
+            </div>
+
+            <h2 class="display-5 fw-bold text-white mt-2">
+
+                See a problem?
+                Help get it fixed.
+
+            </h2>
+
+            <p class="text-light-emphasis mx-auto cta-copy">
+
+                Report an infrastructure issue and follow
+                its journey from submission to resolution.
+
+            </p>
+
+            <a
+                href="/register"
+                class="btn btn-primary btn-lg rounded-pill px-5 mt-3"
+            >
+                Report a problem →
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="footer py-4">
+
+    <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+
+        <span>
+            © 2026 InfraGuardAI — BitShift PS #4
+        </span>
+
+        <span>
+            Predictive maintenance for better public infrastructure.
+        </span>
+
+    </div>
+
+</footer>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+</body>
+</html>

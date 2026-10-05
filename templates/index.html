@@ -1,0 +1,6549 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <meta
+        name="description"
+        content="InfraGuard AI is a civic infrastructure management platform for reporting, monitoring and predicting maintenance needs across public infrastructure."
+    >
+
+    <meta
+        name="keywords"
+        content="InfraGuard AI, civic infrastructure, e-governance, predictive maintenance, public infrastructure, citizen services, smart city"
+    >
+
+    <meta
+        name="author"
+        content="InfraGuard AI"
+    >
+
+    <title>
+        InfraGuard AI | Civic Infrastructure Services
+    </title>
+
+
+    <!-- Bootstrap -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- Font Awesome -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+
+    <!-- Existing project stylesheet -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+
+    <style>
+
+        /* =========================================================
+           ROOT
+        ========================================================= */
+
+        :root {
+
+            --gov-blue: #0b3d91;
+            --gov-blue-dark: #082b68;
+            --gov-blue-light: #edf4ff;
+
+            --gov-navy: #102a43;
+
+            --gov-green: #198754;
+            --gov-orange: #ff9933;
+            --gov-red: #c62828;
+
+            --gov-text: #26374a;
+            --gov-muted: #64748b;
+
+            --gov-bg: #f5f7fa;
+            --gov-border: #dce4ee;
+
+            --white: #ffffff;
+
+            --shadow-sm:
+                0 4px 14px rgba(20, 50, 80, 0.06);
+
+            --shadow-md:
+                0 14px 35px rgba(20, 50, 80, 0.10);
+
+        }
+
+
+        /* =========================================================
+           GLOBAL
+        ========================================================= */
+
+        html {
+
+            scroll-behavior: smooth;
+
+            scroll-padding-top: 90px;
+
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                "Segoe UI",
+                Roboto,
+                Arial,
+                sans-serif;
+
+            color: var(--gov-text);
+
+            background: #ffffff;
+
+            line-height: 1.6;
+
+        }
+
+
+        a {
+
+            text-decoration: none;
+
+        }
+
+
+        button {
+
+            font-family: inherit;
+
+        }
+
+
+        .container {
+
+            max-width: 1180px;
+
+        }
+
+
+        /* =========================================================
+           ACCESSIBILITY
+        ========================================================= */
+
+        .skip-link {
+
+            position: fixed;
+
+            left: 15px;
+
+            top: -60px;
+
+            z-index: 9999;
+
+            background: var(--gov-blue);
+
+            color: white;
+
+            padding: 10px 16px;
+
+            border-radius: 0 0 5px 5px;
+
+            font-weight: 700;
+
+            transition: top .2s ease;
+
+        }
+
+
+        .skip-link:focus {
+
+            top: 0;
+
+        }
+
+
+        :focus-visible {
+
+            outline: 3px solid #ff9933 !important;
+
+            outline-offset: 3px;
+
+        }
+
+
+        /* =========================================================
+           PAGE PROGRESS
+        ========================================================= */
+
+        .page-progress {
+
+            position: fixed;
+
+            left: 0;
+
+            top: 0;
+
+            width: 0%;
+
+            height: 3px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ff9933,
+                    #ffffff,
+                    #138808
+                );
+
+            z-index: 10000;
+
+            transition: width .08s linear;
+
+        }
+
+
+        /* =========================================================
+           TOP BAR
+        ========================================================= */
+
+        .gov-topbar {
+
+            background: #f1f3f5;
+
+            border-bottom: 1px solid #dfe3e8;
+
+            font-size: 13px;
+
+        }
+
+
+        .gov-topbar-inner {
+
+            min-height: 38px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+        }
+
+
+        .top-links {
+
+            display: flex;
+
+            gap: 18px;
+
+        }
+
+
+        .top-links a {
+
+            color: #394b5f;
+
+        }
+
+
+        .top-links a:hover {
+
+            color: var(--gov-blue);
+
+        }
+
+
+        .accessibility-links {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+        }
+
+
+        .accessibility-links button {
+
+            border: 0;
+
+            background: transparent;
+
+            color: #425466;
+
+            cursor: pointer;
+
+            padding: 2px 4px;
+
+        }
+
+
+        .accessibility-links button:hover {
+
+            color: var(--gov-blue);
+
+        }
+
+
+        /* =========================================================
+           TRICOLOR
+        ========================================================= */
+
+        .tricolor-line {
+
+            height: 4px;
+
+            background:
+                linear-gradient(
+                    to right,
+                    #ff9933 0%,
+                    #ff9933 33.33%,
+                    #ffffff 33.33%,
+                    #ffffff 66.66%,
+                    #138808 66.66%,
+                    #138808 100%
+                );
+
+            border-bottom: 1px solid #e4e7eb;
+
+        }
+
+
+        /* =========================================================
+           NAVIGATION
+        ========================================================= */
+
+        .main-nav {
+
+            background: white;
+
+            border-bottom: 1px solid var(--gov-border);
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+            box-shadow:
+                0 2px 8px rgba(15, 35, 60, 0.05);
+
+            transition:
+                box-shadow .25s ease;
+
+        }
+
+
+        .main-nav.scrolled {
+
+            box-shadow:
+                0 5px 22px rgba(15, 35, 60, 0.11);
+
+        }
+
+
+        .brand-area {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+
+            min-height: 82px;
+
+        }
+
+
+        .brand-emblem {
+
+            width: 55px;
+
+            height: 55px;
+
+            border: 2px solid var(--gov-blue);
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: var(--gov-blue);
+
+            background: #f8fbff;
+
+            font-size: 23px;
+
+            flex-shrink: 0;
+
+            transition:
+                transform .3s ease;
+
+        }
+
+
+        .brand-area:hover .brand-emblem {
+
+            transform:
+                rotate(-5deg)
+                scale(1.05);
+
+        }
+
+
+        .brand-title {
+
+            color: var(--gov-navy);
+
+            font-size: 22px;
+
+            font-weight: 750;
+
+            line-height: 1.15;
+
+        }
+
+
+        .brand-subtitle {
+
+            color: #68788a;
+
+            font-size: 12px;
+
+            margin-top: 4px;
+
+        }
+
+
+        .navbar-nav .nav-link {
+
+            color: #34495e;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            padding: 29px 13px !important;
+
+            position: relative;
+
+        }
+
+
+        .navbar-nav .nav-link::after {
+
+            content: "";
+
+            position: absolute;
+
+            left: 13px;
+
+            right: 13px;
+
+            bottom: 18px;
+
+            height: 2px;
+
+            background: var(--gov-blue);
+
+            transform: scaleX(0);
+
+            transform-origin: center;
+
+            transition: transform .25s ease;
+
+        }
+
+
+        .navbar-nav .nav-link:hover::after,
+        .navbar-nav .nav-link.active::after {
+
+            transform: scaleX(1);
+
+        }
+
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+
+            color: var(--gov-blue);
+
+        }
+
+
+        .nav-login {
+
+            border: 1px solid var(--gov-blue);
+
+            color: var(--gov-blue);
+
+            border-radius: 5px;
+
+            padding: 9px 18px;
+
+            font-weight: 650;
+
+            font-size: 14px;
+
+            transition:
+                background .2s ease,
+                color .2s ease;
+
+        }
+
+
+        .nav-login:hover {
+
+            background: var(--gov-blue);
+
+            color: white;
+
+        }
+
+
+        .nav-register {
+
+            background: var(--gov-blue);
+
+            color: white;
+
+            border-radius: 5px;
+
+            padding: 10px 18px;
+
+            font-weight: 650;
+
+            font-size: 14px;
+
+            transition:
+                background .2s ease,
+                transform .2s ease;
+
+        }
+
+
+        .nav-register:hover {
+
+            background: var(--gov-blue-dark);
+
+            color: white;
+
+            transform: translateY(-1px);
+
+        }
+
+
+        /* =========================================================
+           HERO
+        ========================================================= */
+
+        .hero {
+
+            position: relative;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    110deg,
+                    #f4f8fd 0%,
+                    #ffffff 54%,
+                    #edf5ff 100%
+                );
+
+            border-bottom: 1px solid var(--gov-border);
+
+        }
+
+
+        .hero::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 500px;
+
+            height: 500px;
+
+            right: -250px;
+
+            top: -250px;
+
+            border-radius: 50%;
+
+            border: 1px solid rgba(11,61,145,.08);
+
+            animation:
+                slowRotate 18s linear infinite;
+
+        }
+
+
+        .hero::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 280px;
+
+            height: 280px;
+
+            right: 5%;
+
+            bottom: -180px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(11,61,145,.035);
+
+            animation:
+                floating 5s ease-in-out infinite;
+
+        }
+
+
+        .hero-content {
+
+            padding: 82px 0;
+
+            position: relative;
+
+            z-index: 2;
+
+        }
+
+
+        .hero-kicker {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            color: var(--gov-blue);
+
+            font-weight: 700;
+
+            font-size: 13px;
+
+            letter-spacing: .05em;
+
+            margin-bottom: 18px;
+
+            animation:
+                fadeUp .7s ease both;
+
+        }
+
+
+        .hero-kicker::before {
+
+            content: "";
+
+            width: 28px;
+
+            height: 3px;
+
+            background: var(--gov-orange);
+
+        }
+
+
+        .hero h1 {
+
+            color: var(--gov-navy);
+
+            font-size:
+                clamp(40px, 5vw, 62px);
+
+            line-height: 1.08;
+
+            font-weight: 750;
+
+            letter-spacing: -.035em;
+
+            margin-bottom: 22px;
+
+            animation:
+                fadeUp .8s .1s ease both;
+
+        }
+
+
+        .hero h1 span {
+
+            color: var(--gov-blue);
+
+        }
+
+
+        .hero-description {
+
+            color: #526477;
+
+            font-size: 18px;
+
+            max-width: 700px;
+
+            margin-bottom: 30px;
+
+            animation:
+                fadeUp .8s .2s ease both;
+
+        }
+
+
+        .hero-buttons {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 12px;
+
+            animation:
+                fadeUp .8s .3s ease both;
+
+        }
+
+
+        .btn-gov-primary {
+
+            background: var(--gov-blue);
+
+            color: white;
+
+            border: 1px solid var(--gov-blue);
+
+            border-radius: 5px;
+
+            padding: 12px 22px;
+
+            font-weight: 650;
+
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease,
+                background .2s ease;
+
+        }
+
+
+        .btn-gov-primary:hover {
+
+            background: var(--gov-blue-dark);
+
+            color: white;
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 20px rgba(11,61,145,.20);
+
+        }
+
+
+        .btn-gov-secondary {
+
+            background: white;
+
+            color: var(--gov-blue);
+
+            border: 1px solid #b8c8db;
+
+            border-radius: 5px;
+
+            padding: 12px 22px;
+
+            font-weight: 650;
+
+            transition:
+                transform .2s ease,
+                background .2s ease;
+
+        }
+
+
+        .btn-gov-secondary:hover {
+
+            border-color: var(--gov-blue);
+
+            background: #f2f7ff;
+
+            color: var(--gov-blue-dark);
+
+            transform: translateY(-2px);
+
+        }
+
+
+        .hero-note {
+
+            margin-top: 24px;
+
+            color: #68788a;
+
+            font-size: 13px;
+
+            animation:
+                fadeUp .8s .4s ease both;
+
+        }
+
+
+        /* =========================================================
+           HERO VISUAL
+        ========================================================= */
+
+        .hero-visual {
+
+            position: relative;
+
+            padding: 25px;
+
+            z-index: 2;
+
+            animation:
+                fadeRight .9s .25s ease both;
+
+        }
+
+
+        .hero-image {
+
+            width: 100%;
+
+            height: 400px;
+
+            object-fit: cover;
+
+            border-radius: 8px;
+
+            border: 1px solid #d8e1eb;
+
+            box-shadow:
+                0 22px 48px rgba(30,60,90,.14);
+
+            transition:
+                transform .5s ease;
+
+        }
+
+
+        .hero-visual:hover .hero-image {
+
+            transform:
+                scale(1.015);
+
+        }
+
+
+        .hero-status-card {
+
+            position: absolute;
+
+            left: -5px;
+
+            bottom: 10px;
+
+            width: 255px;
+
+            background: white;
+
+            border: 1px solid var(--gov-border);
+
+            box-shadow: var(--shadow-md);
+
+            padding: 17px;
+
+            border-radius: 7px;
+
+            animation:
+                floating 4s ease-in-out infinite;
+
+        }
+
+
+        .status-top {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            font-size: 12px;
+
+            color: var(--gov-muted);
+
+            margin-bottom: 7px;
+
+        }
+
+
+        .live-dot {
+
+            width: 8px;
+
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: var(--gov-green);
+
+            box-shadow:
+                0 0 0 5px rgba(25,135,84,.10);
+
+            animation:
+                pulse 2s infinite;
+
+        }
+
+
+        .hero-status-card strong {
+
+            color: var(--gov-navy);
+
+            font-size: 15px;
+
+        }
+
+
+        /* =========================================================
+           NOTICE
+        ========================================================= */
+
+        .notice-bar {
+
+            background: white;
+
+            border-bottom: 1px solid var(--gov-border);
+
+        }
+
+
+        .notice-inner {
+
+            min-height: 58px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+
+        }
+
+
+        .notice-label {
+
+            background: var(--gov-blue);
+
+            color: white;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            padding: 6px 12px;
+
+            border-radius: 3px;
+
+            white-space: nowrap;
+
+        }
+
+
+        .notice-text {
+
+            color: #526477;
+
+            font-size: 14px;
+
+        }
+
+
+        /* =========================================================
+           GENERAL SECTIONS
+        ========================================================= */
+
+        .section {
+
+            padding: 82px 0;
+
+        }
+
+
+        .section-light {
+
+            background: white;
+
+        }
+
+
+        .section-gray {
+
+            background: var(--gov-bg);
+
+        }
+
+
+        .section-blue {
+
+            background: #f1f6fd;
+
+        }
+
+
+        .section-header {
+
+            max-width: 760px;
+
+            margin-bottom: 42px;
+
+        }
+
+
+        .section-header.center {
+
+            margin-left: auto;
+
+            margin-right: auto;
+
+            text-align: center;
+
+        }
+
+
+        .section-label {
+
+            color: var(--gov-blue);
+
+            font-weight: 750;
+
+            font-size: 12px;
+
+            letter-spacing: .08em;
+
+            text-transform: uppercase;
+
+            margin-bottom: 9px;
+
+        }
+
+
+        .section-title {
+
+            color: var(--gov-navy);
+
+            font-size: 34px;
+
+            line-height: 1.2;
+
+            font-weight: 750;
+
+            margin-bottom: 13px;
+
+        }
+
+
+        .section-description {
+
+            color: var(--gov-muted);
+
+            font-size: 16px;
+
+            margin: 0;
+
+        }
+
+
+        /* =========================================================
+           SCROLL REVEAL
+        ========================================================= */
+
+        .reveal {
+
+            opacity: 0;
+
+            transform: translateY(28px);
+
+            transition:
+                opacity .7s ease,
+                transform .7s ease;
+
+        }
+
+
+        .reveal-left {
+
+            opacity: 0;
+
+            transform: translateX(-30px);
+
+            transition:
+                opacity .7s ease,
+                transform .7s ease;
+
+        }
+
+
+        .reveal-right {
+
+            opacity: 0;
+
+            transform: translateX(30px);
+
+            transition:
+                opacity .7s ease,
+                transform .7s ease;
+
+        }
+
+
+        .reveal.visible,
+        .reveal-left.visible,
+        .reveal-right.visible {
+
+            opacity: 1;
+
+            transform: translate(0);
+
+        }
+
+
+        /* =========================================================
+           ABOUT
+        ========================================================= */
+
+        .about-image-wrap {
+
+            position: relative;
+
+        }
+
+
+        .about-image {
+
+            width: 100%;
+
+            height: 430px;
+
+            object-fit: cover;
+
+            border-radius: 7px;
+
+            border: 1px solid var(--gov-border);
+
+        }
+
+
+        .about-mini-card {
+
+            position: absolute;
+
+            right: -18px;
+
+            bottom: 25px;
+
+            background: white;
+
+            border: 1px solid var(--gov-border);
+
+            box-shadow: var(--shadow-md);
+
+            padding: 18px;
+
+            width: 220px;
+
+            border-radius: 6px;
+
+        }
+
+
+        .about-mini-card strong {
+
+            display: block;
+
+            color: var(--gov-blue);
+
+            font-size: 25px;
+
+            line-height: 1;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .about-mini-card span {
+
+            color: var(--gov-muted);
+
+            font-size: 12px;
+
+        }
+
+
+        .about-box {
+
+            padding-left: 25px;
+
+        }
+
+
+        .about-points {
+
+            list-style: none;
+
+            padding: 0;
+
+            margin: 25px 0 0;
+
+        }
+
+
+        .about-points li {
+
+            display: flex;
+
+            gap: 12px;
+
+            margin-bottom: 15px;
+
+            color: #526477;
+
+            font-size: 15px;
+
+        }
+
+
+        .about-points i {
+
+            color: var(--gov-green);
+
+            margin-top: 4px;
+
+        }
+
+
+        /* =========================================================
+           SERVICE CARDS
+        ========================================================= */
+
+        .service-card {
+
+            height: 100%;
+
+            background: white;
+
+            border: 1px solid var(--gov-border);
+
+            border-radius: 7px;
+
+            padding: 26px;
+
+            position: relative;
+
+            overflow: hidden;
+
+            transition:
+                transform .28s ease,
+                box-shadow .28s ease,
+                border-color .28s ease;
+
+        }
+
+
+        .service-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+
+            top: 0;
+
+            width: 100%;
+
+            height: 3px;
+
+            background: var(--gov-blue);
+
+            transform: scaleX(0);
+
+            transform-origin: left;
+
+            transition: transform .3s ease;
+
+        }
+
+
+        .service-card:hover {
+
+            transform: translateY(-7px);
+
+            border-color: #b6c9df;
+
+            box-shadow: var(--shadow-md);
+
+        }
+
+
+        .service-card:hover::before {
+
+            transform: scaleX(1);
+
+        }
+
+
+        .service-icon {
+
+            width: 52px;
+
+            height: 52px;
+
+            border-radius: 6px;
+
+            background: #edf4ff;
+
+            color: var(--gov-blue);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 21px;
+
+            margin-bottom: 20px;
+
+            transition:
+                transform .25s ease,
+                background .25s ease;
+
+        }
+
+
+        .service-card:hover .service-icon {
+
+            transform:
+                rotate(-4deg)
+                scale(1.08);
+
+            background: #e2edff;
+
+        }
+
+
+        .service-card h3 {
+
+            color: var(--gov-navy);
+
+            font-size: 19px;
+
+            font-weight: 700;
+
+            margin-bottom: 9px;
+
+        }
+
+
+        .service-card p {
+
+            color: var(--gov-muted);
+
+            font-size: 14px;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .service-link {
+
+            color: var(--gov-blue);
+
+            font-weight: 650;
+
+            font-size: 14px;
+
+        }
+
+
+        .service-link i {
+
+            transition:
+                transform .2s ease;
+
+        }
+
+
+        .service-link:hover i {
+
+            transform:
+                translateX(4px);
+
+        }
+
+
+        /* =========================================================
+           INTERACTIVE PROCESS
+        ========================================================= */
+
+        .process-shell {
+
+            background: white;
+
+            border: 1px solid var(--gov-border);
+
+            border-radius: 8px;
+
+            overflow: hidden;
+
+            box-shadow: var(--shadow-sm);
+
+        }
+
+
+        .process-tabs {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, 1fr);
+
+            border-bottom: 1px solid var(--gov-border);
+
+        }
+
+
+        .process-tab {
+
+            border: 0;
+
+            background: white;
+
+            padding: 19px 12px;
+
+            color: var(--gov-muted);
+
+            font-weight: 700;
+
+            font-size: 13px;
+
+            border-right: 1px solid var(--gov-border);
+
+            cursor: pointer;
+
+            transition:
+                background .2s ease,
+                color .2s ease;
+
+        }
+
+
+        .process-tab:last-child {
+
+            border-right: 0;
+
+        }
+
+
+        .process-tab:hover {
+
+            background: #f7faff;
+
+            color: var(--gov-blue);
+
+        }
+
+
+        .process-tab.active {
+
+            background: var(--gov-blue);
+
+            color: white;
+
+        }
+
+
+        .process-tab-number {
+
+            display: block;
+
+            font-size: 11px;
+
+            opacity: .75;
+
+            margin-bottom: 4px;
+
+        }
+
+
+        .process-content {
+
+            padding: 34px;
+
+        }
+
+
+        .process-panel {
+
+            display: none;
+
+            animation:
+                panelIn .4s ease;
+
+        }
+
+
+        .process-panel.active {
+
+            display: block;
+
+        }
+
+
+        .process-icon-large {
+
+            width: 64px;
+
+            height: 64px;
+
+            background: var(--gov-blue-light);
+
+            color: var(--gov-blue);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 8px;
+
+            font-size: 25px;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .process-panel h3 {
+
+            color: var(--gov-navy);
+
+            font-size: 24px;
+
+            font-weight: 750;
+
+        }
+
+
+        .process-panel p {
+
+            color: var(--gov-muted);
+
+            max-width: 760px;
+
+        }
+
+
+        .process-flow-line {
+
+            height: 5px;
+
+            background: #e7edf4;
+
+            border-radius: 5px;
+
+            overflow: hidden;
+
+            margin-top: 25px;
+
+        }
+
+
+        .process-flow-progress {
+
+            height: 100%;
+
+            width: 20%;
+
+            background: var(--gov-blue);
+
+            border-radius: 5px;
+
+            transition:
+                width .35s ease;
+
+        }
+
+
+        /* =========================================================
+           INFRASTRUCTURE FILTER
+        ========================================================= */
+
+        .infra-filters {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            margin-bottom: 30px;
+
+        }
+
+
+        .infra-filter {
+
+            border: 1px solid #cbd7e4;
+
+            background: white;
+
+            color: #526477;
+
+            padding: 8px 15px;
+
+            border-radius: 30px;
+
+            font-size: 13px;
+
+            font-weight: 650;
+
+            cursor: pointer;
+
+            transition:
+                background .2s ease,
+                color .2s ease,
+                border-color .2s ease;
+
+        }
+
+
+        .infra-filter:hover,
+        .infra-filter.active {
+
+            background: var(--gov-blue);
+
+            border-color: var(--gov-blue);
+
+            color: white;
+
+        }
+
+
+        .infra-card {
+
+            position: relative;
+
+            min-height: 235px;
+
+            overflow: hidden;
+
+            border-radius: 8px;
+
+            background: #102a43;
+
+            color: white;
+
+            transition:
+                opacity .25s ease,
+                transform .25s ease;
+
+        }
+
+
+        .infra-card.hidden {
+
+            display: none;
+
+        }
+
+
+        .infra-card img {
+
+            width: 100%;
+
+            height: 235px;
+
+            object-fit: cover;
+
+            opacity: .55;
+
+            transition:
+                transform .5s ease;
+
+        }
+
+
+        .infra-card:hover img {
+
+            transform: scale(1.07);
+
+        }
+
+
+        .infra-overlay {
+
+            position: absolute;
+
+            inset: 0;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: flex-end;
+
+            padding: 23px;
+
+            background:
+                linear-gradient(
+                    to top,
+                    rgba(7,27,48,.95),
+                    rgba(7,27,48,.08)
+                );
+
+        }
+
+
+        .infra-overlay h3 {
+
+            font-size: 21px;
+
+            font-weight: 700;
+
+            margin-bottom: 4px;
+
+        }
+
+
+        .infra-overlay p {
+
+            font-size: 13px;
+
+            color: #dce7f2;
+
+            margin: 0;
+
+        }
+
+
+        /* =========================================================
+           PLATFORM DATA
+        ========================================================= */
+
+        .data-section {
+
+            background:
+                linear-gradient(
+                    120deg,
+                    #082b68,
+                    #0b3d91
+                );
+
+            color: white;
+
+            position: relative;
+
+            overflow: hidden;
+
+        }
+
+
+        .data-section::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 450px;
+
+            height: 450px;
+
+            border-radius: 50%;
+
+            border: 1px solid rgba(255,255,255,.10);
+
+            right: -200px;
+
+            top: -220px;
+
+        }
+
+
+        .data-section .section-label {
+
+            color: #bcd4ff;
+
+        }
+
+
+        .data-section .section-title {
+
+            color: white;
+
+        }
+
+
+        .data-section .section-description {
+
+            color: #d8e6fb;
+
+        }
+
+
+        .stat-box {
+
+            text-align: center;
+
+            padding: 28px 15px;
+
+            border-right: 1px solid rgba(255,255,255,.18);
+
+            position: relative;
+
+            z-index: 1;
+
+        }
+
+
+        .stat-number {
+
+            display: block;
+
+            font-size: 38px;
+
+            font-weight: 750;
+
+            line-height: 1.1;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .stat-label {
+
+            color: #d7e4f7;
+
+            font-size: 13px;
+
+        }
+
+
+        .demo-label {
+
+            display: inline-block;
+
+            margin-top: 28px;
+
+            font-size: 12px;
+
+            color: #cfe0f8;
+
+            border: 1px solid rgba(255,255,255,.25);
+
+            padding: 6px 10px;
+
+            border-radius: 4px;
+
+        }
+
+
+        /* =========================================================
+           AI RISK EXPLORER
+        ========================================================= */
+
+        .risk-explorer {
+
+            background: white;
+
+            border: 1px solid var(--gov-border);
+
+            border-radius: 8px;
+
+            box-shadow: var(--shadow-md);
+
+            overflow: hidden;
+
+        }
+
+
+        .risk-header {
+
+            background: #f7faff;
+
+            border-bottom: 1px solid var(--gov-border);
+
+            padding: 20px 24px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+        }
+
+
+        .risk-header h3 {
+
+            color: var(--gov-navy);
+
+            font-size: 20px;
+
+            font-weight: 750;
+
+            margin: 0;
+
+        }
+
+
+        .prototype-badge {
+
+            font-size: 11px;
+
+            color: var(--gov-blue);
+
+            background: var(--gov-blue-light);
+
+            border: 1px solid #c9dbf5;
+
+            padding: 5px 9px;
+
+            border-radius: 4px;
+
+            font-weight: 700;
+
+        }
+
+
+        .risk-body {
+
+            padding: 28px;
+
+        }
+
+
+        .asset-select {
+
+            width: 100%;
+
+            border: 1px solid #cbd7e4;
+
+            border-radius: 5px;
+
+            padding: 11px 13px;
+
+            color: var(--gov-text);
+
+            background: white;
+
+        }
+
+
+        .risk-meter {
+
+            width: 190px;
+
+            height: 190px;
+
+            border-radius: 50%;
+
+            margin: 10px auto 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                conic-gradient(
+                    var(--gov-blue) 0deg,
+                    #e8edf3 0deg
+                );
+
+            position: relative;
+
+            transition:
+                background 1s ease;
+
+        }
+
+
+        .risk-meter::after {
+
+            content: "";
+
+            width: 145px;
+
+            height: 145px;
+
+            border-radius: 50%;
+
+            background: white;
+
+            position: absolute;
+
+        }
+
+
+        .risk-meter-content {
+
+            position: relative;
+
+            z-index: 2;
+
+            text-align: center;
+
+        }
+
+
+        .risk-score {
+
+            display: block;
+
+            font-size: 38px;
+
+            font-weight: 800;
+
+            color: var(--gov-navy);
+
+            line-height: 1;
+
+        }
+
+
+        .risk-score-label {
+
+            color: var(--gov-muted);
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            letter-spacing: .06em;
+
+        }
+
+
+        .risk-level {
+
+            display: inline-block;
+
+            margin-top: 5px;
+
+            padding: 5px 10px;
+
+            border-radius: 4px;
+
+            font-size: 11px;
+
+            font-weight: 750;
+
+        }
+
+
+        .risk-low {
+
+            background: #e8f6ee;
+
+            color: #157347;
+
+        }
+
+
+        .risk-medium {
+
+            background: #fff8d9;
+
+            color: #8a6a00;
+
+        }
+
+
+        .risk-high {
+
+            background: #fff0df;
+
+            color: #b45309;
+
+        }
+
+
+        .risk-critical {
+
+            background: #fde8e8;
+
+            color: #b42318;
+
+        }
+
+
+        .factor-row {
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .factor-head {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            font-size: 13px;
+
+            margin-bottom: 7px;
+
+        }
+
+
+        .factor-head strong {
+
+            color: var(--gov-navy);
+
+        }
+
+
+        .factor-head span {
+
+            color: var(--gov-muted);
+
+        }
+
+
+        .factor-bar {
+
+            height: 7px;
+
+            border-radius: 20px;
+
+            background: #e8edf3;
+
+            overflow: hidden;
+
+        }
+
+
+        .factor-fill {
+
+            height: 100%;
+
+            width: 0;
+
+            background: var(--gov-blue);
+
+            border-radius: 20px;
+
+            transition:
+                width 1s ease;
+
+        }
+
+
+        .risk-description {
+
+            background: #f7faff;
+
+            border-left: 4px solid var(--gov-blue);
+
+            padding: 14px 16px;
+
+            color: var(--gov-muted);
+
+            font-size: 13px;
+
+            margin-top: 20px;
+
+        }
+
+
+        /* =========================================================
+           CITIZEN JOURNEY
+        ========================================================= */
+
+        .journey {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(6, 1fr);
+
+            border: 1px solid var(--gov-border);
+
+            background: white;
+
+            border-radius: 7px;
+
+            overflow: hidden;
+
+        }
+
+
+        .journey-item {
+
+            padding: 22px 13px;
+
+            text-align: center;
+
+            border-right: 1px solid var(--gov-border);
+
+            transition:
+                background .2s ease,
+                transform .2s ease;
+
+        }
+
+
+        .journey-item:last-child {
+
+            border-right: 0;
+
+        }
+
+
+        .journey-item:hover {
+
+            background: #f7faff;
+
+            transform: translateY(-3px);
+
+        }
+
+
+        .journey-item i {
+
+            color: var(--gov-blue);
+
+            font-size: 20px;
+
+            margin-bottom: 9px;
+
+        }
+
+
+        .journey-item strong {
+
+            display: block;
+
+            color: var(--gov-navy);
+
+            font-size: 13px;
+
+        }
+
+
+        .journey-item span {
+
+            color: var(--gov-muted);
+
+            font-size: 11px;
+
+        }
+
+
+        /* =========================================================
+           CONTACT
+        ========================================================= */
+
+        .contact-card {
+
+            height: 100%;
+
+            background: white;
+
+            border: 1px solid var(--gov-border);
+
+            border-radius: 7px;
+
+            padding: 26px;
+
+            transition:
+                transform .25s ease,
+                box-shadow .25s ease;
+
+        }
+
+
+        .contact-card:hover {
+
+            transform: translateY(-4px);
+
+            box-shadow: var(--shadow-sm);
+
+        }
+
+
+        .contact-icon {
+
+            color: var(--gov-blue);
+
+            font-size: 20px;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .contact-card h3 {
+
+            color: var(--gov-navy);
+
+            font-size: 17px;
+
+            font-weight: 700;
+
+        }
+
+
+        .contact-card p {
+
+            color: var(--gov-muted);
+
+            font-size: 14px;
+
+            margin-bottom: 4px;
+
+        }
+
+
+        /* =========================================================
+           FAQ
+        ========================================================= */
+
+        .faq-item {
+
+            border: 1px solid var(--gov-border);
+
+            margin-bottom: 10px;
+
+            border-radius: 5px;
+
+            overflow: hidden;
+
+            background: white;
+
+        }
+
+
+        .faq-item button {
+
+            width: 100%;
+
+            text-align: left;
+
+            border: 0;
+
+            background: white;
+
+            padding: 17px 20px;
+
+            color: var(--gov-navy);
+
+            font-weight: 650;
+
+            transition:
+                background .2s ease;
+
+        }
+
+
+        .faq-item button:hover {
+
+            background: #f7faff;
+
+        }
+
+
+        .faq-answer {
+
+            color: var(--gov-muted);
+
+            font-size: 14px;
+
+            padding: 0 20px 18px;
+
+        }
+
+
+        /* =========================================================
+           CTA
+        ========================================================= */
+
+        .final-cta {
+
+            background:
+                linear-gradient(
+                    110deg,
+                    #082b68,
+                    #0b3d91
+                );
+
+            color: white;
+
+            position: relative;
+
+            overflow: hidden;
+
+        }
+
+
+        .final-cta::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 330px;
+
+            height: 330px;
+
+            border-radius: 50%;
+
+            border: 1px solid rgba(255,255,255,.10);
+
+            right: -120px;
+
+            top: -160px;
+
+        }
+
+
+        .final-cta h2 {
+
+            font-size: 34px;
+
+            font-weight: 750;
+
+            position: relative;
+
+        }
+
+
+        .final-cta p {
+
+            color: #d9e6f8;
+
+            max-width: 700px;
+
+            margin: 12px auto 25px;
+
+            position: relative;
+
+        }
+
+
+        .btn-white {
+
+            background: white;
+
+            color: var(--gov-blue);
+
+            border: none;
+
+            padding: 12px 25px;
+
+            border-radius: 5px;
+
+            font-weight: 700;
+
+            position: relative;
+
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease;
+
+        }
+
+
+        .btn-white:hover {
+
+            background: #eef4ff;
+
+            color: var(--gov-blue-dark);
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 20px rgba(0,0,0,.15);
+
+        }
+
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        .footer {
+
+            background: #132238;
+
+            color: #d4deea;
+
+        }
+
+
+        .footer-main {
+
+            padding: 52px 0 35px;
+
+        }
+
+
+        .footer-brand {
+
+            font-size: 20px;
+
+            font-weight: 700;
+
+            color: white;
+
+            margin-bottom: 13px;
+
+        }
+
+
+        .footer-description {
+
+            color: #aebdcd;
+
+            font-size: 13px;
+
+            max-width: 410px;
+
+        }
+
+
+        .footer-title {
+
+            color: white;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .footer-links {
+
+            list-style: none;
+
+            padding: 0;
+
+            margin: 0;
+
+        }
+
+
+        .footer-links li {
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .footer-links a {
+
+            color: #b7c4d3;
+
+            font-size: 13px;
+
+            transition:
+                color .2s ease;
+
+        }
+
+
+        .footer-links a:hover {
+
+            color: white;
+
+        }
+
+
+        .footer-bottom {
+
+            border-top: 1px solid rgba(255,255,255,.12);
+
+            padding: 17px 0;
+
+            color: #9eafc1;
+
+            font-size: 12px;
+
+        }
+
+
+        .ownership-notice {
+
+            background: #f8fafc;
+
+            border-top: 1px solid #dfe5eb;
+
+            padding: 15px;
+
+            color: #5e6e7f;
+
+            font-size: 12px;
+
+            text-align: center;
+
+        }
+
+
+        /* =========================================================
+           BACK TO TOP
+        ========================================================= */
+
+        .back-to-top {
+
+            position: fixed;
+
+            right: 22px;
+
+            bottom: 22px;
+
+            width: 43px;
+
+            height: 43px;
+
+            border-radius: 50%;
+
+            border: 0;
+
+            background: var(--gov-blue);
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            box-shadow:
+                0 7px 20px rgba(0,0,0,.18);
+
+            opacity: 0;
+
+            visibility: hidden;
+
+            transform: translateY(15px);
+
+            transition:
+                opacity .25s ease,
+                visibility .25s ease,
+                transform .25s ease;
+
+            z-index: 900;
+
+        }
+
+
+        .back-to-top.show {
+
+            opacity: 1;
+
+            visibility: visible;
+
+            transform: translateY(0);
+
+        }
+
+
+        .back-to-top:hover {
+
+            background: var(--gov-blue-dark);
+
+        }
+
+
+        /* =========================================================
+           TOAST
+        ========================================================= */
+
+        .interactive-toast {
+
+            position: fixed;
+
+            right: 22px;
+
+            bottom: 78px;
+
+            background: #132238;
+
+            color: white;
+
+            padding: 12px 17px;
+
+            border-radius: 6px;
+
+            box-shadow:
+                0 10px 30px rgba(0,0,0,.18);
+
+            font-size: 13px;
+
+            opacity: 0;
+
+            transform: translateY(15px);
+
+            pointer-events: none;
+
+            transition:
+                opacity .25s ease,
+                transform .25s ease;
+
+            z-index: 950;
+
+        }
+
+
+        .interactive-toast.show {
+
+            opacity: 1;
+
+            transform: translateY(0);
+
+        }
+
+
+        /* =========================================================
+           ANIMATIONS
+        ========================================================= */
+
+        @keyframes fadeUp {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(25px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+
+            }
+
+        }
+
+
+        @keyframes fadeRight {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateX(35px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateX(0);
+
+            }
+
+        }
+
+
+        @keyframes floating {
+
+            0%,
+            100% {
+
+                transform:
+                    translateY(0);
+
+            }
+
+            50% {
+
+                transform:
+                    translateY(-8px);
+
+            }
+
+        }
+
+
+        @keyframes pulse {
+
+            0% {
+
+                box-shadow:
+                    0 0 0 0
+                    rgba(25,135,84,.35);
+
+            }
+
+            70% {
+
+                box-shadow:
+                    0 0 0 7px
+                    rgba(25,135,84,0);
+
+            }
+
+            100% {
+
+                box-shadow:
+                    0 0 0 0
+                    rgba(25,135,84,0);
+
+            }
+
+        }
+
+
+        @keyframes slowRotate {
+
+            from {
+
+                transform:
+                    rotate(0deg);
+
+            }
+
+            to {
+
+                transform:
+                    rotate(360deg);
+
+            }
+
+        }
+
+
+        @keyframes panelIn {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(10px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+
+            }
+
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 991px) {
+
+            .navbar-nav .nav-link {
+
+                padding: 10px 0 !important;
+
+            }
+
+
+            .navbar-nav .nav-link::after {
+
+                display: none;
+
+            }
+
+
+            .hero-content {
+
+                padding: 60px 0 40px;
+
+            }
+
+
+            .hero-visual {
+
+                padding: 0;
+
+                margin-bottom: 45px;
+
+            }
+
+
+            .about-box {
+
+                padding-left: 0;
+
+                margin-top: 35px;
+
+            }
+
+
+            .about-mini-card {
+
+                right: 15px;
+
+            }
+
+
+            .stat-box {
+
+                border-right: 0;
+
+                border-bottom:
+                    1px solid
+                    rgba(255,255,255,.18);
+
+            }
+
+
+            .journey {
+
+                grid-template-columns:
+                    repeat(3, 1fr);
+
+            }
+
+
+            .journey-item {
+
+                border-bottom:
+                    1px solid var(--gov-border);
+
+            }
+
+
+            .journey-item:nth-child(3n) {
+
+                border-right: 0;
+
+            }
+
+        }
+
+
+        @media (max-width: 767px) {
+
+            .gov-topbar-inner {
+
+                justify-content: center;
+
+            }
+
+
+            .top-links {
+
+                display: none;
+
+            }
+
+
+            .accessibility-links {
+
+                width: 100%;
+
+                justify-content: center;
+
+            }
+
+
+            .brand-area {
+
+                min-height: 70px;
+
+            }
+
+
+            .brand-emblem {
+
+                width: 46px;
+
+                height: 46px;
+
+                font-size: 18px;
+
+            }
+
+
+            .brand-title {
+
+                font-size: 18px;
+
+            }
+
+
+            .brand-subtitle {
+
+                font-size: 10px;
+
+            }
+
+
+            .hero h1 {
+
+                font-size: 39px;
+
+            }
+
+
+            .hero-description {
+
+                font-size: 16px;
+
+            }
+
+
+            .hero-image {
+
+                height: 300px;
+
+            }
+
+
+            .hero-status-card {
+
+                position: relative;
+
+                left: auto;
+
+                bottom: auto;
+
+                width: 100%;
+
+                margin-top: 12px;
+
+            }
+
+
+            .section {
+
+                padding: 60px 0;
+
+            }
+
+
+            .section-title {
+
+                font-size: 29px;
+
+            }
+
+
+            .process-tabs {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+            }
+
+
+            .process-tab {
+
+                border-bottom:
+                    1px solid var(--gov-border);
+
+            }
+
+
+            .process-content {
+
+                padding: 25px;
+
+            }
+
+
+            .risk-body {
+
+                padding: 20px;
+
+            }
+
+
+            .journey {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+            }
+
+
+            .journey-item {
+
+                border-right:
+                    1px solid var(--gov-border);
+
+            }
+
+
+            .journey-item:nth-child(2n) {
+
+                border-right: 0;
+
+            }
+
+
+            .journey-item:nth-last-child(-n+2) {
+
+                border-bottom: 0;
+
+            }
+
+
+            .notice-inner {
+
+                padding: 12px 0;
+
+                align-items: flex-start;
+
+            }
+
+        }
+
+
+        /* =========================================================
+           REDUCED MOTION
+        ========================================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            html {
+
+                scroll-behavior: auto;
+
+            }
+
+
+            *,
+            *::before,
+            *::after {
+
+                animation-duration: .01ms !important;
+
+                animation-iteration-count: 1 !important;
+
+                transition-duration: .01ms !important;
+
+            }
+
+
+            .reveal,
+            .reveal-left,
+            .reveal-right {
+
+                opacity: 1;
+
+                transform: none;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<a
+    href="#main-content"
+    class="skip-link"
+>
+    Skip to main content
+</a>
+
+
+<div
+    class="page-progress"
+    id="pageProgress"
+></div>
+
+
+
+<div class="tricolor-line"></div>
+
+
+<!-- =========================================================
+     NAVIGATION
+========================================================= -->
+
+<nav
+    class="main-nav navbar navbar-expand-lg"
+    id="mainNav"
+>
+
+    <div class="container">
+
+        <a
+            class="navbar-brand"
+            href="/"
+        >
+
+            <div class="brand-area">
+
+                <div class="brand-emblem">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                </div>
+
+
+                <div>
+
+                    <div class="brand-title">
+                        InfraGuard AI
+                    </div>
+
+                    <div class="brand-subtitle">
+                        Civic Infrastructure Management Platform
+                    </div>
+
+                </div>
+
+            </div>
+
+        </a>
+
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#mainNavigation"
+            aria-label="Toggle navigation"
+        >
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+
+        <div
+            class="collapse navbar-collapse"
+            id="mainNavigation"
+        >
+
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link active"
+                        href="#home"
+                    >
+                        Home
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link"
+                        href="#about"
+                    >
+                        About
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link"
+                        href="#services"
+                    >
+                        Citizen Services
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link"
+                        href="#how-it-works"
+                    >
+                        How It Works
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link"
+                        href="#infrastructure"
+                    >
+                        Infrastructure
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link"
+                        href="#contact"
+                    >
+                        Contact
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+
+                    <a
+                        href="/login"
+                        class="nav-login d-inline-block"
+                    >
+                        Login
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+
+                    <a
+                        href="/register"
+                        class="nav-register d-inline-block"
+                    >
+                        Register
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main id="main-content">
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section
+    class="hero"
+    id="home"
+>
+
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-7">
+
+                <div class="hero-content">
+
+                    <div class="hero-kicker">
+                        DIGITAL CIVIC INFRASTRUCTURE
+                    </div>
+
+
+                    <h1>
+
+                        Better infrastructure
+
+                        <span>
+                            through smarter governance.
+                        </span>
+
+                    </h1>
+
+
+                    <p class="hero-description">
+
+                        InfraGuard AI connects citizens,
+                        maintenance officers and field inspectors
+                        through one transparent platform for
+                        reporting, monitoring and predictive
+                        maintenance of public infrastructure.
+
+                    </p>
+
+
+                    <div class="hero-buttons">
+
+                        <a
+                            href="/register"
+                            class="btn-gov-primary"
+                            data-toast="Opening citizen registration..."
+                        >
+
+                            <i class="fa-solid fa-file-circle-plus me-2"></i>
+
+                            Report an Infrastructure Issue
+
+                        </a>
+
+
+                        <a
+                            href="#how-it-works"
+                            class="btn-gov-secondary"
+                        >
+
+                            Learn How It Works
+
+                            <i class="fa-solid fa-arrow-right ms-2"></i>
+
+                        </a>
+
+                    </div>
+
+
+                    <div class="hero-note">
+
+                        <i class="fa-solid fa-circle-check text-success me-1"></i>
+
+                        Citizen reporting
+
+                        <span class="mx-2">
+                            •
+                        </span>
+
+                        GIS-based asset identification
+
+                        <span class="mx-2">
+                            •
+                        </span>
+
+                        AI-assisted maintenance prioritization
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-5">
+
+                <div class="hero-visual">
+
+                    <img
+                        class="hero-image"
+                        src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1200&q=85"
+                        alt="Urban public infrastructure and roads"
+                    >
+
+
+                    <div class="hero-status-card">
+
+                        <div class="status-top">
+
+                            <span class="live-dot"></span>
+
+                            Prototype service status
+
+                        </div>
+
+                        <strong>
+                            Predict before infrastructure fails.
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     NOTICE
+========================================================= -->
+
+<section class="notice-bar">
+
+    <div class="container">
+
+        <div class="notice-inner">
+
+            <div class="notice-label">
+                CITIZEN NOTICE
+            </div>
+
+            <div class="notice-text">
+
+                See a pothole, broken streetlight,
+                drainage problem or other public
+                infrastructure issue?
+                Report it online and track its progress.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     ABOUT
+========================================================= -->
+
+<section
+    id="about"
+    class="section section-light"
+>
+
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <div
+                class="col-lg-6 reveal-left"
+            >
+
+                <div class="about-image-wrap">
+
+                    <img
+                        class="about-image"
+                        src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1200&q=85"
+                        alt="Urban civic infrastructure"
+                        loading="lazy"
+                    >
+
+
+                    <div class="about-mini-card">
+
+                        <strong>
+                            AI + GIS
+                        </strong>
+
+                        <span>
+                            Decision support for infrastructure
+                            maintenance teams.
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="col-lg-6 reveal-right"
+            >
+
+                <div class="about-box">
+
+                    <div class="section-label">
+                        ABOUT INFRAGUARD AI
+                    </div>
+
+
+                    <h2 class="section-title">
+
+                        A digital platform for
+                        responsive public infrastructure
+
+                    </h2>
+
+
+                    <p class="section-description">
+
+                        Public infrastructure requires continuous
+                        inspection, timely maintenance and effective
+                        citizen participation. InfraGuard AI brings
+                        these activities together in a single
+                        digital workflow.
+
+                    </p>
+
+
+                    <p class="section-description mt-3">
+
+                        Historical maintenance information,
+                        citizen complaints, inspections,
+                        asset condition and environmental factors
+                        can help identify infrastructure that
+                        may require attention.
+
+                    </p>
+
+
+                    <ul class="about-points">
+
+                        <li>
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                            <span>
+                                Citizen-centric complaint reporting
+                                with location and photo evidence.
+                            </span>
+
+                        </li>
+
+
+                        <li>
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                            <span>
+                                GIS-based identification of nearby
+                                public infrastructure assets.
+                            </span>
+
+                        </li>
+
+
+                        <li>
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                            <span>
+                                AI-assisted risk prediction and
+                                maintenance prioritization.
+                            </span>
+
+                        </li>
+
+
+                        <li>
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                            <span>
+                                Transparent status tracking from
+                                submission to resolution.
+                            </span>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     SERVICES
+========================================================= -->
+
+<section
+    id="services"
+    class="section section-gray"
+>
+
+    <div class="container">
+
+        <div class="section-header center reveal">
+
+            <div class="section-label">
+                CITIZEN SERVICES
+            </div>
+
+            <h2 class="section-title">
+                Access infrastructure services online
+            </h2>
+
+            <p class="section-description">
+
+                Simple digital services designed to make interaction
+                between citizens and infrastructure authorities
+                more transparent and efficient.
+
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+
+            <div class="col-md-6 col-lg-3 reveal">
+
+                <div class="service-card">
+
+                    <div class="service-icon">
+
+                        <i class="fa-solid fa-file-circle-plus"></i>
+
+                    </div>
+
+                    <h3>
+                        Report an Issue
+                    </h3>
+
+                    <p>
+                        Submit a complaint about roads,
+                        streetlights, drainage, water systems
+                        and other public infrastructure.
+                    </p>
+
+                    <a
+                        href="/register"
+                        class="service-link"
+                    >
+                        Report now
+                        <i class="fa-solid fa-arrow-right ms-1"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3 reveal">
+
+                <div class="service-card">
+
+                    <div class="service-icon">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                    </div>
+
+                    <h3>
+                        Infrastructure Map
+                    </h3>
+
+                    <p>
+                        View infrastructure assets and understand
+                        their condition and maintenance risk
+                        through location-based information.
+                    </p>
+
+                    <a
+                        href="/login"
+                        class="service-link"
+                    >
+                        Explore map
+                        <i class="fa-solid fa-arrow-right ms-1"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3 reveal">
+
+                <div class="service-card">
+
+                    <div class="service-icon">
+
+                        <i class="fa-solid fa-list-check"></i>
+
+                    </div>
+
+                    <h3>
+                        Track Complaint
+                    </h3>
+
+                    <p>
+                        Follow your complaint through review,
+                        verification, assignment, inspection
+                        and resolution.
+                    </p>
+
+                    <a
+                        href="/login"
+                        class="service-link"
+                    >
+                        Track status
+                        <i class="fa-solid fa-arrow-right ms-1"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3 reveal">
+
+                <div class="service-card">
+
+                    <div class="service-icon">
+
+                        <i class="fa-solid fa-comment-dots"></i>
+
+                    </div>
+
+                    <h3>
+                        Citizen Feedback
+                    </h3>
+
+                    <p>
+                        Confirm whether an issue has been resolved
+                        and provide feedback on completed
+                        maintenance work.
+                    </p>
+
+                    <a
+                        href="/login"
+                        class="service-link"
+                    >
+                        Give feedback
+                        <i class="fa-solid fa-arrow-right ms-1"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     HOW IT WORKS
+========================================================= -->
+
+<section
+    id="how-it-works"
+    class="section section-light"
+>
+
+    <div class="container">
+
+        <div class="section-header center reveal">
+
+            <div class="section-label">
+                HOW IT WORKS
+            </div>
+
+            <h2 class="section-title">
+                From citizen report to verified resolution
+            </h2>
+
+            <p class="section-description">
+                Click each stage to explore the service workflow.
+            </p>
+
+        </div>
+
+
+        <div class="process-shell reveal">
+
+            <div class="process-tabs">
+
+                <button
+                    class="process-tab active"
+                    data-step="1"
+                >
+
+                    <span class="process-tab-number">
+                        01
+                    </span>
+
+                    Report
+
+                </button>
+
+
+                <button
+                    class="process-tab"
+                    data-step="2"
+                >
+
+                    <span class="process-tab-number">
+                        02
+                    </span>
+
+                    Locate
+
+                </button>
+
+
+                <button
+                    class="process-tab"
+                    data-step="3"
+                >
+
+                    <span class="process-tab-number">
+                        03
+                    </span>
+
+                    Predict
+
+                </button>
+
+
+                <button
+                    class="process-tab"
+                    data-step="4"
+                >
+
+                    <span class="process-tab-number">
+                        04
+                    </span>
+
+                    Assign
+
+                </button>
+
+
+                <button
+                    class="process-tab"
+                    data-step="5"
+                >
+
+                    <span class="process-tab-number">
+                        05
+                    </span>
+
+                    Verify
+
+                </button>
+
+            </div>
+
+
+            <div class="process-content">
+
+
+                <div
+                    class="process-panel active"
+                    data-panel="1"
+                >
+
+                    <div class="process-icon-large">
+
+                        <i class="fa-solid fa-camera"></i>
+
+                    </div>
+
+                    <h3>
+                        Citizen reports an issue
+                    </h3>
+
+                    <p>
+                        A citizen submits an infrastructure
+                        complaint with a description, severity,
+                        location and optional photo evidence.
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="process-panel"
+                    data-panel="2"
+                >
+
+                    <div class="process-icon-large">
+
+                        <i class="fa-solid fa-location-crosshairs"></i>
+
+                    </div>
+
+                    <h3>
+                        Nearby asset is identified
+                    </h3>
+
+                    <p>
+                        Geographic coordinates help the platform
+                        identify the infrastructure asset associated
+                        with the complaint.
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="process-panel"
+                    data-panel="3"
+                >
+
+                    <div class="process-icon-large">
+
+                        <i class="fa-solid fa-brain"></i>
+
+                    </div>
+
+                    <h3>
+                        AI assesses maintenance risk
+                    </h3>
+
+                    <p>
+                        Asset condition, complaint history,
+                        failures, maintenance intervals,
+                        inspection scores and environmental
+                        factors contribute to risk assessment.
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="process-panel"
+                    data-panel="4"
+                >
+
+                    <div class="process-icon-large">
+
+                        <i class="fa-solid fa-users-gear"></i>
+
+                    </div>
+
+                    <h3>
+                        Officers prioritize and assign
+                    </h3>
+
+                    <p>
+                        Maintenance officers review the
+                        recommendation, prioritize the issue
+                        and coordinate the required maintenance
+                        action.
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="process-panel"
+                    data-panel="5"
+                >
+
+                    <div class="process-icon-large">
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                    </div>
+
+                    <h3>
+                        Field verification and closure
+                    </h3>
+
+                    <p>
+                        Field inspectors verify the work and
+                        citizens can confirm the outcome through
+                        the service workflow.
+                    </p>
+
+                </div>
+
+
+                <div class="process-flow-line">
+
+                    <div
+                        class="process-flow-progress"
+                        id="processProgress"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     INFRASTRUCTURE
+========================================================= -->
+
+<section
+    id="infrastructure"
+    class="section section-blue"
+>
+
+    <div class="container">
+
+        <div class="section-header center reveal">
+
+            <div class="section-label">
+                PUBLIC INFRASTRUCTURE
+            </div>
+
+            <h2 class="section-title">
+                One platform for multiple infrastructure systems
+            </h2>
+
+            <p class="section-description">
+
+                Select a category to explore how the platform
+                can support different infrastructure systems.
+
+            </p>
+
+        </div>
+
+
+        <div class="infra-filters reveal">
+
+            <button
+                class="infra-filter active"
+                data-filter="all"
+            >
+                All
+            </button>
+
+            <button
+                class="infra-filter"
+                data-filter="transport"
+            >
+                Transport
+            </button>
+
+            <button
+                class="infra-filter"
+                data-filter="utilities"
+            >
+                Utilities
+            </button>
+
+            <button
+                class="infra-filter"
+                data-filter="civic"
+            >
+                Civic Facilities
+            </button>
+
+        </div>
+
+
+        <div
+            class="row g-4"
+            id="infraGrid"
+        >
+
+
+            <div
+                class="col-md-6 col-lg-4 infra-item reveal"
+                data-category="transport"
+            >
+
+                <div class="infra-card">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1542296332-2e4473faf563?auto=format&fit=crop&w=900&q=80"
+                        alt="Public road infrastructure"
+                        loading="lazy"
+                    >
+
+                    <div class="infra-overlay">
+
+                        <h3>
+                            Roads
+                        </h3>
+
+                        <p>
+                            Condition monitoring, complaints,
+                            failures and maintenance prioritization.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="col-md-6 col-lg-4 infra-item reveal"
+                data-category="transport"
+            >
+
+                <div class="infra-card">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1523867574998-1a336b6ded04?auto=format&fit=crop&w=900&q=80"
+                        alt="Bridge infrastructure"
+                        loading="lazy"
+                    >
+
+                    <div class="infra-overlay">
+
+                        <h3>
+                            Bridges
+                        </h3>
+
+                        <p>
+                            Inspection history, condition monitoring
+                            and risk-based maintenance.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="col-md-6 col-lg-4 infra-item reveal"
+                data-category="utilities"
+            >
+
+                <div class="infra-card">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=900&q=80"
+                        alt="Public water infrastructure"
+                        loading="lazy"
+                    >
+
+                    <div class="infra-overlay">
+
+                        <h3>
+                            Water Systems
+                        </h3>
+
+                        <p>
+                            Track complaints, failures and
+                            maintenance indicators.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="col-md-6 col-lg-4 infra-item reveal"
+                data-category="utilities"
+            >
+
+                <div class="infra-card">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1516939884455-1445c8652f83?auto=format&fit=crop&w=900&q=80"
+                        alt="Urban drainage infrastructure"
+                        loading="lazy"
+                    >
+
+                    <div class="infra-overlay">
+
+                        <h3>
+                            Drainage
+                        </h3>
+
+                        <p>
+                            Combine citizen reports and environmental
+                            risk signals to identify urgent problems.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="col-md-6 col-lg-4 infra-item reveal"
+                data-category="utilities"
+            >
+
+                <div class="infra-card">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=900&q=80"
+                        alt="Urban street infrastructure"
+                        loading="lazy"
+                    >
+
+                    <div class="infra-overlay">
+
+                        <h3>
+                            Streetlights
+                        </h3>
+
+                        <p>
+                            Monitor reported failures and identify
+                            assets requiring attention.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="col-md-6 col-lg-4 infra-item reveal"
+                data-category="civic"
+            >
+
+                <div class="infra-card">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=900&q=80"
+                        alt="Public building infrastructure"
+                        loading="lazy"
+                    >
+
+                    <div class="infra-overlay">
+
+                        <h3>
+                            Public Buildings
+                        </h3>
+
+                        <p>
+                            Maintain condition records, inspection
+                            data and maintenance history.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     PLATFORM DATA
+========================================================= -->
+
+<section class="section data-section">
+
+    <div class="container">
+
+        <div class="section-header center reveal">
+
+            <div class="section-label">
+                PLATFORM AT A GLANCE
+            </div>
+
+            <h2 class="section-title">
+                Built for measurable civic service delivery
+            </h2>
+
+            <p class="section-description">
+
+                The current hackathon prototype demonstrates
+                a complete infrastructure maintenance workflow.
+
+            </p>
+
+        </div>
+
+
+        <div class="row g-0">
+
+
+            <div class="col-6 col-lg-3">
+
+                <div class="stat-box reveal">
+
+                    <span
+                        class="stat-number counter"
+                        data-target="7"
+                    >
+                        0
+                    </span>
+
+                    <span class="stat-label">
+                        Demonstration assets
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-6 col-lg-3">
+
+                <div class="stat-box reveal">
+
+                    <span
+                        class="stat-number counter"
+                        data-target="6"
+                    >
+                        0
+                    </span>
+
+                    <span class="stat-label">
+                        Infrastructure categories
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-6 col-lg-3">
+
+                <div class="stat-box reveal">
+
+                    <span
+                        class="stat-number counter"
+                        data-target="9"
+                        data-suffix="+"
+                    >
+                        0
+                    </span>
+
+                    <span class="stat-label">
+                        Complaint lifecycle stages
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-6 col-lg-3">
+
+                <div class="stat-box reveal">
+
+                    <span
+                        class="stat-number counter"
+                        data-target="4"
+                    >
+                        0
+                    </span>
+
+                    <span class="stat-label">
+                        Operational user roles
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="text-center">
+
+            <span class="demo-label">
+
+                Demonstration data — hackathon prototype
+
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     AI RISK EXPLORER
+========================================================= -->
+
+<section class="section section-light">
+
+    <div class="container">
+
+        <div class="section-header center reveal">
+
+            <div class="section-label">
+                AI-ASSISTED MAINTENANCE
+            </div>
+
+            <h2 class="section-title">
+                Explore the infrastructure risk engine
+            </h2>
+
+            <p class="section-description">
+
+                Select a demonstration asset to see how different
+                infrastructure signals contribute to a risk score.
+
+            </p>
+
+        </div>
+
+
+        <div class="risk-explorer reveal">
+
+
+            <div class="risk-header">
+
+                <div>
+
+                    <h3>
+                        Infrastructure Risk Explorer
+                    </h3>
+
+                    <div class="small text-secondary mt-1">
+                        Interactive demonstration
+                    </div>
+
+                </div>
+
+
+                <span class="prototype-badge">
+                    PROTOTYPE
+                </span>
+
+            </div>
+
+
+            <div class="risk-body">
+
+                <div class="row align-items-center g-5">
+
+
+                    <div class="col-lg-5">
+
+                        <label
+                            for="assetSelect"
+                            class="fw-semibold mb-2"
+                        >
+                            Select demonstration asset
+                        </label>
+
+
+                        <select
+                            id="assetSelect"
+                            class="asset-select"
+                        >
+
+                            <option value="bridge">
+                                Bridge BR-0104
+                            </option>
+
+                            <option value="road">
+                                Road RD-0101
+                            </option>
+
+                            <option value="water">
+                                Water WP-0301
+                            </option>
+
+                            <option value="road2">
+                                Road RD-0102
+                            </option>
+
+                            <option value="streetlight">
+                                Streetlight SL-0512
+                            </option>
+
+                        </select>
+
+
+                        <div class="risk-description">
+
+                            <i class="fa-solid fa-circle-info me-1"></i>
+
+                            The visualization is a front-end
+                            demonstration using representative
+                            prototype asset data.
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-lg-3 text-center">
+
+                        <div
+                            class="risk-meter"
+                            id="riskMeter"
+                        >
+
+                            <div class="risk-meter-content">
+
+                                <span
+                                    class="risk-score"
+                                    id="riskScore"
+                                >
+                                    0
+                                </span>
+
+                                <span class="risk-score-label">
+                                    Risk score
+                                </span>
+
+                                <span
+                                    class="risk-level risk-critical"
+                                    id="riskLevel"
+                                >
+                                    CRITICAL
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-lg-4">
+
+
+                        <div class="factor-row">
+
+                            <div class="factor-head">
+
+                                <strong>
+                                    Asset condition
+                                </strong>
+
+                                <span id="conditionValue">
+                                    0%
+                                </span>
+
+                            </div>
+
+                            <div class="factor-bar">
+
+                                <div
+                                    class="factor-fill"
+                                    id="conditionBar"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="factor-row">
+
+                            <div class="factor-head">
+
+                                <strong>
+                                    Complaint history
+                                </strong>
+
+                                <span id="complaintValue">
+                                    0%
+                                </span>
+
+                            </div>
+
+                            <div class="factor-bar">
+
+                                <div
+                                    class="factor-fill"
+                                    id="complaintBar"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="factor-row">
+
+                            <div class="factor-head">
+
+                                <strong>
+                                    Failure history
+                                </strong>
+
+                                <span id="failureValue">
+                                    0%
+                                </span>
+
+                            </div>
+
+                            <div class="factor-bar">
+
+                                <div
+                                    class="factor-fill"
+                                    id="failureBar"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="factor-row">
+
+                            <div class="factor-head">
+
+                                <strong>
+                                    Maintenance age
+                                </strong>
+
+                                <span id="maintenanceValue">
+                                    0%
+                                </span>
+
+                            </div>
+
+                            <div class="factor-bar">
+
+                                <div
+                                    class="factor-fill"
+                                    id="maintenanceBar"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     CITIZEN JOURNEY
+========================================================= -->
+
+<section class="section section-gray">
+
+    <div class="container">
+
+        <div class="section-header center reveal">
+
+            <div class="section-label">
+                TRANSPARENT SERVICE DELIVERY
+            </div>
+
+            <h2 class="section-title">
+                Know what happens after you report
+            </h2>
+
+            <p class="section-description">
+
+                Every complaint follows a structured workflow
+                so citizens and authorities can understand
+                its progress.
+
+            </p>
+
+        </div>
+
+
+        <div class="journey reveal">
+
+
+            <div class="journey-item">
+
+                <i class="fa-solid fa-paper-plane"></i>
+
+                <strong>
+                    Submitted
+                </strong>
+
+                <span>
+                    Complaint received
+                </span>
+
+            </div>
+
+
+            <div class="journey-item">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <strong>
+                    Reviewed
+                </strong>
+
+                <span>
+                    Officer verification
+                </span>
+
+            </div>
+
+
+            <div class="journey-item">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                <strong>
+                    Prioritized
+                </strong>
+
+                <span>
+                    Risk assessment
+                </span>
+
+            </div>
+
+
+            <div class="journey-item">
+
+                <i class="fa-solid fa-users-gear"></i>
+
+                <strong>
+                    Assigned
+                </strong>
+
+                <span>
+                    Maintenance action
+                </span>
+
+            </div>
+
+
+            <div class="journey-item">
+
+                <i class="fa-solid fa-person-circle-check"></i>
+
+                <strong>
+                    Inspected
+                </strong>
+
+                <span>
+                    Field verification
+                </span>
+
+            </div>
+
+
+            <div class="journey-item">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+                <strong>
+                    Resolved
+                </strong>
+
+                <span>
+                    Citizen confirmation
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     CONTACT
+========================================================= -->
+
+<section
+    id="contact"
+    class="section section-light"
+>
+
+    <div class="container">
+
+        <div class="section-header center reveal">
+
+            <div class="section-label">
+                CONTACT & SUPPORT
+            </div>
+
+            <h2 class="section-title">
+                Project information
+            </h2>
+
+            <p class="section-description">
+
+                InfraGuard AI is an academic technology prototype
+                developed for demonstrating predictive maintenance
+                and digital civic infrastructure workflows.
+
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+
+            <div class="col-md-6 col-lg-3 reveal">
+
+                <div class="contact-card">
+
+                    <div class="contact-icon">
+
+                        <i class="fa-solid fa-building-columns"></i>
+
+                    </div>
+
+                    <h3>
+                        Project Team
+                    </h3>
+
+                    <p>
+                        InfraGuard AI Project Team
+                    </p>
+
+                    <p>
+                        BitShift Hackathon
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3 reveal">
+
+                <div class="contact-card">
+
+                    <div class="contact-icon">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                    </div>
+
+                    <h3>
+                        Project Location
+                    </h3>
+
+                    <p>
+                        ICFAI University Jharkhand
+                    </p>
+
+                    <p>
+                        Jharkhand, India
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3 reveal">
+
+                <div class="contact-card">
+
+                    <div class="contact-icon">
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                    </div>
+
+                    <h3>
+                        Support
+                    </h3>
+
+                    <p>
+                        Use the project team contact
+                        provided by your hackathon team.
+                    </p>
+
+                    <p class="text-secondary small">
+                        Replace with your actual project email.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3 reveal">
+
+                <div class="contact-card">
+
+                    <div class="contact-icon">
+
+                        <i class="fa-solid fa-clock"></i>
+
+                    </div>
+
+                    <h3>
+                        Support Hours
+                    </h3>
+
+                    <p>
+                        Monday – Friday
+                    </p>
+
+                    <p>
+                        10:00 AM – 5:00 PM
+                    </p>
+
+                    <p>
+                        India Standard Time
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FAQ
+========================================================= -->
+
+<section
+    id="help"
+    class="section section-gray"
+>
+
+    <div class="container">
+
+        <div class="section-header center reveal">
+
+            <div class="section-label">
+                HELP & FAQ
+            </div>
+
+            <h2 class="section-title">
+                Frequently asked questions
+            </h2>
+
+        </div>
+
+
+        <div
+            class="accordion"
+            id="faqAccordion"
+        >
+
+
+            <div class="faq-item reveal">
+
+                <button
+                    data-bs-toggle="collapse"
+                    data-bs-target="#faqOne"
+                    aria-expanded="true"
+                >
+
+                    How can a citizen report an issue?
+
+                    <i
+                        class="fa-solid fa-chevron-down float-end mt-1"
+                    ></i>
+
+                </button>
+
+
+                <div
+                    id="faqOne"
+                    class="collapse show"
+                    data-bs-parent="#faqAccordion"
+                >
+
+                    <div class="faq-answer">
+
+                        Citizens can register on the platform
+                        and submit an infrastructure complaint
+                        with a description, severity, location
+                        and optional photo evidence.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="faq-item reveal">
+
+                <button
+                    data-bs-toggle="collapse"
+                    data-bs-target="#faqTwo"
+                    aria-expanded="false"
+                >
+
+                    Can citizens track their complaints?
+
+                    <i
+                        class="fa-solid fa-chevron-down float-end mt-1"
+                    ></i>
+
+                </button>
+
+
+                <div
+                    id="faqTwo"
+                    class="collapse"
+                    data-bs-parent="#faqAccordion"
+                >
+
+                    <div class="faq-answer">
+
+                        Yes. Citizens can sign in to their
+                        dashboard and view the current status
+                        of submitted complaints throughout
+                        the maintenance workflow.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="faq-item reveal">
+
+                <button
+                    data-bs-toggle="collapse"
+                    data-bs-target="#faqThree"
+                    aria-expanded="false"
+                >
+
+                    How does the AI prediction work?
+
+                    <i
+                        class="fa-solid fa-chevron-down float-end mt-1"
+                    ></i>
+
+                </button>
+
+
+                <div
+                    id="faqThree"
+                    class="collapse"
+                    data-bs-parent="#faqAccordion"
+                >
+
+                    <div class="faq-answer">
+
+                        The prototype considers infrastructure
+                        characteristics such as condition, age,
+                        complaint history, failure history,
+                        maintenance interval, inspection score,
+                        environmental risk and usage level.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="faq-item reveal">
+
+                <button
+                    data-bs-toggle="collapse"
+                    data-bs-target="#faqFour"
+                    aria-expanded="false"
+                >
+
+                    Is InfraGuard AI an official Government portal?
+
+                    <i
+                        class="fa-solid fa-chevron-down float-end mt-1"
+                    ></i>
+
+                </button>
+
+
+                <div
+                    id="faqFour"
+                    class="collapse"
+                    data-bs-parent="#faqAccordion"
+                >
+
+                    <div class="faq-answer">
+
+                        No. InfraGuard AI is an independent
+                        student-built e-governance prototype
+                        developed for the BitShift Hackathon.
+                        It demonstrates how citizen reporting,
+                        GIS and AI-assisted predictive maintenance
+                        could support public infrastructure management.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     CTA
+========================================================= -->
+
+<section class="final-cta">
+
+    <div class="container py-5 text-center">
+
+        <div class="section-label">
+            CITIZEN PARTICIPATION
+        </div>
+
+
+        <h2>
+            See an infrastructure problem?
+        </h2>
+
+
+        <p>
+
+            Your report can help identify problems,
+            prioritize maintenance and make public
+            infrastructure safer and more reliable.
+
+        </p>
+
+
+        <a
+            href="/register"
+            class="btn-white"
+            data-toast="Opening citizen registration..."
+        >
+
+            <i class="fa-solid fa-file-circle-plus me-2"></i>
+
+            Report an Issue
+
+        </a>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="footer">
+
+    <div class="footer-main">
+
+        <div class="container">
+
+            <div class="row g-5">
+
+
+                <div class="col-lg-5">
+
+                    <div class="footer-brand">
+
+                        <i class="fa-solid fa-shield-halved me-2"></i>
+
+                        InfraGuard AI
+
+                    </div>
+
+
+                    <p class="footer-description">
+
+                        A civic infrastructure management prototype
+                        combining citizen participation, GIS-based
+                        asset information and AI-assisted predictive
+                        maintenance.
+
+                    </p>
+
+
+                    <p class="footer-description">
+
+                        Built as a BitShift Hackathon PS #4 project.
+
+                    </p>
+
+                </div>
+
+
+                <div class="col-6 col-lg-2">
+
+                    <div class="footer-title">
+                        Quick Links
+                    </div>
+
+
+                    <ul class="footer-links">
+
+                        <li>
+                            <a href="#home">
+                                Home
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#about">
+                                About
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#services">
+                                Services
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#how-it-works">
+                                How It Works
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#infrastructure">
+                                Infrastructure
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="col-6 col-lg-2">
+
+                    <div class="footer-title">
+                        Citizen
+                    </div>
+
+
+                    <ul class="footer-links">
+
+                        <li>
+                            <a href="/register">
+                                Register
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/login">
+                                Login
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/login">
+                                Track Complaint
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="col-6 col-lg-3">
+
+                    <div class="footer-title">
+                        Project
+                    </div>
+
+
+                    <ul class="footer-links">
+
+                        <li>
+                            ICFAI University Jharkhand
+                        </li>
+
+                        <li>
+                            Jharkhand, India
+                        </li>
+
+                        <li>
+                            BitShift Hackathon PS #4
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <div class="container">
+
+            <div class="row align-items-center g-2">
+
+                <div class="col-md-6">
+
+                    © 2026 InfraGuard AI.
+                    All rights reserved.
+
+                </div>
+
+
+                <div class="col-md-6 text-md-end">
+
+                    Last updated:
+                    October 2026
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</footer>
+
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
+<div
+    class="interactive-toast"
+    id="interactiveToast"
+    role="status"
+    aria-live="polite"
+>
+</div>
+
+
+<!-- =========================================================
+     BACK TO TOP
+========================================================= -->
+
+<button
+    type="button"
+    class="back-to-top"
+    id="backToTop"
+    aria-label="Back to top"
+>
+
+    <i class="fa-solid fa-arrow-up"></i>
+
+</button>
+
+
+<!-- =========================================================
+     BOOTSTRAP
+========================================================= -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+
+<script>
+
+    /* =========================================================
+       PAGE ELEMENTS
+    ========================================================= */
+
+    const body = document.body;
+
+    const mainNav =
+        document.getElementById("mainNav");
+
+    const pageProgress =
+        document.getElementById("pageProgress");
+
+    const backToTop =
+        document.getElementById("backToTop");
+
+    const toast =
+        document.getElementById("interactiveToast");
+
+
+    /* =========================================================
+       FONT SIZE CONTROLS
+    ========================================================= */
+
+    document
+        .querySelectorAll("[data-font-size]")
+        .forEach(function (button) {
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    const size =
+                        this.getAttribute(
+                            "data-font-size"
+                        );
+
+                    body.style.fontSize =
+                        size + "px";
+
+                }
+            );
+
+        });
+
+
+    /* =========================================================
+       TOAST
+    ========================================================= */
+
+    let toastTimer;
+
+
+    function showToast(message) {
+
+        toast.textContent = message;
+
+        toast.classList.add("show");
+
+        clearTimeout(toastTimer);
+
+        toastTimer = setTimeout(
+            function () {
+
+                toast.classList.remove("show");
+
+            },
+            2200
+        );
+
+    }
+
+
+    document
+        .querySelectorAll("[data-toast]")
+        .forEach(function (element) {
+
+            element.addEventListener(
+                "click",
+                function () {
+
+                    showToast(
+                        this.dataset.toast
+                    );
+
+                }
+            );
+
+        });
+
+
+    /* =========================================================
+       SCROLL EFFECTS
+    ========================================================= */
+
+    function handleScroll() {
+
+        const scrollTop =
+            window.scrollY;
+
+        const documentHeight =
+            document.documentElement.scrollHeight
+            - window.innerHeight;
+
+        const percentage =
+            documentHeight > 0
+                ? (scrollTop / documentHeight) * 100
+                : 0;
+
+        pageProgress.style.width =
+            percentage + "%";
+
+
+        if (scrollTop > 40) {
+
+            mainNav.classList.add("scrolled");
+
+            backToTop.classList.add("show");
+
+        } else {
+
+            mainNav.classList.remove("scrolled");
+
+            backToTop.classList.remove("show");
+
+        }
+
+    }
+
+
+    window.addEventListener(
+        "scroll",
+        handleScroll,
+        { passive: true }
+    );
+
+
+    handleScroll();
+
+
+    /* =========================================================
+       BACK TO TOP
+    ========================================================= */
+
+    backToTop.addEventListener(
+        "click",
+        function () {
+
+            window.scrollTo({
+
+                top: 0,
+
+                behavior: "smooth"
+
+            });
+
+        }
+    );
+
+
+    /* =========================================================
+       SCROLL REVEAL
+    ========================================================= */
+
+    const revealElements =
+        document.querySelectorAll(
+            ".reveal, .reveal-left, .reveal-right"
+        );
+
+
+    const revealObserver =
+        new IntersectionObserver(
+            function (entries) {
+
+                entries.forEach(
+                    function (entry) {
+
+                        if (
+                            entry.isIntersecting
+                        ) {
+
+                            entry.target.classList.add(
+                                "visible"
+                            );
+
+                            revealObserver.unobserve(
+                                entry.target
+                            );
+
+                        }
+
+                    }
+                );
+
+            },
+            {
+                threshold: 0.12
+            }
+        );
+
+
+    revealElements.forEach(
+        function (element) {
+
+            revealObserver.observe(
+                element
+            );
+
+        }
+    );
+
+
+    /* =========================================================
+       ACTIVE NAVIGATION
+    ========================================================= */
+
+    const navLinks =
+        document.querySelectorAll(
+            ".navbar-nav .nav-link"
+        );
+
+
+    const sections =
+        document.querySelectorAll(
+            "main section[id]"
+        );
+
+
+    const sectionObserver =
+        new IntersectionObserver(
+            function (entries) {
+
+                entries.forEach(
+                    function (entry) {
+
+                        if (
+                            entry.isIntersecting
+                        ) {
+
+                            const id =
+                                entry.target.id;
+
+                            navLinks.forEach(
+                                function (link) {
+
+                                    link.classList.remove(
+                                        "active"
+                                    );
+
+                                    if (
+                                        link.getAttribute(
+                                            "href"
+                                        ) === "#" + id
+                                    ) {
+
+                                        link.classList.add(
+                                            "active"
+                                        );
+
+                                    }
+
+                                }
+                            );
+
+                        }
+
+                    }
+                );
+
+            },
+            {
+                rootMargin:
+                    "-25% 0px -65% 0px"
+            }
+        );
+
+
+    sections.forEach(
+        function (section) {
+
+            sectionObserver.observe(
+                section
+            );
+
+        }
+    );
+
+
+    /* =========================================================
+       MOBILE NAV AUTO CLOSE
+    ========================================================= */
+
+    navLinks.forEach(
+        function (link) {
+
+            link.addEventListener(
+                "click",
+                function () {
+
+                    const nav =
+                        document.getElementById(
+                            "mainNavigation"
+                        );
+
+                    if (
+                        nav.classList.contains(
+                            "show"
+                        )
+                    ) {
+
+                        bootstrap
+                            .Collapse
+                            .getOrCreateInstance(nav)
+                            .hide();
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+    /* =========================================================
+       INTERACTIVE PROCESS STEPPER
+    ========================================================= */
+
+    const processTabs =
+        document.querySelectorAll(
+            ".process-tab"
+        );
+
+
+    const processPanels =
+        document.querySelectorAll(
+            ".process-panel"
+        );
+
+
+    const processProgress =
+        document.getElementById(
+            "processProgress"
+        );
+
+
+    processTabs.forEach(
+        function (tab) {
+
+            tab.addEventListener(
+                "click",
+                function () {
+
+                    const step =
+                        this.dataset.step;
+
+
+                    processTabs.forEach(
+                        function (item) {
+
+                            item.classList.remove(
+                                "active"
+                            );
+
+                        }
+                    );
+
+
+                    processPanels.forEach(
+                        function (panel) {
+
+                            panel.classList.remove(
+                                "active"
+                            );
+
+                        }
+                    );
+
+
+                    this.classList.add(
+                        "active"
+                    );
+
+
+                    const selectedPanel =
+                        document.querySelector(
+                            '[data-panel="' +
+                            step +
+                            '"]'
+                        );
+
+
+                    if (selectedPanel) {
+
+                        selectedPanel.classList.add(
+                            "active"
+                        );
+
+                    }
+
+
+                    processProgress.style.width =
+                        (parseInt(step) * 20) +
+                        "%";
+
+                }
+            );
+
+        }
+    );
+
+
+    /* =========================================================
+       INFRASTRUCTURE FILTER
+    ========================================================= */
+
+    const infraFilters =
+        document.querySelectorAll(
+            ".infra-filter"
+        );
+
+
+    const infraItems =
+        document.querySelectorAll(
+            ".infra-item"
+        );
+
+
+    infraFilters.forEach(
+        function (filterButton) {
+
+            filterButton.addEventListener(
+                "click",
+                function () {
+
+                    const filter =
+                        this.dataset.filter;
+
+
+                    infraFilters.forEach(
+                        function (button) {
+
+                            button.classList.remove(
+                                "active"
+                            );
+
+                        }
+                    );
+
+
+                    this.classList.add(
+                        "active"
+                    );
+
+
+                    infraItems.forEach(
+                        function (item) {
+
+                            const category =
+                                item.dataset.category;
+
+
+                            if (
+                                filter === "all"
+                                ||
+                                category === filter
+                            ) {
+
+                                item.classList.remove(
+                                    "hidden"
+                                );
+
+                                item.style.animation =
+                                    "panelIn .35s ease";
+
+                            } else {
+
+                                item.classList.add(
+                                    "hidden"
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+    /* =========================================================
+       ANIMATED COUNTERS
+    ========================================================= */
+
+    const counters =
+        document.querySelectorAll(
+            ".counter"
+        );
+
+
+    let countersStarted = false;
+
+
+    function animateCounter(
+        element
+    ) {
+
+        const target =
+            parseInt(
+                element.dataset.target
+            );
+
+
+        const suffix =
+            element.dataset.suffix || "";
+
+
+        const duration = 900;
+
+        const startTime =
+            performance.now();
+
+
+        function updateCounter(
+            currentTime
+        ) {
+
+            const elapsed =
+                currentTime - startTime;
+
+
+            const progress =
+                Math.min(
+                    elapsed / duration,
+                    1
+                );
+
+
+            const eased =
+                1 -
+                Math.pow(
+                    1 - progress,
+                    3
+                );
+
+
+            const current =
+                Math.floor(
+                    target * eased
+                );
+
+
+            element.textContent =
+                current + suffix;
+
+
+            if (progress < 1) {
+
+                requestAnimationFrame(
+                    updateCounter
+                );
+
+            } else {
+
+                element.textContent =
+                    target + suffix;
+
+            }
+
+        }
+
+
+        requestAnimationFrame(
+            updateCounter
+        );
+
+    }
+
+
+    const counterObserver =
+        new IntersectionObserver(
+            function (entries) {
+
+                entries.forEach(
+                    function (entry) {
+
+                        if (
+                            entry.isIntersecting
+                            &&
+                            !countersStarted
+                        ) {
+
+                            countersStarted = true;
+
+                            counters.forEach(
+                                function (counter) {
+
+                                    animateCounter(
+                                        counter
+                                    );
+
+                                }
+                            );
+
+                        }
+
+                    }
+                );
+
+            },
+            {
+                threshold: 0.3
+            }
+        );
+
+
+    if (counters.length) {
+
+        counterObserver.observe(
+            counters[0]
+        );
+
+    }
+
+
+    /* =========================================================
+       AI RISK EXPLORER
+    ========================================================= */
+
+    const assetSelect =
+        document.getElementById(
+            "assetSelect"
+        );
+
+
+    const riskMeter =
+        document.getElementById(
+            "riskMeter"
+        );
+
+
+    const riskScore =
+        document.getElementById(
+            "riskScore"
+        );
+
+
+    const riskLevel =
+        document.getElementById(
+            "riskLevel"
+        );
+
+
+    const conditionValue =
+        document.getElementById(
+            "conditionValue"
+        );
+
+
+    const complaintValue =
+        document.getElementById(
+            "complaintValue"
+        );
+
+
+    const failureValue =
+        document.getElementById(
+            "failureValue"
+        );
+
+
+    const maintenanceValue =
+        document.getElementById(
+            "maintenanceValue"
+        );
+
+
+    const conditionBar =
+        document.getElementById(
+            "conditionBar"
+        );
+
+
+    const complaintBar =
+        document.getElementById(
+            "complaintBar"
+        );
+
+
+    const failureBar =
+        document.getElementById(
+            "failureBar"
+        );
+
+
+    const maintenanceBar =
+        document.getElementById(
+            "maintenanceBar"
+        );
+
+
+    const assetRiskData = {
+
+        bridge: {
+
+            score: 91,
+
+            condition: 72,
+
+            complaints: 88,
+
+            failures: 90,
+
+            maintenance: 86
+
+        },
+
+        road: {
+
+            score: 84,
+
+            condition: 61,
+
+            complaints: 82,
+
+            failures: 76,
+
+            maintenance: 79
+
+        },
+
+        water: {
+
+            score: 73,
+
+            condition: 66,
+
+            complaints: 71,
+
+            failures: 68,
+
+            maintenance: 76
+
+        },
+
+        road2: {
+
+            score: 36,
+
+            condition: 31,
+
+            complaints: 25,
+
+            failures: 28,
+
+            maintenance: 39
+
+        },
+
+        streetlight: {
+
+            score: 18,
+
+            condition: 12,
+
+            complaints: 9,
+
+            failures: 5,
+
+            maintenance: 20
+
+        }
+
+    };
+
+
+    function getRiskClass(score) {
+
+        if (score >= 81) {
+
+            return "risk-critical";
+
+        }
+
+        if (score >= 61) {
+
+            return "risk-high";
+
+        }
+
+        if (score >= 31) {
+
+            return "risk-medium";
+
+        }
+
+        return "risk-low";
+
+    }
+
+
+    function getRiskName(score) {
+
+        if (score >= 81) {
+
+            return "CRITICAL";
+
+        }
+
+        if (score >= 61) {
+
+            return "HIGH";
+
+        }
+
+        if (score >= 31) {
+
+            return "MEDIUM";
+
+        }
+
+        return "LOW";
+
+    }
+
+
+    function animateRiskNumber(
+        target
+    ) {
+
+        const start = 0;
+
+        const duration = 700;
+
+        const startTime =
+            performance.now();
+
+
+        function tick(
+            currentTime
+        ) {
+
+            const progress =
+                Math.min(
+                    (
+                        currentTime -
+                        startTime
+                    ) / duration,
+                    1
+                );
+
+
+            const eased =
+                1 -
+                Math.pow(
+                    1 - progress,
+                    3
+                );
+
+
+            const value =
+                Math.round(
+                    start +
+                    (
+                        target -
+                        start
+                    ) * eased
+                );
+
+
+            riskScore.textContent =
+                value;
+
+
+            if (progress < 1) {
+
+                requestAnimationFrame(
+                    tick
+                );
+
+            }
+
+        }
+
+
+        requestAnimationFrame(
+            tick
+        );
+
+    }
+
+
+    function updateRiskExplorer() {
+
+        const selected =
+            assetRiskData[
+                assetSelect.value
+            ];
+
+
+        if (!selected) {
+
+            return;
+
+        }
+
+
+        const score =
+            selected.score;
+
+
+        const degrees =
+            Math.round(
+                score * 3.6
+            );
+
+
+        riskMeter.style.background =
+            "conic-gradient(" +
+            "var(--gov-blue) 0deg " +
+            degrees +
+            "deg, " +
+            "#e8edf3 " +
+            degrees +
+            "deg 360deg)";
+
+
+        animateRiskNumber(
+            score
+        );
+
+
+        riskLevel.className =
+            "risk-level " +
+            getRiskClass(score);
+
+
+        riskLevel.textContent =
+            getRiskName(score);
+
+
+        conditionValue.textContent =
+            selected.condition + "%";
+
+
+        complaintValue.textContent =
+            selected.complaints + "%";
+
+
+        failureValue.textContent =
+            selected.failures + "%";
+
+
+        maintenanceValue.textContent =
+            selected.maintenance + "%";
+
+
+        setTimeout(
+            function () {
+
+                conditionBar.style.width =
+                    selected.condition + "%";
+
+                complaintBar.style.width =
+                    selected.complaints + "%";
+
+                failureBar.style.width =
+                    selected.failures + "%";
+
+                maintenanceBar.style.width =
+                    selected.maintenance + "%";
+
+            },
+            80
+        );
+
+    }
+
+
+    assetSelect.addEventListener(
+        "change",
+        updateRiskExplorer
+    );
+
+
+    updateRiskExplorer();
+
+
+    /* =========================================================
+       IMAGE ERROR FALLBACK
+    ========================================================= */
+
+    document
+        .querySelectorAll("img")
+        .forEach(function (image) {
+
+            image.addEventListener(
+                "error",
+                function () {
+
+                    this.style.background =
+                        "#eaf2ff";
+
+                    this.style.objectFit =
+                        "cover";
+
+                }
+            );
+
+        });
+
+
+</script>
+
+
+</body>
+
+</html>

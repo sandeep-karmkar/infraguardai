@@ -1,0 +1,575 @@
+:root {
+    --navy: #07111f;
+    --navy-2: #0b1728;
+    --blue: #4f8cff;
+    --cyan: #45d8e8;
+    --text: #eaf1fb;
+    --muted: #8ea1b9;
+    --light: #f5f8fc;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    color: #172235;
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.civic-nav {
+    background: rgba(7, 17, 31, 0.76);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.navbar-brand {
+    letter-spacing: -0.03em;
+}
+
+.brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 30px;
+    height: 30px;
+
+    margin-right: 8px;
+
+    border-radius: 9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            var(--cyan)
+        );
+
+    color: white;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero-section {
+    position: relative;
+    overflow: hidden;
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 80% 30%,
+            rgba(79, 140, 255, 0.22),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 15% 75%,
+            rgba(69, 216, 232, 0.10),
+            transparent 25%
+        ),
+        var(--navy);
+}
+
+.hero-grid {
+    position: absolute;
+    inset: 0;
+
+    opacity: 0.24;
+
+    background-image:
+        linear-gradient(
+            rgba(255, 255, 255, 0.05) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.05) 1px,
+            transparent 1px
+        );
+
+    background-size: 60px 60px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent 85%
+        );
+}
+
+.eyebrow {
+    color: #72dce8;
+
+    font-size: 0.75rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.18em;
+}
+
+.eyebrow-dark {
+    color: #4f78ad;
+
+    font-size: 0.75rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.18em;
+}
+
+.text-gradient {
+    background:
+        linear-gradient(
+            90deg,
+            #71d7ff,
+            #8f9cff
+        );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+}
+
+.hero-copy {
+    max-width: 650px;
+
+    color: #aab9ca !important;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn-primary {
+    border: 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f8cff,
+            #6b76ff
+        );
+
+    box-shadow:
+        0 12px 30px
+        rgba(79, 140, 255, 0.25);
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+}
+
+.btn-ghost {
+    color: white;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.18);
+}
+
+
+/* =========================================================
+   HERO TRUST
+========================================================= */
+
+.hero-trust {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 18px;
+
+    color: #8ea1b9;
+
+    font-size: 0.9rem;
+}
+
+
+/* =========================================================
+   COMMAND CARD
+========================================================= */
+
+.command-card {
+    padding: 28px;
+
+    border-radius: 24px;
+
+    background:
+        rgba(13, 29, 49, 0.82);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.10);
+
+    box-shadow:
+        0 30px 80px
+        rgba(0, 0, 0, 0.28);
+}
+
+.live-dot {
+    color: #65e0a0;
+
+    font-size: 0.8rem;
+}
+
+
+/* =========================================================
+   HEALTH SCORE
+========================================================= */
+
+.health-score {
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+}
+
+.score-ring {
+    width: 100px;
+    height: 100px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #0d1d31 56%,
+            transparent 58%
+        ),
+        conic-gradient(
+            #55d7e7 0 82%,
+            #1a3049 82% 100%
+        );
+
+    box-shadow:
+        inset 0 0 25px
+        rgba(69, 216, 232, 0.10);
+
+    color: white;
+}
+
+.score-ring span {
+    font-size: 1.8rem;
+
+    font-weight: 800;
+
+    line-height: 1;
+}
+
+.score-ring small {
+    color: #8ea1b9;
+}
+
+
+/* =========================================================
+   METRICS
+========================================================= */
+
+.metric-row {
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr auto;
+
+    gap: 8px;
+
+    color: #b7c4d5;
+
+    font-size: 0.88rem;
+
+    margin: 14px 0;
+}
+
+.metric-bar {
+    grid-column: 1 / -1;
+
+    height: 5px;
+
+    background: #1a3049;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+}
+
+.metric-bar i {
+    display: block;
+
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #4f8cff,
+            #45d8e8
+        );
+
+    border-radius: 10px;
+}
+
+
+/* =========================================================
+   AI ALERT
+========================================================= */
+
+.alert-card {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 14px;
+
+    border:
+        1px solid
+        rgba(255, 193, 7, 0.18);
+
+    background:
+        rgba(255, 193, 7, 0.06);
+
+    border-radius: 14px;
+}
+
+.risk-icon {
+    width: 32px;
+    height: 32px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 10px;
+
+    background:
+        rgba(255, 193, 7, 0.15);
+
+    color: #ffc107;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   LIGHT SECTIONS
+========================================================= */
+
+.section-light {
+    background: var(--light);
+}
+
+.section-heading {
+    max-width: 680px;
+}
+
+
+/* =========================================================
+   HOW IT WORKS
+========================================================= */
+
+.step-card {
+    height: 100%;
+
+    padding: 28px;
+
+    background: white;
+
+    border:
+        1px solid
+        #e4eaf2;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 12px 35px
+        rgba(20, 40, 70, 0.06);
+}
+
+.step-card span {
+    color: #4f8cff;
+
+    font-weight: 800;
+
+    font-size: 0.8rem;
+}
+
+.step-card h4 {
+    margin-top: 25px;
+
+    font-weight: 750;
+}
+
+.step-card p {
+    color: #65758a;
+
+    line-height: 1.7;
+
+    margin-bottom: 0;
+}
+
+
+/* =========================================================
+   DARK INFRASTRUCTURE SECTION
+========================================================= */
+
+.section-dark {
+    background: #091524;
+}
+
+.infra-card {
+    height: 100%;
+
+    padding: 30px;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #0e2034,
+            #0a1726
+        );
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+}
+
+.infra-number {
+    color: #45d8e8;
+
+    font-size: 0.75rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.12em;
+}
+
+.infra-card h4 {
+    color: white;
+
+    margin-top: 45px;
+}
+
+.infra-card p {
+    color: #8ea1b9;
+
+    line-height: 1.7;
+
+    min-height: 72px;
+}
+
+.infra-card span {
+    color: #72dce8;
+
+    font-size: 0.88rem;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   IMPACT
+========================================================= */
+
+.stat {
+    padding: 25px 10px;
+}
+
+.stat strong {
+    display: block;
+
+    font-size: 2.3rem;
+
+    letter-spacing: -0.04em;
+}
+
+.stat span {
+    color: #738298;
+
+    font-size: 0.9rem;
+}
+
+
+/* =========================================================
+   CTA
+========================================================= */
+
+.cta-section {
+    background:
+        linear-gradient(
+            135deg,
+            #081321,
+            #102744
+        );
+}
+
+.cta-copy {
+    max-width: 600px;
+
+    color: #9eb0c5 !important;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+    background: #050d17;
+
+    color: #728298;
+
+    font-size: 0.8rem;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 991px) {
+
+    .hero-section .min-vh-100 {
+        min-height: auto;
+
+        padding-top: 130px !important;
+
+        padding-bottom: 80px !important;
+    }
+
+    .command-card {
+        margin-top: 20px;
+    }
+
+}

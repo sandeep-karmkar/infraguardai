@@ -1,0 +1,4748 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Inspector Command Center | InfraGuard AI</title>
+
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+
+    <!-- Leaflet -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+
+    <!-- Noto Sans -->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <style>
+
+        /* =========================================================
+           ROOT
+        ========================================================= */
+
+        :root {
+
+            --navy: #123b63;
+            --navy-dark: #0b2946;
+
+            --blue: #1f5f95;
+            --blue-light: #eaf3fb;
+
+            --green: #138a52;
+            --green-light: #eaf7f0;
+
+            --saffron: #e97824;
+            --saffron-light: #fff3e9;
+
+            --red: #c62828;
+            --red-light: #fdeeee;
+
+            --yellow: #a96d00;
+            --yellow-light: #fff8df;
+
+            --text: #18324b;
+            --muted: #657789;
+
+            --bg: #f5f8fb;
+            --surface: #ffffff;
+
+            --border: #dce5ed;
+
+            --shadow:
+                0 8px 28px rgba(22, 54, 84, 0.07);
+
+            --shadow-hover:
+                0 14px 34px rgba(22, 54, 84, 0.12);
+        }
+
+
+        /* =========================================================
+           GLOBAL
+        ========================================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #f8fafc 0%,
+                    #f4f7fa 100%
+                );
+
+            color: var(--text);
+
+            font-family:
+                "Noto Sans",
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            min-height: 100vh;
+        }
+
+
+        a {
+            text-decoration: none;
+        }
+
+
+        button,
+        input,
+        textarea,
+        select {
+            font-family: inherit;
+        }
+
+
+        /* =========================================================
+           TRICOLOR
+        ========================================================= */
+
+        .tricolor-line {
+
+            height: 4px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #e97824 0 33.33%,
+                    #ffffff 33.33% 66.66%,
+                    #138a52 66.66%
+                );
+        }
+
+
+        /* =========================================================
+           UTILITY BAR
+        ========================================================= */
+
+        .utility {
+
+            height: 34px;
+
+            background:
+                var(--navy-dark);
+
+            color:
+                rgba(255,255,255,.82);
+
+            font-size:
+                0.72rem;
+        }
+
+
+        .utility .inner {
+
+            max-width:
+                1440px;
+
+            margin:
+                auto;
+
+            height:
+                100%;
+
+            padding:
+                0 24px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+        }
+
+
+        .utility .left,
+        .utility .right {
+
+            display:
+                flex;
+
+            gap:
+                18px;
+
+            align-items:
+                center;
+        }
+
+
+        .utility i {
+            opacity:
+                .8;
+        }
+
+
+        .live {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                7px;
+        }
+
+
+        .live-dot {
+
+            width:
+                7px;
+
+            height:
+                7px;
+
+            border-radius:
+                50%;
+
+            background:
+                #35b86f;
+
+            box-shadow:
+                0 0 0 0
+                rgba(53,184,111,.55);
+
+            animation:
+                pulse 2s infinite;
+        }
+
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .topnav {
+
+            background:
+                #ffffff;
+
+            border-bottom:
+                1px solid var(--border);
+
+            position:
+                sticky;
+
+            top:
+                0;
+
+            z-index:
+                1000;
+        }
+
+
+        .topnav-inner {
+
+            max-width:
+                1440px;
+
+            margin:
+                auto;
+
+            min-height:
+                76px;
+
+            padding:
+                0 24px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                20px;
+        }
+
+
+        .brand {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                12px;
+
+            color:
+                var(--navy);
+        }
+
+
+        .brand-icon {
+
+            width:
+                44px;
+
+            height:
+                44px;
+
+            border-radius:
+                12px;
+
+            background:
+                var(--blue-light);
+
+            border:
+                1px solid #cfe1f1;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            color:
+                var(--blue);
+
+            font-size:
+                1.1rem;
+        }
+
+
+        .brand-title {
+
+            font-weight:
+                800;
+
+            font-size:
+                1.08rem;
+
+            line-height:
+                1.1;
+        }
+
+
+        .brand-title span {
+            color:
+                var(--blue);
+        }
+
+
+        .brand-subtitle {
+
+            font-size:
+                .64rem;
+
+            color:
+                var(--muted);
+
+            margin-top:
+                3px;
+        }
+
+
+        .nav-actions {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                10px;
+        }
+
+
+        .role-pill {
+
+            padding:
+                7px 11px;
+
+            border:
+                1px solid var(--border);
+
+            background:
+                #f8fafc;
+
+            border-radius:
+                999px;
+
+            font-size:
+                .7rem;
+
+            font-weight:
+                700;
+
+            color:
+                var(--muted);
+        }
+
+
+        .logout {
+
+            border:
+                1px solid #e4c8c8;
+
+            background:
+                #ffffff;
+
+            color:
+                var(--red);
+
+            border-radius:
+                8px;
+
+            padding:
+                8px 12px;
+
+            font-size:
+                .72rem;
+
+            font-weight:
+                700;
+        }
+
+
+        .logout:hover {
+            background:
+                var(--red-light);
+        }
+
+
+        /* =========================================================
+           PAGE
+        ========================================================= */
+
+        .page {
+
+            max-width:
+                1440px;
+
+            margin:
+                auto;
+
+            padding:
+                28px 24px 52px;
+        }
+
+
+        /* =========================================================
+           HERO
+        ========================================================= */
+
+        .hero {
+
+            position:
+                relative;
+
+            overflow:
+                hidden;
+
+            border:
+                1px solid #cfe0ee;
+
+            border-radius:
+                18px;
+
+            padding:
+                28px 30px;
+
+            margin-bottom:
+                20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff 0%,
+                    #eef6fb 65%,
+                    #eaf4ee 100%
+                );
+
+            box-shadow:
+                var(--shadow);
+        }
+
+
+        .hero::after {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            width:
+                260px;
+
+            height:
+                260px;
+
+            right:
+                -90px;
+
+            top:
+                -100px;
+
+            border-radius:
+                50%;
+
+            background:
+                rgba(31,95,149,.08);
+        }
+
+
+        .hero-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr auto;
+
+            gap:
+                25px;
+
+            align-items:
+                center;
+
+            position:
+                relative;
+
+            z-index:
+                1;
+        }
+
+
+        .kicker {
+
+            font-size:
+                .68rem;
+
+            letter-spacing:
+                1.3px;
+
+            font-weight:
+                800;
+
+            color:
+                var(--saffron);
+
+            text-transform:
+                uppercase;
+        }
+
+
+        .hero h1 {
+
+            font-size:
+                clamp(1.7rem,3vw,2.35rem);
+
+            font-weight:
+                800;
+
+            color:
+                var(--navy);
+
+            margin:
+                6px 0 8px;
+        }
+
+
+        .hero p {
+
+            max-width:
+                760px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                .88rem;
+
+            line-height:
+                1.7;
+
+            margin:
+                0;
+        }
+
+
+        .hero-side {
+
+            min-width:
+                230px;
+
+            padding:
+                16px 18px;
+
+            background:
+                #ffffff;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                13px;
+
+            box-shadow:
+                0 8px 22px rgba(22,54,84,.06);
+        }
+
+
+        .hero-side-label {
+
+            font-size:
+                .64rem;
+
+            color:
+                var(--muted);
+
+            font-weight:
+                700;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                .7px;
+        }
+
+
+        .hero-side strong {
+
+            display:
+                block;
+
+            font-size:
+                1.3rem;
+
+            color:
+                var(--navy);
+
+            margin-top:
+                4px;
+        }
+
+
+        .hero-side small {
+
+            color:
+                var(--muted);
+
+            font-size:
+                .66rem;
+        }
+
+
+        .refresh-btn {
+
+            border:
+                1px solid #c6d9e9;
+
+            background:
+                #ffffff;
+
+            color:
+                var(--blue);
+
+            border-radius:
+                8px;
+
+            padding:
+                8px 12px;
+
+            font-size:
+                .72rem;
+
+            font-weight:
+                800;
+
+            margin-top:
+                14px;
+        }
+
+
+        .refresh-btn:hover {
+            background:
+                var(--blue-light);
+        }
+
+
+        /* =========================================================
+           STATISTICS
+        ========================================================= */
+
+        .stats-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap:
+                14px;
+
+            margin-bottom:
+                20px;
+        }
+
+
+        .stat-card {
+
+            background:
+                #ffffff;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                14px;
+
+            padding:
+                18px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                13px;
+
+            box-shadow:
+                var(--shadow);
+
+            transition:
+                transform .2s,
+                box-shadow .2s;
+        }
+
+
+        .stat-card:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                var(--shadow-hover);
+        }
+
+
+        .stat-icon {
+
+            width:
+                43px;
+
+            height:
+                43px;
+
+            border-radius:
+                11px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            flex:
+                none;
+        }
+
+
+        .stat-icon.blue {
+
+            background:
+                var(--blue-light);
+
+            color:
+                var(--blue);
+        }
+
+
+        .stat-icon.orange {
+
+            background:
+                var(--saffron-light);
+
+            color:
+                var(--saffron);
+        }
+
+
+        .stat-icon.green {
+
+            background:
+                var(--green-light);
+
+            color:
+                var(--green);
+        }
+
+
+        .stat-icon.red {
+
+            background:
+                var(--red-light);
+
+            color:
+                var(--red);
+        }
+
+
+        .stat-label {
+
+            color:
+                var(--muted);
+
+            font-size:
+                .68rem;
+
+            font-weight:
+                600;
+        }
+
+
+        .stat-number {
+
+            margin-top:
+                2px;
+
+            color:
+                var(--navy);
+
+            font-size:
+                1.4rem;
+
+            font-weight:
+                800;
+        }
+
+
+        .stat-note {
+
+            font-size:
+                .62rem;
+
+            color:
+                #8b9bab;
+
+            margin-top:
+                2px;
+        }
+
+
+        /* =========================================================
+           WORKSPACE
+        ========================================================= */
+
+        .workspace {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                minmax(0,1.03fr)
+                minmax(430px,.97fr);
+
+            gap:
+                18px;
+        }
+
+
+        .panel {
+
+            background:
+                #ffffff;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                15px;
+
+            overflow:
+                hidden;
+
+            box-shadow:
+                var(--shadow);
+
+            min-width:
+                0;
+        }
+
+
+        .panel-header {
+
+            padding:
+                17px 19px;
+
+            border-bottom:
+                1px solid var(--border);
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                12px;
+        }
+
+
+        .panel-title {
+
+            font-size:
+                .9rem;
+
+            font-weight:
+                800;
+
+            color:
+                var(--navy);
+
+            margin:
+                0;
+        }
+
+
+        .panel-subtitle {
+
+            color:
+                var(--muted);
+
+            font-size:
+                .68rem;
+
+            margin-top:
+                3px;
+        }
+
+
+        /* =========================================================
+           INSPECTION QUEUE
+        ========================================================= */
+
+        .queue {
+
+            max-height:
+                690px;
+
+            overflow-y:
+                auto;
+        }
+
+
+        .queue-item {
+
+            padding:
+                16px 19px;
+
+            border-bottom:
+                1px solid #edf2f6;
+
+            cursor:
+                pointer;
+
+            transition:
+                background .18s,
+                transform .18s;
+
+            border-left:
+                3px solid transparent;
+        }
+
+
+        .queue-item:hover {
+
+            background:
+                #f8fbfd;
+        }
+
+
+        .queue-item.selected {
+
+            background:
+                var(--blue-light);
+
+            border-left-color:
+                var(--blue);
+        }
+
+
+        .queue-top {
+
+            display:
+                flex;
+
+            align-items:
+                flex-start;
+
+            justify-content:
+                space-between;
+
+            gap:
+                10px;
+        }
+
+
+        .complaint-code {
+
+            color:
+                var(--blue);
+
+            font-size:
+                .67rem;
+
+            font-weight:
+                800;
+        }
+
+
+        .complaint-title {
+
+            margin-top:
+                4px;
+
+            color:
+                var(--navy);
+
+            font-size:
+                .83rem;
+
+            font-weight:
+                800;
+        }
+
+
+        .complaint-description {
+
+            color:
+                var(--muted);
+
+            font-size:
+                .7rem;
+
+            line-height:
+                1.5;
+
+            margin-top:
+                5px;
+        }
+
+
+        .queue-meta {
+
+            display:
+                flex;
+
+            flex-wrap:
+                wrap;
+
+            gap:
+                7px;
+
+            margin-top:
+                10px;
+        }
+
+
+        .meta-chip {
+
+            background:
+                #f8fafc;
+
+            border:
+                1px solid var(--border);
+
+            color:
+                var(--muted);
+
+            border-radius:
+                6px;
+
+            padding:
+                4px 7px;
+
+            font-size:
+                .6rem;
+
+            font-weight:
+                700;
+        }
+
+
+        .risk-badge {
+
+            border-radius:
+                999px;
+
+            padding:
+                5px 9px;
+
+            font-size:
+                .6rem;
+
+            font-weight:
+                800;
+
+            white-space:
+                nowrap;
+        }
+
+
+        .risk-critical {
+
+            color:
+                #b42318;
+
+            background:
+                #fde2e2;
+        }
+
+
+        .risk-high {
+
+            color:
+                #b54708;
+
+            background:
+                #ffeadb;
+        }
+
+
+        .risk-medium {
+
+            color:
+                #8a5a00;
+
+            background:
+                #fff4c7;
+        }
+
+
+        .risk-low {
+
+            color:
+                #147a49;
+
+            background:
+                #dff5e8;
+        }
+
+
+        /* =========================================================
+           EMPTY / ERROR
+        ========================================================= */
+
+        .empty {
+
+            text-align:
+                center;
+
+            padding:
+                68px 25px;
+
+            color:
+                var(--muted);
+        }
+
+
+        .empty i {
+
+            font-size:
+                2rem;
+
+            margin-bottom:
+                14px;
+
+            color:
+                #c5d2de;
+        }
+
+
+        .empty h4 {
+
+            font-size:
+                .9rem;
+
+            color:
+                var(--navy);
+
+            margin-bottom:
+                5px;
+        }
+
+
+        .empty p {
+
+            font-size:
+                .72rem;
+
+            margin:
+                0;
+        }
+
+
+        .error-box {
+
+            margin:
+                15px;
+
+            padding:
+                14px;
+
+            border-radius:
+                10px;
+
+            background:
+                var(--red-light);
+
+            border:
+                1px solid #f3c5c5;
+
+            color:
+                #991b1b;
+
+            font-size:
+                .72rem;
+        }
+
+
+        /* =========================================================
+           DETAILS
+        ========================================================= */
+
+        .details {
+            padding:
+                20px;
+        }
+
+
+        .details-empty {
+
+            min-height:
+                540px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            text-align:
+                center;
+
+            color:
+                var(--muted);
+        }
+
+
+        .details-empty i {
+
+            font-size:
+                2.4rem;
+
+            color:
+                #c5d2de;
+
+            margin-bottom:
+                12px;
+        }
+
+
+        .details-empty div div {
+
+            color:
+                var(--navy);
+
+            font-weight:
+                700;
+        }
+
+
+        .details-empty small {
+
+            display:
+                block;
+
+            margin-top:
+                5px;
+
+            font-size:
+                .7rem;
+        }
+
+
+        .section-label {
+
+            font-size:
+                .62rem;
+
+            color:
+                #8798a8;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                .8px;
+
+            font-weight:
+                800;
+
+            margin-bottom:
+                9px;
+        }
+
+
+        .detail-title {
+
+            color:
+                var(--navy);
+
+            font-size:
+                1.05rem;
+
+            font-weight:
+                800;
+
+            margin-bottom:
+                4px;
+        }
+
+
+        .detail-code {
+
+            color:
+                var(--blue);
+
+            font-size:
+                .67rem;
+
+            font-weight:
+                800;
+        }
+
+
+        .detail-description {
+
+            color:
+                var(--muted);
+
+            font-size:
+                .75rem;
+
+            line-height:
+                1.55;
+
+            margin-top:
+                12px;
+        }
+
+
+        .detail-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(2,1fr);
+
+            gap:
+                10px;
+
+            margin:
+                18px 0;
+        }
+
+
+        .detail-box {
+
+            background:
+                #f8fafc;
+
+            border:
+                1px solid #e7edf3;
+
+            border-radius:
+                9px;
+
+            padding:
+                11px;
+        }
+
+
+        .detail-box span {
+
+            display:
+                block;
+
+            color:
+                #8a9aaa;
+
+            font-size:
+                .6rem;
+
+            font-weight:
+                700;
+
+            margin-bottom:
+                3px;
+        }
+
+
+        .detail-box strong {
+
+            color:
+                var(--navy);
+
+            font-size:
+                .75rem;
+        }
+
+
+        /* =========================================================
+           AI RISK
+        ========================================================= */
+
+        .ai-card {
+
+            border:
+                1px solid #cfe1f1;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef6fb,
+                    #f8fbfd
+                );
+
+            border-radius:
+                11px;
+
+            padding:
+                15px;
+
+            margin-bottom:
+                18px;
+        }
+
+
+        .ai-head {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+        }
+
+
+        .ai-title {
+
+            color:
+                var(--blue);
+
+            font-size:
+                .72rem;
+
+            font-weight:
+                800;
+        }
+
+
+        .ai-score {
+
+            color:
+                var(--navy);
+
+            font-size:
+                1.35rem;
+
+            font-weight:
+                900;
+        }
+
+
+        .ai-bar {
+
+            height:
+                8px;
+
+            border-radius:
+                999px;
+
+            background:
+                #d8e7f2;
+
+            overflow:
+                hidden;
+
+            margin:
+                9px 0;
+        }
+
+
+        .ai-bar-fill {
+
+            height:
+                100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #5b9fd0,
+                    #1f5f95
+                );
+
+            border-radius:
+                inherit;
+
+            transition:
+                width .7s ease;
+        }
+
+
+        .ai-text {
+
+            color:
+                var(--muted);
+
+            font-size:
+                .64rem;
+        }
+
+
+        /* =========================================================
+           MAP
+        ========================================================= */
+
+        #inspectionMap {
+
+            width:
+                100%;
+
+            height:
+                215px;
+
+            border-radius:
+                10px;
+
+            margin-bottom:
+                18px;
+
+            border:
+                1px solid var(--border);
+
+            overflow:
+                hidden;
+        }
+
+
+        .leaflet-container {
+
+            font-family:
+                "Noto Sans",
+                "Segoe UI",
+                sans-serif;
+        }
+
+
+        /* =========================================================
+           INSPECTION FORM
+        ========================================================= */
+
+        .inspection-form {
+
+            border-top:
+                1px solid var(--border);
+
+            padding-top:
+                18px;
+        }
+
+
+        .form-label-custom {
+
+            display:
+                block;
+
+            color:
+                var(--navy);
+
+            font-size:
+                .67rem;
+
+            font-weight:
+                800;
+
+            margin-bottom:
+                7px;
+        }
+
+
+        .form-control-custom {
+
+            width:
+                100%;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                8px;
+
+            padding:
+                10px 11px;
+
+            outline:
+                none;
+
+            color:
+                var(--navy);
+
+            font-size:
+                .74rem;
+
+            background:
+                #fff;
+        }
+
+
+        .form-control-custom:focus {
+
+            border-color:
+                #8db7d7;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(31,95,149,.09);
+        }
+
+
+        textarea.form-control-custom {
+
+            min-height:
+                90px;
+
+            resize:
+                vertical;
+        }
+
+
+        .score-row {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                13px;
+        }
+
+
+        .score-range {
+            flex:
+                1;
+        }
+
+
+        .score-value {
+
+            width:
+                48px;
+
+            height:
+                38px;
+
+            border-radius:
+                8px;
+
+            background:
+                var(--navy);
+
+            color:
+                white;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            font-size:
+                .78rem;
+
+            font-weight:
+                800;
+        }
+
+
+        .decision-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap:
+                10px;
+
+            margin-top:
+                10px;
+        }
+
+
+        .decision-btn {
+
+            border:
+                1px solid var(--border);
+
+            background:
+                white;
+
+            border-radius:
+                9px;
+
+            padding:
+                12px;
+
+            cursor:
+                pointer;
+
+            text-align:
+                center;
+
+            transition:
+                .2s;
+        }
+
+
+        .decision-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 5px 15px
+                rgba(22,54,84,.07);
+        }
+
+
+        .decision-btn i {
+
+            display:
+                block;
+
+            font-size:
+                1rem;
+
+            margin-bottom:
+                5px;
+        }
+
+
+        .decision-btn strong {
+            font-size:
+                .72rem;
+        }
+
+
+        .decision-btn span {
+
+            display:
+                block;
+
+            font-size:
+                .6rem;
+
+            color:
+                var(--muted);
+
+            margin-top:
+                2px;
+        }
+
+
+        .decision-btn.pass.selected {
+
+            background:
+                var(--green-light);
+
+            border-color:
+                #8bd4ad;
+
+            color:
+                var(--green);
+        }
+
+
+        .decision-btn.fail.selected {
+
+            background:
+                var(--red-light);
+
+            border-color:
+                #e8a1a1;
+
+            color:
+                var(--red);
+        }
+
+
+        .submit-btn {
+
+            width:
+                100%;
+
+            border:
+                0;
+
+            background:
+                var(--blue);
+
+            color:
+                white;
+
+            border-radius:
+                9px;
+
+            padding:
+                12px;
+
+            margin-top:
+                14px;
+
+            font-size:
+                .76rem;
+
+            font-weight:
+                800;
+
+            transition:
+                .2s;
+        }
+
+
+        .submit-btn:hover:not(:disabled) {
+
+            background:
+                #174d7c;
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        .submit-btn:disabled {
+
+            opacity:
+                .55;
+
+            cursor:
+                not-allowed;
+        }
+
+
+        /* =========================================================
+           ALERT
+        ========================================================= */
+
+        #alertBox {
+
+            display:
+                none;
+
+            position:
+                fixed;
+
+            right:
+                24px;
+
+            bottom:
+                24px;
+
+            max-width:
+                430px;
+
+            z-index:
+                2000;
+
+            border-radius:
+                10px;
+
+            padding:
+                13px 16px;
+
+            font-size:
+                .74rem;
+
+            font-weight:
+                650;
+
+            box-shadow:
+                0 10px 30px
+                rgba(15,23,42,.12);
+        }
+
+
+        #alertBox.success {
+
+            display:
+                block;
+
+            background:
+                var(--green-light);
+
+            color:
+                #166534;
+
+            border:
+                1px solid #b9e6ca;
+        }
+
+
+        #alertBox.error {
+
+            display:
+                block;
+
+            background:
+                var(--red-light);
+
+            color:
+                #991b1b;
+
+            border:
+                1px solid #efc0c0;
+        }
+
+
+        /* =========================================================
+           ANIMATIONS
+        ========================================================= */
+
+        .reveal {
+
+            animation:
+                reveal .5s ease both;
+        }
+
+
+        @keyframes reveal {
+
+            from {
+
+                opacity:
+                    0;
+
+                transform:
+                    translateY(10px);
+            }
+
+            to {
+
+                opacity:
+                    1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        @keyframes pulse {
+
+            70% {
+
+                box-shadow:
+                    0 0 0 7px
+                    rgba(53,184,111,0);
+            }
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 1100px) {
+
+            .stats-grid {
+
+                grid-template-columns:
+                    repeat(2,1fr);
+            }
+
+
+            .workspace {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .details {
+
+                min-height:
+                    0;
+            }
+
+
+            .queue {
+
+                max-height:
+                    520px;
+            }
+        }
+
+
+        @media (max-width: 760px) {
+
+            .utility {
+                display:
+                    none;
+            }
+
+
+            .topnav-inner {
+
+                min-height:
+                    68px;
+
+                padding:
+                    0 15px;
+            }
+
+
+            .brand-subtitle {
+                display:
+                    none;
+            }
+
+
+            .role-pill {
+                display:
+                    none;
+            }
+
+
+            .page {
+
+                padding:
+                    18px 14px 38px;
+            }
+
+
+            .hero {
+
+                padding:
+                    22px;
+            }
+
+
+            .hero-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .hero-side {
+
+                min-width:
+                    0;
+            }
+
+
+            .stats-grid {
+
+                grid-template-columns:
+                    1fr 1fr;
+            }
+
+
+            .workspace {
+
+                gap:
+                    14px;
+            }
+
+
+            .panel-header {
+
+                padding:
+                    15px;
+            }
+
+
+            .details {
+
+                padding:
+                    16px;
+            }
+        }
+
+
+        @media (max-width: 520px) {
+
+            .stats-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .detail-grid,
+            .decision-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .topnav-inner {
+
+                gap:
+                    8px;
+            }
+
+
+            .brand-title {
+
+                font-size:
+                    .98rem;
+            }
+
+
+            .logout {
+
+                padding:
+                    7px 9px;
+            }
+
+
+            .hero h1 {
+
+                font-size:
+                    1.55rem;
+            }
+
+
+            .hero p {
+
+                font-size:
+                    .78rem;
+            }
+        }
+
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+
+                scroll-behavior:
+                    auto !important;
+
+                animation:
+                    none !important;
+
+                transition:
+                    none !important;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     TRICOLOR
+========================================================= -->
+
+<div class="tricolor-line"></div>
+
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<nav class="topnav">
+
+    <div class="topnav-inner">
+
+
+        <a
+            class="brand"
+            href="/"
+        >
+
+            <div class="brand-icon">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+            </div>
+
+
+            <div>
+
+                <div class="brand-title">
+
+                    Infra<span>Guard AI</span>
+
+                </div>
+
+
+                <div class="brand-subtitle">
+
+                    Civic Infrastructure Management Platform
+
+                </div>
+
+            </div>
+
+        </a>
+
+
+        <div class="nav-actions">
+
+
+            <span class="role-pill">
+
+                <i class="fa-solid fa-user-check me-1"></i>
+
+                Field Inspector
+
+            </span>
+
+
+            <a
+                href="/"
+                class="btn btn-sm btn-light border"
+            >
+
+                <i class="fa-solid fa-house me-1"></i>
+
+                Home
+
+            </a>
+
+
+            <button
+                class="logout"
+                onclick="logout()"
+            >
+
+                <i class="fa-solid fa-right-from-bracket me-1"></i>
+
+                Sign out
+
+            </button>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="page">
+
+
+    <!-- HERO -->
+
+    <section class="hero reveal">
+
+        <div class="hero-grid">
+
+
+            <div>
+
+                <div class="kicker">
+
+                    Field verification & maintenance assurance
+
+                </div>
+
+
+                <h1>
+
+                    Inspection Command Center
+
+                </h1>
+
+
+                <p>
+
+                    Verify completed maintenance work, record
+                    physical condition, capture field observations
+                    and close the infrastructure loop with
+                    evidence-based inspection decisions.
+
+                </p>
+
+
+                <button
+                    class="refresh-btn"
+                    onclick="loadData()"
+                >
+
+                    <i class="fa-solid fa-rotate me-1"></i>
+
+                    Refresh inspection data
+
+                </button>
+
+            </div>
+
+
+            <div class="hero-side">
+
+                <div class="hero-side-label">
+
+                    Current assignment
+
+                </div>
+
+
+                <strong id="heroPending">
+
+                    0
+
+                </strong>
+
+
+                <small>
+
+                    complaints awaiting field inspection
+
+                </small>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <section class="stats-grid">
+
+
+        <div class="stat-card reveal">
+
+            <div class="stat-icon orange">
+
+                <i class="fa-solid fa-clipboard-check"></i>
+
+            </div>
+
+
+            <div>
+
+                <div class="stat-label">
+
+                    Awaiting Inspection
+
+                </div>
+
+
+                <div
+                    class="stat-number"
+                    id="statPending"
+                >
+
+                    0
+
+                </div>
+
+
+                <div class="stat-note">
+
+                    Current field queue
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card reveal">
+
+            <div class="stat-icon green">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+            </div>
+
+
+            <div>
+
+                <div class="stat-label">
+
+                    Passed
+
+                </div>
+
+
+                <div
+                    class="stat-number"
+                    id="statPassed"
+                >
+
+                    0
+
+                </div>
+
+
+                <div class="stat-note">
+
+                    Verified maintenance
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card reveal">
+
+            <div class="stat-icon red">
+
+                <i class="fa-solid fa-triangle-exclamation"></i>
+
+            </div>
+
+
+            <div>
+
+                <div class="stat-label">
+
+                    Failed
+
+                </div>
+
+
+                <div
+                    class="stat-number"
+                    id="statFailed"
+                >
+
+                    0
+
+                </div>
+
+
+                <div class="stat-note">
+
+                    Needs attention
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card reveal">
+
+            <div class="stat-icon blue">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+            </div>
+
+
+            <div>
+
+                <div class="stat-label">
+
+                    Total Inspections
+
+                </div>
+
+
+                <div
+                    class="stat-number"
+                    id="statTotal"
+                >
+
+                    0
+
+                </div>
+
+
+                <div class="stat-note">
+
+                    Inspection history
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         WORKSPACE
+    ====================================================== -->
+
+    <section class="workspace">
+
+
+        <!-- =================================================
+             INSPECTION QUEUE
+        ================================================== -->
+
+        <div class="panel reveal">
+
+
+            <div class="panel-header">
+
+
+                <div>
+
+                    <div class="panel-title">
+
+                        Inspection Queue
+
+                    </div>
+
+
+                    <div class="panel-subtitle">
+
+                        Complaints currently waiting for field verification
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="btn btn-sm btn-light"
+                    onclick="loadData()"
+                    title="Refresh"
+                >
+
+                    <i class="fa-solid fa-rotate"></i>
+
+                </button>
+
+
+            </div>
+
+
+            <div
+                class="queue"
+                id="complaintQueue"
+            >
+
+                <div class="empty">
+
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+
+                    <h4>
+
+                        Loading inspection queue
+
+                    </h4>
+
+                    <p>
+
+                        Connecting to InfraGuard AI...
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             FIELD VERIFICATION
+        ================================================== -->
+
+        <div class="panel reveal">
+
+
+            <div class="panel-header">
+
+
+                <div>
+
+                    <div class="panel-title">
+
+                        Field Verification
+
+                    </div>
+
+
+                    <div class="panel-subtitle">
+
+                        Inspect the selected infrastructure issue
+
+                    </div>
+
+                </div>
+
+
+                <span
+                    id="selectedStatus"
+                    class="risk-badge risk-medium"
+                    style="display:none;"
+                >
+
+                    INSPECTION
+
+                </span>
+
+
+            </div>
+
+
+            <div
+                class="details"
+                id="detailsPanel"
+            >
+
+                <div class="details-empty">
+
+                    <div>
+
+                        <i class="fa-solid fa-location-crosshairs"></i>
+
+
+                        <div>
+
+                            Select a complaint from the queue
+
+                        </div>
+
+
+                        <small>
+
+                            Inspection details will appear here.
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+
+<!-- ALERT -->
+
+<div id="alertBox"></div>
+
+
+
+<!-- LEAFLET -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+
+
+<script>
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let complaints = [];
+
+let inspections = [];
+
+let selectedComplaint = null;
+
+let selectedDecision = null;
+
+let inspectionMap = null;
+
+let alertTimer = null;
+
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+function getAccessToken() {
+
+    const keys = [
+        "access_token",
+        "accessToken",
+        "supabase_access_token",
+        "token"
+    ];
+
+
+    for (const key of keys) {
+
+        const value =
+            localStorage.getItem(key);
+
+
+        if (value) {
+
+            return value;
+
+        }
+
+    }
+
+
+    return null;
+}
+
+
+
+function authHeaders() {
+
+    const token =
+        getAccessToken();
+
+
+    if (!token) {
+
+        return {};
+
+    }
+
+
+    return {
+
+        "Authorization":
+            `Bearer ${token}`
+
+    };
+
+}
+
+
+
+function logout() {
+
+    [
+        "access_token",
+        "accessToken",
+        "supabase_access_token",
+        "token",
+        "user",
+        "profile"
+    ].forEach(key => {
+
+        localStorage.removeItem(key);
+
+    });
+
+
+    window.location.href =
+        "/login";
+
+}
+
+
+
+/* =========================================================
+   API HELPER
+========================================================= */
+
+async function api(
+    url,
+    options = {}
+) {
+
+    const response =
+        await fetch(
+            url,
+            {
+
+                ...options,
+
+                headers: {
+
+                    ...authHeaders(),
+
+                    ...(options.headers || {})
+
+                }
+
+            }
+        );
+
+
+    const contentType =
+        response.headers.get(
+            "content-type"
+        ) || "";
+
+
+    let data;
+
+
+    if (
+        contentType.includes(
+            "application/json"
+        )
+    ) {
+
+        data =
+            await response.json();
+
+    }
+
+    else {
+
+        const text =
+            await response.text();
+
+
+        throw new Error(
+            `HTTP ${response.status}: ${
+                text ||
+                "Server returned a non-JSON response."
+            }`
+        );
+
+    }
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            data.error ||
+            data.message ||
+            `HTTP ${response.status}`
+        );
+
+    }
+
+
+    return data;
+
+}
+
+
+
+/* =========================================================
+   LOAD DATA
+========================================================= */
+
+async function loadData() {
+
+    const queue =
+        document.getElementById(
+            "complaintQueue"
+        );
+
+
+    queue.innerHTML = `
+
+        <div class="empty">
+
+            <i class="fa-solid fa-spinner fa-spin"></i>
+
+            <h4>
+                Loading inspection queue
+            </h4>
+
+            <p>
+                Fetching assignments...
+            </p>
+
+        </div>
+
+    `;
+
+
+    complaints = [];
+
+    inspections = [];
+
+
+    let queueError = null;
+
+    let historyError = null;
+
+
+    /*
+        Queue and history are loaded separately.
+        If history fails, queue still works.
+    */
+
+    try {
+
+        const queueData =
+            await api(
+                "/api/inspector/complaints"
+            );
+
+
+        complaints =
+            Array.isArray(
+                queueData.complaints
+            )
+                ? queueData.complaints
+                : [];
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Inspector queue error:",
+            error
+        );
+
+
+        queueError =
+            error.message;
+
+    }
+
+
+    try {
+
+        const historyData =
+            await api(
+                "/api/inspector/inspections"
+            );
+
+
+        inspections =
+            Array.isArray(
+                historyData.inspections
+            )
+                ? historyData.inspections
+                : [];
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Inspector history error:",
+            error
+        );
+
+
+        historyError =
+            error.message;
+
+    }
+
+
+    updateStats();
+
+    renderQueue();
+
+
+    if (queueError) {
+
+        queue.innerHTML = `
+
+            <div class="error-box">
+
+                <strong>
+
+                    <i class="fa-solid fa-triangle-exclamation me-1"></i>
+
+                    Unable to load inspection queue
+
+                </strong>
+
+
+                <div class="mt-2">
+
+                    ${escapeHtml(queueError)}
+
+                </div>
+
+
+                <button
+                    class="btn btn-sm btn-danger mt-3"
+                    onclick="loadData()"
+                >
+
+                    <i class="fa-solid fa-rotate me-1"></i>
+
+                    Retry
+
+                </button>
+
+            </div>
+
+        `;
+
+
+        showAlert(
+            "Inspector queue API failed: " +
+            queueError,
+            "error"
+        );
+
+
+        showEmptyDetails();
+
+        return;
+
+    }
+
+
+    if (historyError) {
+
+        showAlert(
+            "Queue loaded, but inspection history failed: " +
+            historyError,
+            "error"
+        );
+
+    }
+
+
+    if (!complaints.length) {
+
+        showEmptyDetails();
+
+        return;
+
+    }
+
+
+    selectComplaint(
+        complaints[0]
+    );
+
+}
+
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+function updateStats() {
+
+    const passed =
+        inspections.filter(
+            item =>
+                String(
+                    item.decision || ""
+                )
+                .toUpperCase() ===
+                "PASS"
+        ).length;
+
+
+    const failed =
+        inspections.filter(
+            item =>
+                String(
+                    item.decision || ""
+                )
+                .toUpperCase() ===
+                "FAIL"
+        ).length;
+
+
+    document.getElementById(
+        "statPending"
+    ).textContent =
+        complaints.length;
+
+
+    document.getElementById(
+        "statPassed"
+    ).textContent =
+        passed;
+
+
+    document.getElementById(
+        "statFailed"
+    ).textContent =
+        failed;
+
+
+    document.getElementById(
+        "statTotal"
+    ).textContent =
+        inspections.length;
+
+
+    const heroPending =
+        document.getElementById(
+            "heroPending"
+        );
+
+
+    if (heroPending) {
+
+        heroPending.textContent =
+            complaints.length;
+
+    }
+
+}
+
+
+
+/* =========================================================
+   QUEUE
+========================================================= */
+
+function renderQueue() {
+
+    const container =
+        document.getElementById(
+            "complaintQueue"
+        );
+
+
+    if (!complaints.length) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+                <h4>
+                    No pending inspections
+                </h4>
+
+                <p>
+                    No complaints are currently waiting
+                    for field verification.
+                </p>
+
+                <div class="mt-3">
+
+                    <small>
+
+                        A complaint appears here after
+                        the officer moves it to
+                        <strong>INSPECTION</strong>.
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        complaints.map(
+            (complaint, index) => {
+
+                const asset =
+                    complaint.asset || {};
+
+
+                const risk =
+                    getRiskFromAsset(
+                        asset
+                    );
+
+
+                return `
+
+                    <div
+                        class="queue-item ${
+                            index === 0
+                                ? "selected"
+                                : ""
+                        }"
+
+                        data-id="${escapeAttribute(
+                            complaint.id
+                        )}"
+
+                        onclick="selectComplaintById(
+                            '${escapeAttribute(
+                                complaint.id
+                            )}'
+                        )"
+                    >
+
+                        <div class="queue-top">
+
+                            <div>
+
+                                <div class="complaint-code">
+
+                                    ${escapeHtml(
+                                        complaint.complaint_code ||
+                                        "INFRA-CASE"
+                                    )}
+
+                                </div>
+
+
+                                <div class="complaint-title">
+
+                                    ${escapeHtml(
+                                        complaint.problem_type ||
+                                        complaint.category ||
+                                        "Infrastructure issue"
+                                    )}
+
+                                </div>
+
+                            </div>
+
+
+                            <span
+                                class="risk-badge ${
+                                    getRiskClass(risk)
+                                }"
+                            >
+
+                                ${escapeHtml(risk)}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="complaint-description">
+
+                            ${escapeHtml(
+                                truncate(
+                                    complaint.description ||
+                                    "No description provided.",
+                                    110
+                                )
+                            )}
+
+                        </div>
+
+
+                        <div class="queue-meta">
+
+
+                            <span class="meta-chip">
+
+                                <i class="fa-solid fa-layer-group me-1"></i>
+
+                                ${escapeHtml(
+                                    complaint.category ||
+                                    "Unknown"
+                                )}
+
+                            </span>
+
+
+                            <span class="meta-chip">
+
+                                <i class="fa-solid fa-clock me-1"></i>
+
+                                ${formatDate(
+                                    complaint.created_at
+                                )}
+
+                            </span>
+
+
+                            ${
+                                asset.asset_code
+                                    ?
+
+                                `
+
+                                    <span class="meta-chip">
+
+                                        <i class="fa-solid fa-cube me-1"></i>
+
+                                        ${escapeHtml(
+                                            asset.asset_code
+                                        )}
+
+                                    </span>
+
+                                `
+
+                                    :
+
+                                `
+
+                                    <span class="meta-chip">
+
+                                        <i class="fa-solid fa-link-slash me-1"></i>
+
+                                        Asset not linked
+
+                                    </span>
+
+                                `
+                            }
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+        ).join("");
+
+}
+
+
+
+/* =========================================================
+   SELECT
+========================================================= */
+
+function selectComplaintById(id) {
+
+    const complaint =
+        complaints.find(
+            item =>
+                String(item.id) ===
+                String(id)
+        );
+
+
+    if (complaint) {
+
+        selectComplaint(
+            complaint
+        );
+
+    }
+
+}
+
+
+
+function selectComplaint(
+    complaint
+) {
+
+    selectedComplaint =
+        complaint;
+
+    selectedDecision =
+        null;
+
+
+    document.querySelectorAll(
+        ".queue-item"
+    ).forEach(item => {
+
+        item.classList.toggle(
+            "selected",
+            item.dataset.id ===
+            String(complaint.id)
+        );
+
+    });
+
+
+    renderDetails(
+        complaint
+    );
+
+}
+
+
+
+/* =========================================================
+   DETAILS
+========================================================= */
+
+function renderDetails(
+    complaint
+) {
+
+    const panel =
+        document.getElementById(
+            "detailsPanel"
+        );
+
+
+    const asset =
+        complaint.asset || {};
+
+
+    const risk =
+        getRiskFromAsset(
+            asset
+        );
+
+
+    const riskScore =
+        getRiskScore(
+            asset
+        );
+
+
+    document.getElementById(
+        "selectedStatus"
+    ).style.display =
+        "inline-block";
+
+
+    panel.innerHTML = `
+
+        <div>
+
+            <div class="section-label">
+                Complaint
+            </div>
+
+
+            <div class="detail-code">
+
+                ${escapeHtml(
+                    complaint.complaint_code ||
+                    "INFRA-CASE"
+                )}
+
+            </div>
+
+
+            <div class="detail-title">
+
+                ${escapeHtml(
+                    complaint.problem_type ||
+                    complaint.category ||
+                    "Infrastructure Issue"
+                )}
+
+            </div>
+
+
+            <div class="detail-description">
+
+                ${escapeHtml(
+                    complaint.description ||
+                    "No description provided."
+                )}
+
+            </div>
+
+
+            <div class="detail-grid">
+
+
+                <div class="detail-box">
+
+                    <span>
+                        Category
+                    </span>
+
+                    <strong>
+
+                        ${escapeHtml(
+                            complaint.category ||
+                            "—"
+                        )}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <span>
+                        Severity
+                    </span>
+
+                    <strong>
+
+                        ${escapeHtml(
+                            complaint.severity ||
+                            "—"
+                        )}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <span>
+                        Asset
+                    </span>
+
+                    <strong>
+
+                        ${escapeHtml(
+                            asset.asset_code ||
+                            "Not linked"
+                        )}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <span>
+                        Asset Type
+                    </span>
+
+                    <strong>
+
+                        ${escapeHtml(
+                            formatAssetType(
+                                asset.asset_type
+                            ) ||
+                            "—"
+                        )}
+
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="section-label">
+
+                AI Risk Snapshot
+
+            </div>
+
+
+            <div class="ai-card">
+
+                <div class="ai-head">
+
+                    <div class="ai-title">
+
+                        <i class="fa-solid fa-brain me-1"></i>
+
+                        Predictive Maintenance Risk
+
+                    </div>
+
+
+                    <div class="ai-score">
+
+                        ${riskScore}
+
+                    </div>
+
+                </div>
+
+
+                <div class="ai-bar">
+
+                    <div
+                        class="ai-bar-fill"
+                        style="width:${riskScore}%"
+                    ></div>
+
+                </div>
+
+
+                <div class="ai-text">
+
+                    Current asset risk:
+
+                    <strong>
+                        ${escapeHtml(risk)}
+                    </strong>
+
+                    ${
+                        asset.condition_score !== undefined
+
+                            ?
+
+                        ` · Condition ${
+                            escapeHtml(
+                                String(
+                                    asset.condition_score
+                                )
+                            )
+                        }/100`
+
+                            :
+
+                        ""
+                    }
+
+                </div>
+
+            </div>
+
+
+            <div class="section-label">
+
+                Location
+
+            </div>
+
+
+            <div id="inspectionMap"></div>
+
+
+            <div class="inspection-form">
+
+
+                <div class="section-label">
+
+                    Field Inspection
+
+                </div>
+
+
+                <label class="form-label-custom">
+
+                    Physical condition score
+
+                </label>
+
+
+                <div class="score-row">
+
+                    <input
+                        type="range"
+                        id="inspectionScore"
+                        class="form-range score-range"
+                        min="0"
+                        max="100"
+                        value="50"
+                        oninput="updateScore(this.value)"
+                    >
+
+
+                    <div
+                        class="score-value"
+                        id="scoreValue"
+                    >
+
+                        50
+
+                    </div>
+
+                </div>
+
+
+                <div class="mt-3">
+
+                    <label class="form-label-custom">
+
+                        Inspection observations
+
+                    </label>
+
+
+                    <textarea
+                        id="inspectionObservations"
+                        class="form-control-custom"
+                        placeholder="Describe the actual field condition, defects found, work quality, safety concerns, and supporting observations..."
+                    ></textarea>
+
+                </div>
+
+
+                <div class="mt-3">
+
+                    <label class="form-label-custom">
+
+                        Evidence URL
+
+                        <span
+                            style="
+                                font-weight:400;
+                                color:#94a3b8;
+                            "
+                        >
+
+                            (optional)
+
+                        </span>
+
+                    </label>
+
+
+                    <input
+                        type="url"
+                        id="evidenceUrl"
+                        class="form-control-custom"
+                        placeholder="https://..."
+                    >
+
+                </div>
+
+
+                <div class="mt-3">
+
+                    <label class="form-label-custom">
+
+                        Verification decision
+
+                    </label>
+
+
+                    <div class="decision-grid">
+
+
+                        <button
+                            type="button"
+                            class="decision-btn pass"
+                            id="passBtn"
+                            onclick="selectDecision('PASS')"
+                        >
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                            <strong>
+                                PASS
+                            </strong>
+
+                            <span>
+                                Maintenance verified
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="decision-btn fail"
+                            id="failBtn"
+                            onclick="selectDecision('FAIL')"
+                        >
+
+                            <i class="fa-solid fa-circle-xmark"></i>
+
+                            <strong>
+                                FAIL
+                            </strong>
+
+                            <span>
+                                Work requires attention
+                            </span>
+
+                        </button>
+
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="submit-btn"
+                    id="submitInspectionBtn"
+                    onclick="submitInspection()"
+                >
+
+                    <i class="fa-solid fa-paper-plane me-2"></i>
+
+                    Submit Inspection
+
+                </button>
+
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    initializeMap(
+        complaint.latitude,
+        complaint.longitude,
+        asset.latitude,
+        asset.longitude
+    );
+
+}
+
+
+
+/* =========================================================
+   MAP
+========================================================= */
+
+function initializeMap(
+    complaintLat,
+    complaintLng,
+    assetLat,
+    assetLng
+) {
+
+    if (inspectionMap) {
+
+        inspectionMap.remove();
+
+        inspectionMap = null;
+
+    }
+
+
+    const lat =
+        Number(
+            assetLat ??
+            complaintLat
+        );
+
+
+    const lng =
+        Number(
+            assetLng ??
+            complaintLng
+        );
+
+
+    if (
+        !Number.isFinite(lat) ||
+        !Number.isFinite(lng)
+    ) {
+
+        document.getElementById(
+            "inspectionMap"
+        ).innerHTML = `
+
+            <div
+                style="
+                    height:100%;
+                    display:grid;
+                    place-items:center;
+                    color:#64748b;
+                    font-size:.72rem;
+                    background:#f8fafc;
+                "
+            >
+
+                <div>
+
+                    <i class="fa-solid fa-location-dot me-1"></i>
+
+                    Location coordinates unavailable
+
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    inspectionMap =
+        L.map(
+            "inspectionMap"
+        ).setView(
+            [lat, lng],
+            16
+        );
+
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            attribution:
+                "&copy; OpenStreetMap contributors"
+        }
+    ).addTo(
+        inspectionMap
+    );
+
+
+    L.marker(
+        [lat, lng]
+    )
+    .addTo(
+        inspectionMap
+    )
+    .bindPopup(
+        "<strong>Inspection Location</strong>"
+    )
+    .openPopup();
+
+}
+
+
+
+/* =========================================================
+   SCORE
+========================================================= */
+
+function updateScore(value) {
+
+    const element =
+        document.getElementById(
+            "scoreValue"
+        );
+
+
+    if (element) {
+
+        element.textContent =
+            value;
+
+    }
+
+}
+
+
+
+/* =========================================================
+   DECISION
+========================================================= */
+
+function selectDecision(
+    decision
+) {
+
+    selectedDecision =
+        decision;
+
+
+    const pass =
+        document.getElementById(
+            "passBtn"
+        );
+
+
+    const fail =
+        document.getElementById(
+            "failBtn"
+        );
+
+
+    if (pass) {
+
+        pass.classList.remove(
+            "selected"
+        );
+
+    }
+
+
+    if (fail) {
+
+        fail.classList.remove(
+            "selected"
+        );
+
+    }
+
+
+    if (decision === "PASS") {
+
+        pass.classList.add(
+            "selected"
+        );
+
+    }
+
+
+    if (decision === "FAIL") {
+
+        fail.classList.add(
+            "selected"
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   SUBMIT
+========================================================= */
+
+async function submitInspection() {
+
+    if (!selectedComplaint) {
+
+        showAlert(
+            "Select a complaint first.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!selectedDecision) {
+
+        showAlert(
+            "Choose PASS or FAIL before submitting.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const scoreElement =
+        document.getElementById(
+            "inspectionScore"
+        );
+
+
+    const observationsElement =
+        document.getElementById(
+            "inspectionObservations"
+        );
+
+
+    const evidenceElement =
+        document.getElementById(
+            "evidenceUrl"
+        );
+
+
+    if (
+        !scoreElement ||
+        !observationsElement
+    ) {
+
+        showAlert(
+            "Inspection form is not ready. Please refresh the page.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const score =
+        Number(
+            scoreElement.value
+        );
+
+
+    const observations =
+        observationsElement
+            .value
+            .trim();
+
+
+    const evidenceUrl =
+        evidenceElement
+            ? evidenceElement.value.trim()
+            : "";
+
+
+    if (
+        !Number.isFinite(score) ||
+        score < 0 ||
+        score > 100
+    ) {
+
+        showAlert(
+            "Inspection score must be between 0 and 100.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!observations) {
+
+        showAlert(
+            "Please enter your inspection observations.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const button =
+        document.getElementById(
+            "submitInspectionBtn"
+        );
+
+
+    button.disabled =
+        true;
+
+
+    button.innerHTML = `
+
+        <i class="fa-solid fa-spinner fa-spin me-2"></i>
+
+        Submitting inspection...
+
+    `;
+
+
+    try {
+
+        const data =
+            await api(
+                `/api/inspector/complaints/${selectedComplaint.id}/inspection`,
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            score:
+                                score,
+
+                            decision:
+                                selectedDecision,
+
+                            observations:
+                                observations,
+
+                            evidence_url:
+                                evidenceUrl ||
+                                null
+
+                        })
+
+                }
+            );
+
+
+        showAlert(
+            data.message ||
+            "Inspection submitted successfully.",
+            "success"
+        );
+
+
+        selectedComplaint =
+            null;
+
+        selectedDecision =
+            null;
+
+
+        await loadData();
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Inspection submission error:",
+            error
+        );
+
+
+        showAlert(
+            error.message,
+            "error"
+        );
+
+
+        button.disabled =
+            false;
+
+
+        button.innerHTML = `
+
+            <i class="fa-solid fa-paper-plane me-2"></i>
+
+            Submit Inspection
+
+        `;
+
+    }
+
+}
+
+
+
+/* =========================================================
+   EMPTY DETAILS
+========================================================= */
+
+function showEmptyDetails() {
+
+    document.getElementById(
+        "selectedStatus"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "detailsPanel"
+    ).innerHTML = `
+
+        <div class="details-empty">
+
+            <div>
+
+                <i class="fa-solid fa-circle-check"></i>
+
+                <div>
+
+                    Inspection queue is clear
+
+                </div>
+
+                <small>
+
+                    No complaints currently require
+                    field verification.
+
+                </small>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* =========================================================
+   RISK
+========================================================= */
+
+function getRiskScore(
+    asset
+) {
+
+    if (!asset) {
+
+        return 0;
+
+    }
+
+
+    const condition =
+        Number(
+            asset.condition_score
+        );
+
+
+    const complaints =
+        Number(
+            asset.complaint_count ||
+            0
+        );
+
+
+    const failures =
+        Number(
+            asset.failure_count ||
+            0
+        );
+
+
+    const days =
+        Number(
+            asset.days_since_maintenance ||
+            0
+        );
+
+
+    let score = 0;
+
+
+    if (
+        Number.isFinite(
+            condition
+        )
+    ) {
+
+        score +=
+            (100 - condition) *
+            0.45;
+
+    }
+
+
+    score +=
+        Math.min(
+            complaints * 1.4,
+            20
+        );
+
+
+    score +=
+        Math.min(
+            failures * 3,
+            15
+        );
+
+
+    score +=
+        Math.min(
+            days / 20,
+            20
+        );
+
+
+    return Math.max(
+        0,
+        Math.min(
+            100,
+            Math.round(score)
+        )
+    );
+
+}
+
+
+
+function getRiskFromAsset(
+    asset
+) {
+
+    const score =
+        getRiskScore(
+            asset
+        );
+
+
+    if (score >= 81) {
+
+        return "CRITICAL";
+
+    }
+
+
+    if (score >= 61) {
+
+        return "HIGH";
+
+    }
+
+
+    if (score >= 31) {
+
+        return "MEDIUM";
+
+    }
+
+
+    return "LOW";
+
+}
+
+
+
+function getRiskClass(
+    risk
+) {
+
+    switch (risk) {
+
+        case "CRITICAL":
+
+            return "risk-critical";
+
+
+        case "HIGH":
+
+            return "risk-high";
+
+
+        case "MEDIUM":
+
+            return "risk-medium";
+
+
+        default:
+
+            return "risk-low";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   FORMATTERS
+========================================================= */
+
+function formatAssetType(
+    type
+) {
+
+    if (!type) {
+
+        return "";
+
+    }
+
+
+    return String(type)
+        .replaceAll(
+            "_",
+            " "
+        )
+        .replace(
+            /\b\w/g,
+            char =>
+                char.toUpperCase()
+        );
+
+}
+
+
+
+function formatDate(
+    value
+) {
+
+    if (!value) {
+
+        return "Unknown date";
+
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return "Unknown date";
+
+    }
+
+
+    return date.toLocaleDateString(
+        "en-IN",
+        {
+
+            day:
+                "2-digit",
+
+            month:
+                "short",
+
+            year:
+                "numeric"
+
+        }
+    );
+
+}
+
+
+
+function truncate(
+    text,
+    length
+) {
+
+    if (!text) {
+
+        return "";
+
+    }
+
+
+    return text.length > length
+
+        ? text.substring(
+            0,
+            length
+        ) + "..."
+
+        : text;
+
+}
+
+
+
+/* =========================================================
+   SECURITY
+========================================================= */
+
+function escapeHtml(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+    .replaceAll(
+        "&",
+        "&amp;"
+    )
+    .replaceAll(
+        "<",
+        "&lt;"
+    )
+    .replaceAll(
+        ">",
+        "&gt;"
+    )
+    .replaceAll(
+        '"',
+        "&quot;"
+    )
+    .replaceAll(
+        "'",
+        "&#039;"
+    );
+
+}
+
+
+
+function escapeAttribute(
+    value
+) {
+
+    return escapeHtml(
+        value
+    );
+
+}
+
+
+
+/* =========================================================
+   ALERT
+========================================================= */
+
+function showAlert(
+    message,
+    type
+) {
+
+    const box =
+        document.getElementById(
+            "alertBox"
+        );
+
+
+    box.className =
+        type;
+
+
+    box.style.display =
+        "block";
+
+
+    box.innerHTML = `
+
+        <i class="fa-solid ${
+            type === "success"
+                ? "fa-circle-check"
+                : "fa-circle-exclamation"
+        } me-2"></i>
+
+        ${escapeHtml(message)}
+
+    `;
+
+
+    clearTimeout(
+        alertTimer
+    );
+
+
+    alertTimer =
+        setTimeout(
+            () => {
+
+                box.style.display =
+                    "none";
+
+                box.className =
+                    "";
+
+            },
+            6000
+        );
+
+}
+
+
+
+/* =========================================================
+   START
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const token =
+            getAccessToken();
+
+
+        if (!token) {
+
+            showAlert(
+                "Authentication token not found. Redirecting to login.",
+                "error"
+            );
+
+
+            setTimeout(
+                () => {
+
+                    window.location.href =
+                        "/login";
+
+                },
+                1200
+            );
+
+
+            return;
+
+        }
+
+
+        loadData();
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>
